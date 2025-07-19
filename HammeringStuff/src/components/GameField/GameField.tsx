@@ -1,13 +1,15 @@
 import React from 'react';
 import TransformableObject from 'components/TransformableObject';
 import ShadowOverlay from 'components/ShadowOverlay';
+import HammerVisual from 'components/HammerVisual/HammerVisual';
 import useMouseTracking from 'hooks/useMouseTracking';
 import useCollisionDetection from 'hooks/useCollisionDetection';
 import useHammerAnimation from 'hooks/useHammerAnimation';
 import useGameState from 'hooks/useGameState';
-import type { ShadowConfig } from 'types/game';
+import type { ShadowConfig, Position } from 'types/game';
 import { GAME_CONFIG } from 'data/gameConfig';
 import styles from './GameField.module.css';
+
 
 interface GameFieldProps {
   shadowConfig?: ShadowConfig;
@@ -16,7 +18,7 @@ interface GameFieldProps {
 
 /**
  * Main game field component that orchestrates the hammer game
- * Now supports click-to-hammer interaction (Option C: Hybrid approach)
+ * Now supports click-to-hammer interaction with visual hammer animation
  */
 const GameField: React.FC<GameFieldProps> = ({
   shadowConfig = GAME_CONFIG.shadowConfig,
@@ -50,6 +52,26 @@ const GameField: React.FC<GameFieldProps> = ({
     isAnimating,
     triggerHammerAnimation
   } = useHammerAnimation(hammerObject);
+
+  // Calculate target position for hammer animation
+  const getTargetPosition = React.useCallback((): Position => {
+    if (!collisionResult.primaryObject) {
+      return shadowPosition;
+    }
+    
+    const targetObject = gameState.objects.find(
+      obj => obj.id === collisionResult.primaryObject
+    );
+    
+    if (targetObject) {
+      return {
+        x: targetObject.position.x + (targetObject.size / 2),
+        y: targetObject.position.y + (targetObject.size / 2)
+      };
+    }
+    
+    return shadowPosition;
+  }, [collisionResult.primaryObject, gameState.objects, shadowPosition]);
 
   // Check if primary object is ready for hammering (80%+ coverage)
   const isPrimaryObjectReady = React.useMemo(() => {
@@ -183,6 +205,14 @@ const GameField: React.FC<GameFieldProps> = ({
           isAnimating={isAnimating}
           onHammerClick={handleHammerClick}
         />
+
+        {/* NEW: Hammer Visual Animation */}
+        <HammerVisual
+  hammerAnimation={hammerAnimation}
+  targetPosition={getTargetPosition()}
+  shadowPosition={shadowPosition} // Pass shadow position for rest position
+  isVisible={true} // Always visible now
+/>
       </div>
 
       {/* Game Complete Overlay */}
@@ -231,9 +261,11 @@ const GameField: React.FC<GameFieldProps> = ({
           <h4>Debug Info</h4>
           <p>Objects: {gameState.objects.length}</p>
           <p>Shadow: ({Math.round(shadowPosition.x)}, {Math.round(shadowPosition.y)})</p>
+          <p>Target: ({Math.round(getTargetPosition().x)}, {Math.round(getTargetPosition().y)})</p>
           <p>Primary Object: {collisionResult.primaryObject || 'None'}</p>
           <p>Ready to Hammer: {isPrimaryObjectReady ? 'Yes' : 'No'}</p>
           <p>Animating: {isAnimating ? 'Yes' : 'No'}</p>
+          <p>Animation Progress: {Math.round(hammerAnimation.progress * 100)}%</p>
           <p>Shadow Size: {shadowConfig.radius}px radius</p>
         </div>
       )}
