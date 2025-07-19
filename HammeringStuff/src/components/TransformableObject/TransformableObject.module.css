@@ -1,153 +1,24 @@
-.transformableObject {
+.container {
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* cursor: pointer; */
-  user-select: none;
-  transition: all 0.1s ease-out;
-  border-radius: 8px;
-  z-index: 2;
 }
 
-/* Object content container */
-.objectContent {
+.originalLayer {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  object-fit: contain;
 }
 
-.objectEmoji {
-  font-size: 2em;
-  line-height: 1;
-  display: block;
-}
-
-/* State-specific styles */
-.state-normal {
-  opacity: 1;
-  z-index: 2;
-}
-
-.state-transformed {
-  opacity: 0.8;
-  z-index: 1;
-}
-
-.state-hammered {
-  opacity: 0.6;
-  z-index: 1;
-  transform: scale(0.7);
-}
-
-.state-hammered .objectContent {
-  background: rgba(120, 120, 120, 0.8);
-  border-color: #a0a0a0;
-}
-
-/* Intersection effects */
-.intersecting {
-  z-index: 3;
-}
-
-.intersecting .objectContent {
-  border-color: #3182ce;
-  box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.3);
-}
-
-/* Ready to hammer state (80%+ coverage) */
-.readyToHammer .objectContent {
-  border-color: #e53e3e;
-  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.4);
-  background: rgba(255, 240, 240, 0.95);
-}
-
-/* Animation states */
-.animating {
-  z-index: 4;
-}
-
-.animating .objectContent {
-  border-color: #ed8936;
-  box-shadow: 0 4px 16px rgba(237, 137, 54, 0.4);
-}
-
-/* Masking overlay - shows the revealed nail */
-.maskOverlay {
+.nailLayer {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.revealedContent {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(139, 69, 19, 0.4); /* Brown background for nail */
-  border-radius: 8px;
-}
-
-.nailEmoji {
-  font-size: 2em;
-  line-height: 1;
-  display: block;
-  color: #8B4513;
-}
-
-/* Debug information */
-.debugInfo {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: bold;
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* Responsive scaling */
-@media (max-width: 768px) {
-  .objectEmoji {
-    font-size: 1.5em;
-  }
-  
-  .nailEmoji {
-    font-size: 1.3em;
-  }
-}
-
-@media (max-width: 480px) {
-  .objectEmoji {
-    font-size: 1.2em;
-  }
-  
-  .nailEmoji {
-    font-size: 1em;
-  }
-}
-
-/* Hover effects for desktop */
-@media (hover: hover) {
-  .transformableObject:hover .objectContent {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
+  font-size: calc(100% * 0.6);
 }

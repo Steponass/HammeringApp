@@ -12,7 +12,7 @@ export interface NailDefinition {
   id: string;                   // Unique nail type identifier
   name: string;                 // Human-readable name (wood screw, railroad spike, etc.)
   svgPath: string;             // Path to the nail SVG file
-  hammerSound?: string;        // Optional: sound file for hammering (future feature)
+  placeholder: string;        // Emoji placeholder until SVGs created
 }
 
 // Mapping between objects and their nail transformations
