@@ -72,8 +72,8 @@ export const GAME_CONFIG: GameConfiguration = {
   
   // Smaller shadow for tighter object spacing
   shadowConfig: {
-    radius: 60,        // Reduced shadow radius
-    opacity: 0.8,      
+    radius: 45,        // Reduced shadow radius
+    opacity: 0.7,      
     blurAmount: 2      
   },
   

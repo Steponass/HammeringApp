@@ -23,3 +23,11 @@ export interface AnimationKeyframe {
   transform: string;           // CSS transform at this point
   opacity?: number;            // Optional opacity change
 }
+
+// Hammer animation state
+export interface HammerAnimation {
+  isActive: boolean;            // Whether hammer animation is playing
+  targetObjectId: string | null; // Which object is being hammered
+  progress: number;             // Animation progress (0-1)
+  duration: number;             // How long the animation takes (ms)
+}

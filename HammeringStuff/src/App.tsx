@@ -1,11 +1,11 @@
 import React from 'react';
-import CollisionTest from 'components/CollisionTest';
+import TestGame from 'components/TestGame';
 import './App.css';
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <CollisionTest />
+      <TestGame />
     </div>
   );
 };

@@ -6,7 +6,6 @@ export type {
   GameObject,
   CursorState,
   GameState,
-  HammerAnimation,
   ObjectMaskData,
   CollisionDetectionResult, 
   ShadowConfig,
@@ -24,5 +23,6 @@ export type {
   AnimationType,
   AnimationConfig,
   ElementAnimation,
-  AnimationKeyframe
+  AnimationKeyframe,
+  HammerAnimation,
 } from './animation';

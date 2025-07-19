@@ -1,0 +1,290 @@
+.gameField {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  cursor: none; /* Hide default cursor since we have custom shadow */
+  user-select: none;
+}
+
+/* Input mode specific styles */
+.input-desktop {
+  cursor: none;
+}
+
+.input-mobile {
+  touch-action: none; /* Prevent scrolling on mobile */
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+}
+
+.loadingMessage {
+  font-size: 1.2rem;
+  color: #6c757d;
+  text-align: center;
+}
+
+/* Game header */
+.gameHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.gameStats {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.statItem {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 6px;
+}
+
+.resetButton {
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.resetButton:hover {
+  background: #2563eb;
+}
+
+.resetButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Main game area */
+.gameArea {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding-top: 64px; /* Account for header */
+}
+
+/* Game complete state */
+.gameComplete {
+  background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%);
+}
+
+.gameCompleteOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: gameCompleteSlideIn 0.5s ease-out;
+}
+
+@keyframes gameCompleteSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.winMessage {
+  background: white;
+  padding: 48px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  margin: 0 24px;
+}
+
+.winMessage h2 {
+  margin: 0 0 16px 0;
+  color: #1f2937;
+  font-size: 2rem;
+}
+
+.winMessage p {
+  margin: 0 0 32px 0;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.playAgainButton {
+  padding: 12px 24px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.playAgainButton:hover {
+  background: #059669;
+}
+
+/* Mobile instructions */
+.mobileInstructions {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-size: 14px;
+  text-align: center;
+  max-width: 300px;
+  z-index: 60;
+  animation: instructionsFade 3s ease-in-out infinite alternate;
+}
+
+@keyframes instructionsFade {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Debug panel (development only) */
+.debugPanel {
+  position: absolute;
+  top: 80px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 12px;
+  z-index: 100;
+  min-width: 200px;
+}
+
+.debugPanel h4 {
+  margin: 0 0 8px 0;
+  color: #fbbf24;
+}
+
+.debugPanel p {
+  margin: 4px 0;
+  color: #d1d5db;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .gameHeader {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .gameStats {
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .statItem {
+    font-size: 12px;
+  }
+  
+  .gameArea {
+    padding-top: 80px;
+  }
+  
+  .debugPanel {
+    right: 8px;
+    top: 90px;
+    font-size: 10px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .winMessage {
+    padding: 32px 24px;
+    margin: 0 16px;
+  }
+  
+  .winMessage h2 {
+    font-size: 1.5rem;
+  }
+  
+  .mobileInstructions {
+    bottom: 16px;
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .gameCompleteOverlay,
+  .mobileInstructions {
+    animation: none !important;
+  }
+}
+
+
+/* Desktop instructions */
+.desktopInstructions {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-size: 14px;
+  text-align: center;
+  max-width: 400px;
+  z-index: 60;
+  animation: instructionsFade 3s ease-in-out infinite alternate;
+}
+
+/* Hide desktop instructions on mobile */
+@media (max-width: 768px) {
+  .desktopInstructions {
+    display: none;
+  }
+}
