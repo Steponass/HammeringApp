@@ -259,16 +259,7 @@ const useGameState = (): UseGameStateReturn => {
   /**
    * Log game completion for debugging
    */
-  useEffect(() => {
-    if (gameState.isGameComplete && gameState.totalCount > 0) {
-      const timeElapsed = Date.now() - gameState.gameStartTime;
-    }
-  }, [
-    gameState.isGameComplete,
-    gameState.hammeredCount,
-    gameState.totalCount,
-    gameState.gameStartTime,
-  ]);
+
 
   return {
     gameState,
