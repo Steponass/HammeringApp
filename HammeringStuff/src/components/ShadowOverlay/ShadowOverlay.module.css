@@ -1,19 +1,15 @@
-/* src/components/ShadowOverlay/ShadowOverlay.module.css */
-
 .shadowOverlay {
   position: fixed;
-  pointer-events: auto; /* Enable clicking */
+  pointer-events: auto;
   z-index: 100;
   transition: opacity 0.2s ease-out;
   cursor: pointer;
 }
 
-/* Disable pointer events when not ready to prevent accidental clicks */
 .shadowOverlay:not(.readyToHammer) {
   pointer-events: none;
 }
 
-/* Main shadow circle - now smaller */
 .shadowCircle {
   width: 100%;
   height: 100%;
@@ -30,7 +26,6 @@
   transition: all 0.15s ease-out;
 }
 
-/* Input mode specific styles */
 .input-desktop .shadowCircle {
   opacity: 0.8;
 }
@@ -40,7 +35,6 @@
   transform: scale(1.1);
 }
 
-/* Ready to hammer state - more prominent */
 .readyToHammer {
   cursor: pointer;
   pointer-events: auto;
@@ -54,73 +48,39 @@
     rgba(220, 38, 127, calc(var(--shadow-opacity) * 0.3)) 70%,
     transparent 100%
   );
-  transform: scale(1.3); /* Slightly larger when ready */
+  transform: scale(1.1); /* Less dramatic scaling */
 }
 
-/* Click indicator */
-.clickIndicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  animation: clickPulse 1s ease-in-out infinite alternate;
-}
-
-.clickIcon {
-  font-size: 16px;
-  line-height: 1;
-}
-
-@keyframes clickPulse {
-  from {
-    transform: translate(-50%, -50%) scale(0.9);
-    opacity: 0.8;
-  }
-  to {
-    transform: translate(-50%, -50%) scale(1.1);
-    opacity: 1;
-  }
-}
-
-/* Ready glow effect */
+/* Subtle ready glow effect - reduced intensity */
 .readyGlow {
   position: absolute;
-  top: 10%;
-  left: 10%;
-  right: 10%;
-  bottom: 10%;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.6) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
     transparent 100%
   );
-  animation: readyPulse 1s ease-in-out infinite alternate;
+  animation: readyPulseSubtle 2s ease-in-out infinite alternate;
 }
 
-@keyframes readyPulse {
+@keyframes readyPulseSubtle {
   from {
-    opacity: 0.6;
-    transform: scale(0.8);
+    opacity: 0.3;
+    transform: scale(0.9);
   }
   to {
-    opacity: 1;
-    transform: scale(1.2);
+    opacity: 0.6;
+    transform: scale(1.1);
   }
 }
 
-/* Hammering animation state */
 .hammering {
-  pointer-events: none; /* Disable clicking during animation */
+  pointer-events: none;
 }
 
 .hammering .shadowCircle {
@@ -134,7 +94,6 @@
   transform: scale(1.5);
 }
 
-/* Hammer pulse effect during animation */
 .hammerPulse {
   position: absolute;
   top: -20%;
@@ -162,37 +121,6 @@
   }
 }
 
-/* Mobile-specific elements */
-.hammerIndicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  animation: hammerBounce 1s ease-in-out infinite alternate;
-}
-
-.hammerIcon {
-  font-size: 18px;
-  line-height: 1;
-}
-
-@keyframes hammerBounce {
-  from {
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-  to {
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-}
-
 /* Mobile touch state styles */
 .firstTouch .shadowCircle {
   background: radial-gradient(
@@ -214,47 +142,10 @@
   );
 }
 
-/* Instruction text */
-.mobileInstructions,
-.desktopInstructions {
-  position: absolute;
-  top: calc(100% + 12px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-  pointer-events: none;
-  animation: instructionsFade 2s ease-in-out infinite alternate;
-}
-
-@keyframes instructionsFade {
-  from {
-    opacity: 0.7;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Responsive adjustments - adjusted for smaller shadow */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .shadowOverlay {
-    /* Less scaling needed since shadow is already smaller */
     transform: scale(1.1);
-  }
-  
-  .hammerIndicator {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .hammerIcon {
-    font-size: 20px;
   }
 }
 
@@ -262,23 +153,12 @@
   .shadowOverlay {
     transform: scale(1.2);
   }
-  
-  .mobileInstructions,
-  .desktopInstructions {
-    font-size: 11px;
-    padding: 4px 8px;
-  }
 }
 
-/* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   .shadowCircle,
   .readyGlow,
-  .hammerPulse,
-  .hammerIndicator,
-  .clickIndicator,
-  .mobileInstructions,
-  .desktopInstructions {
+  .hammerPulse {
     animation: none !important;
     transition: none !important;
   }

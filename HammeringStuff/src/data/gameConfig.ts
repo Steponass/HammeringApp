@@ -80,7 +80,7 @@ export const GAME_CONFIG: GameConfiguration = {
   // Faster animations for more action with many objects
   animation: {
     hammerSwingDuration: 500,     // Slightly faster
-    transformDuration: 300,       // Quicker transforms
+    transformDuration: 200,       // Quicker transforms
     easingFunction: 'ease-out'    
   }
 };

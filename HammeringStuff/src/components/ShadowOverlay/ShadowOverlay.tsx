@@ -10,14 +10,9 @@ interface ShadowOverlayProps {
   shadowConfig: ShadowConfig;
   isPrimaryObjectReady: boolean;
   isAnimating: boolean;
-  onHammerClick: () => void; // New prop for click handling
+  onHammerClick: () => void;
 }
 
-/**
- * Visual shadow overlay that follows cursor/touch
- * Provides visual feedback for hammer interaction areas
- * Now supports clicking when objects are ready
- */
 const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   shadowPosition,
   inputMode,
@@ -28,7 +23,7 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   onHammerClick
 }) => {
 
-  // Calculate shadow size based on configuration (now smaller)
+  // Calculate shadow size based on configuration
   const shadowRadius = shadowConfig.radius;
   const shadowDiameter = shadowRadius * 2;
 
@@ -37,15 +32,8 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
     event.preventDefault();
     event.stopPropagation();
     
-    // Only trigger if an object is ready to be hammered
     if (isPrimaryObjectReady && !isAnimating) {
-      console.log('Shadow clicked - triggering hammer');
       onHammerClick();
-    } else {
-      console.log('Shadow clicked but conditions not met:', {
-        isPrimaryObjectReady,
-        isAnimating
-      });
     }
   };
 
@@ -53,10 +41,8 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   const getShadowClasses = (): string => {
     const classes = [styles.shadowOverlay];
     
-    // Add input mode class
     classes.push(styles[`input-${inputMode}`]);
     
-    // Add state classes
     if (isPrimaryObjectReady) {
       classes.push(styles.readyToHammer);
     }
@@ -65,7 +51,6 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
       classes.push(styles.hammering);
     }
     
-    // Mobile-specific classes
     if (inputMode === 'mobile') {
       if (isFirstTouch) {
         classes.push(styles.firstTouch);
@@ -90,7 +75,7 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
     } as React.CSSProperties;
   };
 
-  // Don't render shadow at origin position (before first mouse movement)
+  // Don't render shadow at origin position
   if (shadowPosition.x === 0 && shadowPosition.y === 0) {
     return null;
   }
@@ -100,29 +85,13 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
       className={getShadowClasses()}
       style={getShadowStyles()}
       onClick={handleShadowClick}
-      onTouchEnd={handleShadowClick} // Handle touch events for mobile
+      onTouchEnd={handleShadowClick}
     >
       {/* Main shadow circle */}
       <div className={styles.shadowCircle}>
-        {/* Inner glow effect for ready state */}
+        {/* Subtle ready glow effect - no icons */}
         {isPrimaryObjectReady && (
           <div className={styles.readyGlow} />
-        )}
-        
-        {/* Click indicator when ready */}
-        {isPrimaryObjectReady && !isAnimating && (
-          <div className={styles.clickIndicator}>
-            <span className={styles.clickIcon}>
-              {inputMode === 'mobile' ? '👆' : '👆'}
-            </span>
-          </div>
-        )}
-        
-        {/* Hammer indicator for mobile */}
-        {inputMode === 'mobile' && !isFirstTouch && isPrimaryObjectReady && (
-          <div className={styles.hammerIndicator}>
-            <span className={styles.hammerIcon}>🔨</span>
-          </div>
         )}
         
         {/* Pulsing effect during animation */}
@@ -130,26 +99,6 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
           <div className={styles.hammerPulse} />
         )}
       </div>
-
-      {/* Instruction text for mobile users */}
-      {inputMode === 'mobile' && isFirstTouch && (
-        <div className={styles.mobileInstructions}>
-          Move to position
-        </div>
-      )}
-      
-      {inputMode === 'mobile' && !isFirstTouch && isPrimaryObjectReady && (
-        <div className={styles.mobileInstructions}>
-          Tap to hammer!
-        </div>
-      )}
-
-      {/* Desktop instruction */}
-      {inputMode === 'desktop' && isPrimaryObjectReady && !isAnimating && (
-        <div className={styles.desktopInstructions}>
-          Click to hammer!
-        </div>
-      )}
     </div>
   );
 };

@@ -209,7 +209,6 @@ const GameField: React.FC<GameFieldProps> = ({
         {/* NEW: Hammer Visual Animation */}
         <HammerVisual
   hammerAnimation={hammerAnimation}
-  targetPosition={getTargetPosition()}
   shadowPosition={shadowPosition} // Pass shadow position for rest position
   isVisible={true} // Always visible now
 />
