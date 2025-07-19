@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import type { Position, InputMode } from 'types/game'; // Removed unused CursorState import
+import type { Position, InputMode } from 'types/game';
 
 // Define what our hook returns for better TypeScript support
 interface UseMouseTrackingReturn {
@@ -38,33 +38,17 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
     y: 0 
   });
   
-  // Track what input method we're using
+  // Track what input method we're using - start with desktop as default
   const [inputMode, setInputMode] = useState<InputMode>('desktop');
   
   // Track touch interaction state for mobile
   const [isFirstTouch, setIsFirstTouch] = useState<boolean>(true);
   
-  // Track if we detected touch capability
+  // Track if we've detected actual touch usage (not just capability)
   const hasDetectedTouch = useRef<boolean>(false);
   
   // Track if user is currently dragging on mobile
   const isDragging = useRef<boolean>(false);
-
-  /**
-   * Detect device input capabilities
-   * Checks for touch support to determine initial input mode
-   */
-  const detectInputMode = useCallback((): InputMode => {
-    // Check multiple ways to detect touch support
-    const hasTouchSupport = (
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      // @ts-expect-error - some older browsers
-      navigator.msMaxTouchPoints > 0
-    );
-    
-    return hasTouchSupport ? 'mobile' : 'desktop';
-  }, []);
 
   /**
    * Update cursor position for desktop mouse movement
@@ -114,10 +98,11 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
    * Manages mobile interaction flow: first touch moves shadow, second touch hammers
    */
   const handleTouchStart = useCallback((event: TouchEvent): void => {
-    // Switch to mobile mode if touch detected
+    // Switch to mobile mode when we detect actual touch usage
     if (!hasDetectedTouch.current) {
       hasDetectedTouch.current = true;
       setInputMode('mobile');
+      console.log('Switched to mobile mode due to touch event');
     }
 
     // Prevent default touch behavior (scrolling, zooming, etc.)
@@ -147,14 +132,6 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
   }, [isFirstTouch]);
 
   /**
-   * Handle touch end events
-   * Stops dragging state
-   */
-  const handleTouchEnd = useCallback((): void => {
-    isDragging.current = false;
-  }, []);
-
-  /**
    * Reset touch interaction state
    * Useful for resetting after hammer action or game events
    */
@@ -164,53 +141,94 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
   }, []);
 
   /**
-   * Handle mouse enter events for desktop
-   * Shows cursor when mouse enters game area
+   * Set up event listeners when component mounts
    */
-  const handleMouseEnter = useCallback((event: MouseEvent): void => {
-    if (inputMode === 'desktop') {
+  useEffect(() => {
+    console.log('Setting up mouse tracking with default desktop mode');
+
+    // Mouse move handler
+    const handleMouseMove = (event: MouseEvent) => {
       const newPosition: Position = {
         x: event.clientX,
         y: event.clientY
       };
       
       setCursorPosition(newPosition);
-      setShadowPosition(newPosition);
-    }
-  }, [inputMode]);
-
-  /**
-   * Set up event listeners when component mounts
-   */
-  useEffect(() => {
-    // Detect initial input mode
-    const initialMode = detectInputMode();
-    setInputMode(initialMode);
-
-    // Create event handler functions that match expected signatures
-    const handleMouseMove = (event: MouseEvent) => {
-      updateCursorPosition(event);
+      
+      // Always update shadow on mouse move if we haven't switched to mobile
+      if (!hasDetectedTouch.current) {
+        setShadowPosition(newPosition);
+      }
     };
 
-    const handleMouseEnterEvent = (event: MouseEvent) => {
-      handleMouseEnter(event);
-    };
-
+    // Touch move handler
     const handleTouchMoveEvent = (event: TouchEvent) => {
-      updateTouchPosition(event);
+      // Switch to mobile mode if not already detected
+      if (!hasDetectedTouch.current) {
+        hasDetectedTouch.current = true;
+        setInputMode('mobile');
+        console.log('Switched to mobile mode due to touch move');
+      }
+
+      event.preventDefault();
+      
+      if (event.touches.length > 0) {
+        const touch = event.touches[0];
+        const newPosition: Position = {
+          x: touch.clientX,
+          y: touch.clientY
+        };
+        
+        setCursorPosition(newPosition);
+        
+        // During drag, shadow follows finger
+        if (isDragging.current) {
+          setShadowPosition(newPosition);
+        }
+      }
     };
 
+    // Touch start handler
     const handleTouchStartEvent = (event: TouchEvent) => {
-      handleTouchStart(event);
+      // Switch to mobile mode when we detect actual touch usage
+      if (!hasDetectedTouch.current) {
+        hasDetectedTouch.current = true;
+        setInputMode('mobile');
+        console.log('Switched to mobile mode due to touch start');
+      }
+
+      event.preventDefault();
+      
+      if (event.touches.length > 0) {
+        const touch = event.touches[0];
+        const newPosition: Position = {
+          x: touch.clientX,
+          y: touch.clientY
+        };
+        
+        setCursorPosition(newPosition);
+        
+        if (isFirstTouch) {
+          // First touch: move shadow to this position
+          setShadowPosition(newPosition);
+          setIsFirstTouch(false);
+          isDragging.current = true;
+        } else {
+          // Second touch: this will trigger hammer action in parent component
+          // Reset state for next interaction cycle
+          setIsFirstTouch(true);
+          isDragging.current = false;
+        }
+      }
     };
 
+    // Touch end handler
     const handleTouchEndEvent = () => {
-      handleTouchEnd();
+      isDragging.current = false;
     };
 
     // Add event listeners to document for global coverage
     document.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('mouseenter', handleMouseEnterEvent, { passive: true });
     document.addEventListener('touchstart', handleTouchStartEvent, { passive: false });
     document.addEventListener('touchmove', handleTouchMoveEvent, { passive: false });
     document.addEventListener('touchend', handleTouchEndEvent, { passive: true });
@@ -218,19 +236,11 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
     // Cleanup function: remove all event listeners
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseenter', handleMouseEnterEvent);
       document.removeEventListener('touchstart', handleTouchStartEvent);
       document.removeEventListener('touchmove', handleTouchMoveEvent);
       document.removeEventListener('touchend', handleTouchEndEvent);
     };
-  }, [
-    detectInputMode,
-    updateCursorPosition,
-    updateTouchPosition,
-    handleTouchStart,
-    handleTouchEnd,
-    handleMouseEnter
-  ]);
+  }, [isFirstTouch]); // Only depend on isFirstTouch
 
   // Return all the data and functions that components will need
   return {
