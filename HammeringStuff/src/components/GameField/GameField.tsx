@@ -1,15 +1,14 @@
-import React from 'react';
-import TransformableObject from 'components/TransformableObject';
-import ShadowOverlay from 'components/ShadowOverlay';
-import HammerVisual from 'components/HammerVisual/HammerVisual';
-import useMouseTracking from 'hooks/useMouseTracking';
-import useCollisionDetection from 'hooks/useCollisionDetection';
-import useHammerAnimation from 'hooks/useHammerAnimation';
-import useGameState from 'hooks/useGameState';
-import type { ShadowConfig, Position } from 'types/game';
-import { GAME_CONFIG } from 'data/gameConfig';
-import styles from './GameField.module.css';
-
+import React from "react";
+import TransformableObject from "components/TransformableObject";
+import ShadowOverlay from "components/ShadowOverlay";
+import HammerVisual from "components/HammerVisual/HammerVisual";
+import useMouseTracking from "hooks/useMouseTracking";
+import useCollisionDetection from "hooks/useCollisionDetection";
+import useHammerAnimation from "hooks/useHammerAnimation";
+import useGameState from "hooks/useGameState";
+import type { ShadowConfig } from "types/game";
+import { GAME_CONFIG } from "data/gameConfig";
+import styles from "./GameField.module.css";
 
 interface GameFieldProps {
   shadowConfig?: ShadowConfig;
@@ -22,82 +21,63 @@ interface GameFieldProps {
  */
 const GameField: React.FC<GameFieldProps> = ({
   shadowConfig = GAME_CONFIG.shadowConfig,
-  className
+  className,
 }) => {
   // Game state management
-  const {
-    gameState,
-    isLoading,
-    hammerObject,
-    resetGame
-  } = useGameState();
+  const { gameState, isLoading, hammerObject, resetGame } = useGameState();
 
   // Mouse/touch position tracking
-  const {
-    shadowPosition,
-    inputMode,
-    isFirstTouch
-  } = useMouseTracking();
+  const { shadowPosition, inputMode, isFirstTouch } = useMouseTracking();
+
+  // Offset shadow position for collision logic
+  const visualShadowPosition = React.useMemo(
+    () => ({
+      x: shadowPosition.x,
+      y: shadowPosition.y,
+    }),
+    [shadowPosition]
+  );
 
   // Collision detection between shadow and objects
   const collisionResult = useCollisionDetection(
-    shadowPosition,
+    visualShadowPosition,
     gameState.objects,
     shadowConfig
   );
 
   // Hammer animation management (manual trigger only)
-  const {
-    hammerAnimation,
-    isAnimating,
-    triggerHammerAnimation
-  } = useHammerAnimation(hammerObject);
-
-  // Calculate target position for hammer animation
-  const getTargetPosition = React.useCallback((): Position => {
-    if (!collisionResult.primaryObject) {
-      return shadowPosition;
-    }
-    
-    const targetObject = gameState.objects.find(
-      obj => obj.id === collisionResult.primaryObject
-    );
-    
-    if (targetObject) {
-      return {
-        x: targetObject.position.x + (targetObject.size / 2),
-        y: targetObject.position.y + (targetObject.size / 2)
-      };
-    }
-    
-    return shadowPosition;
-  }, [collisionResult.primaryObject, gameState.objects, shadowPosition]);
+  const { hammerAnimation, isAnimating, triggerHammerAnimation } =
+    useHammerAnimation(hammerObject);
 
   // Check if primary object is ready for hammering (80%+ coverage)
   const isPrimaryObjectReady = React.useMemo(() => {
     if (!collisionResult.primaryObject) return false;
-    
+
     const primaryObjectData = collisionResult.intersectingObjects.find(
-      obj => obj.objectId === collisionResult.primaryObject
+      (obj) => obj.objectId === collisionResult.primaryObject
     );
-    
-    return primaryObjectData ? primaryObjectData.intersectionPercentage >= 0.8 : false;
+
+    return primaryObjectData
+      ? primaryObjectData.intersectionPercentage >= 0.8
+      : false;
   }, [collisionResult]);
 
   // Handle hammer click/tap
   const handleHammerClick = React.useCallback(() => {
-    if (!isPrimaryObjectReady || isAnimating || !collisionResult.primaryObject) {
-      console.log('Cannot hammer: conditions not met', {
-        isPrimaryObjectReady,
-        isAnimating,
-        primaryObject: collisionResult.primaryObject
-      });
+    if (
+      !isPrimaryObjectReady ||
+      isAnimating ||
+      !collisionResult.primaryObject
+    ) {
       return;
     }
-
-    console.log(`Hammering object: ${collisionResult.primaryObject}`);
     triggerHammerAnimation(collisionResult.primaryObject);
-  }, [isPrimaryObjectReady, isAnimating, collisionResult.primaryObject, triggerHammerAnimation]);
+  }, [
+    isPrimaryObjectReady,
+    isAnimating,
+    collisionResult.primaryObject,
+    triggerHammerAnimation,
+  ]);
 
   // Calculate responsive scale factor
   const scaleFactor = React.useMemo(() => {
@@ -109,22 +89,22 @@ const GameField: React.FC<GameFieldProps> = ({
   // Build CSS classes for game field
   const getGameFieldClasses = (): string => {
     const classes = [styles.gameField];
-    
+
     if (className) {
       classes.push(className);
     }
-    
+
     if (isLoading) {
       classes.push(styles.loading);
     }
-    
+
     if (gameState.isGameComplete) {
       classes.push(styles.gameComplete);
     }
-    
+
     classes.push(styles[`input-${inputMode}`]);
-    
-    return classes.join(' ');
+
+    return classes.join(" ");
   };
 
   // Loading state
@@ -146,22 +126,15 @@ const GameField: React.FC<GameFieldProps> = ({
           <span className={styles.statItem}>
             Progress: {gameState.hammeredCount}/{gameState.totalCount}
           </span>
-          <span className={styles.statItem}>
-            Input: {inputMode}
-          </span>
+          <span className={styles.statItem}>Input: {inputMode}</span>
           {isPrimaryObjectReady && (
-            <span className={styles.statItem} style={{color: '#e53e3e'}}>
+            <span className={styles.statItem} style={{ color: "#e53e3e" }}>
               Ready to hammer!
             </span>
           )}
-          {process.env.NODE_ENV === 'development' && (
-            <span className={styles.statItem}>
-              Intersections: {collisionResult.totalIntersections}
-            </span>
-          )}
         </div>
-        
-        <button 
+
+        <button
           className={styles.resetButton}
           onClick={resetGame}
           disabled={isAnimating}
@@ -176,12 +149,12 @@ const GameField: React.FC<GameFieldProps> = ({
         {gameState.objects.map((gameObject) => {
           // Find collision data for this object
           const objectMaskData = collisionResult.intersectingObjects.find(
-            maskData => maskData.objectId === gameObject.id
+            (maskData) => maskData.objectId === gameObject.id
           );
 
           // Check if this object is currently being animated
-          const isObjectAnimating = isAnimating && 
-            hammerAnimation.targetObjectId === gameObject.id;
+          const isObjectAnimating =
+            isAnimating && hammerAnimation.targetObjectId === gameObject.id;
 
           return (
             <TransformableObject
@@ -208,10 +181,10 @@ const GameField: React.FC<GameFieldProps> = ({
 
         {/* NEW: Hammer Visual Animation */}
         <HammerVisual
-  hammerAnimation={hammerAnimation}
-  shadowPosition={shadowPosition} // Pass shadow position for rest position
-  isVisible={true} // Always visible now
-/>
+          hammerAnimation={hammerAnimation}
+          shadowPosition={shadowPosition} // Pass shadow position for rest position
+          isVisible={true} // Always visible now
+        />
       </div>
 
       {/* Game Complete Overlay */}
@@ -220,10 +193,7 @@ const GameField: React.FC<GameFieldProps> = ({
           <div className={styles.winMessage}>
             <h2>🎉 All Objects Hammered!</h2>
             <p>You successfully hammered {gameState.totalCount} objects!</p>
-            <button 
-              className={styles.playAgainButton}
-              onClick={resetGame}
-            >
+            <button className={styles.playAgainButton} onClick={resetGame}>
               Play Again
             </button>
           </div>
@@ -231,7 +201,7 @@ const GameField: React.FC<GameFieldProps> = ({
       )}
 
       {/* Mobile Instructions - Updated for click behavior */}
-      {inputMode === 'mobile' && gameState.objects.length > 0 && (
+      {inputMode === "mobile" && gameState.objects.length > 0 && (
         <div className={styles.mobileInstructions}>
           {isFirstTouch ? (
             <p>Touch and drag to move the shadow over objects</p>
@@ -244,30 +214,20 @@ const GameField: React.FC<GameFieldProps> = ({
       )}
 
       {/* Desktop Instructions */}
-      {inputMode === 'desktop' && gameState.objects.length > 0 && !gameState.isGameComplete && (
-        <div className={styles.desktopInstructions}>
-          {isPrimaryObjectReady ? (
-            <p>Click the shadow to hammer!</p>
-          ) : (
-            <p>Move mouse to cover 80% of an object, then click to hammer</p>
-          )}
-        </div>
-      )}
+      {inputMode === "desktop" &&
+        gameState.objects.length > 0 &&
+        !gameState.isGameComplete && (
+          <div className={styles.desktopInstructions}>
+            {isPrimaryObjectReady ? (
+              <p>Click the shadow to hammer!</p>
+            ) : (
+              <p>Move mouse to cover 80% of an object, then click to hammer</p>
+            )}
+          </div>
+        )}
 
       {/* Debug Panel (Development Only) */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className={styles.debugPanel}>
-          <h4>Debug Info</h4>
-          <p>Objects: {gameState.objects.length}</p>
-          <p>Shadow: ({Math.round(shadowPosition.x)}, {Math.round(shadowPosition.y)})</p>
-          <p>Target: ({Math.round(getTargetPosition().x)}, {Math.round(getTargetPosition().y)})</p>
-          <p>Primary Object: {collisionResult.primaryObject || 'None'}</p>
-          <p>Ready to Hammer: {isPrimaryObjectReady ? 'Yes' : 'No'}</p>
-          <p>Animating: {isAnimating ? 'Yes' : 'No'}</p>
-          <p>Animation Progress: {Math.round(hammerAnimation.progress * 100)}%</p>
-          <p>Shadow Size: {shadowConfig.radius}px radius</p>
-        </div>
-      )}
+      {/* Debug panel and related code removed */}
     </div>
   );
 };

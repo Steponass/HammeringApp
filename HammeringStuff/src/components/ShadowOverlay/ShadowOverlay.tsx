@@ -1,7 +1,7 @@
 // src/components/ShadowOverlay/ShadowOverlay.tsx
-import React from 'react';
-import type { Position, InputMode, ShadowConfig } from 'types/game';
-import styles from './ShadowOverlay.module.css';
+import React from "react";
+import type { Position, InputMode, ShadowConfig } from "types/game";
+import styles from "./ShadowOverlay.module.css";
 
 interface ShadowOverlayProps {
   shadowPosition: Position;
@@ -20,9 +20,8 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   shadowConfig,
   isPrimaryObjectReady,
   isAnimating,
-  onHammerClick
+  onHammerClick,
 }) => {
-
   // Calculate shadow size based on configuration
   const shadowRadius = shadowConfig.radius;
   const shadowDiameter = shadowRadius * 2;
@@ -31,7 +30,7 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   const handleShadowClick = (event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    
+
     if (isPrimaryObjectReady && !isAnimating) {
       onHammerClick();
     }
@@ -40,38 +39,38 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   // Get shadow classes based on current state
   const getShadowClasses = (): string => {
     const classes = [styles.shadowOverlay];
-    
+
     classes.push(styles[`input-${inputMode}`]);
-    
+
     if (isPrimaryObjectReady) {
       classes.push(styles.readyToHammer);
     }
-    
+
     if (isAnimating) {
       classes.push(styles.hammering);
     }
-    
-    if (inputMode === 'mobile') {
+
+    if (inputMode === "mobile") {
       if (isFirstTouch) {
         classes.push(styles.firstTouch);
       } else {
         classes.push(styles.tapToHammer);
       }
     }
-    
-    return classes.join(' ');
+
+    return classes.join(" ");
   };
 
   // Calculate shadow positioning
   const getShadowStyles = (): React.CSSProperties => {
     return {
       left: shadowPosition.x - shadowRadius,
-      top: shadowPosition.y - shadowRadius,
+      top: shadowPosition.y - shadowRadius + 60, // Offset shadow 60px lower
       width: shadowDiameter,
       height: shadowDiameter,
-      '--shadow-opacity': shadowConfig.opacity,
-      '--shadow-blur': `${shadowConfig.blurAmount}px`,
-      '--shadow-radius': `${shadowRadius}px`
+      "--shadow-opacity": shadowConfig.opacity,
+      "--shadow-blur": `${shadowConfig.blurAmount}px`,
+      "--shadow-radius": `${shadowRadius}px`,
     } as React.CSSProperties;
   };
 
@@ -88,17 +87,7 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
       onTouchEnd={handleShadowClick}
     >
       {/* Main shadow circle */}
-      <div className={styles.shadowCircle}>
-        {/* Subtle ready glow effect - no icons */}
-        {isPrimaryObjectReady && (
-          <div className={styles.readyGlow} />
-        )}
-        
-        {/* Pulsing effect during animation */}
-        {isAnimating && (
-          <div className={styles.hammerPulse} />
-        )}
-      </div>
+      <div className={styles.shadowCircle}></div>
     </div>
   );
 };

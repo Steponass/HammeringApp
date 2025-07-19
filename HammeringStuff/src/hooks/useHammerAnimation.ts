@@ -1,7 +1,7 @@
 // src/hooks/useHammerAnimation.ts
-import { useState, useCallback, useEffect, useRef } from 'react';
-import type { HammerAnimation } from 'types/animation';
-import { GAME_CONFIG } from 'data/gameConfig';
+import { useState, useCallback, useEffect, useRef } from "react";
+import type { HammerAnimation } from "types/animation";
+import { GAME_CONFIG } from "data/gameConfig";
 
 interface UseHammerAnimationReturn {
   hammerAnimation: HammerAnimation;
@@ -18,7 +18,7 @@ interface AnimationTimers {
 /**
  * Custom hook for managing hammer swing and object impact animations
  * Manual trigger only - requires explicit user action (click/tap)
- * 
+ *
  * Key Features:
  * - Manual triggering via triggerHammerAnimation function
  * - Coordinated hammer swing + object impact animations
@@ -28,13 +28,12 @@ interface AnimationTimers {
 const useHammerAnimation = (
   onObjectHammered: (objectId: string) => void
 ): UseHammerAnimationReturn => {
-
   // Current animation state
   const [hammerAnimation, setHammerAnimation] = useState<HammerAnimation>({
     isActive: false,
     targetObjectId: null,
     progress: 0,
-    duration: GAME_CONFIG.animation.hammerSwingDuration
+    duration: GAME_CONFIG.animation.hammerSwingDuration,
   });
 
   // Track if any animation is currently running
@@ -43,7 +42,7 @@ const useHammerAnimation = (
   // Track animation timers for cleanup
   const animationTimers = useRef<AnimationTimers>({
     hammerSwing: null,
-    objectImpact: null
+    objectImpact: null,
   });
 
   // Track which objects have been triggered to prevent double-hammering
@@ -56,94 +55,100 @@ const useHammerAnimation = (
    * Trigger object impact animation and transformation
    * This happens at the end of the hammer swing
    */
-  const triggerObjectImpact = useCallback((objectId: string): void => {
-    // Start object impact animation (scale, shake, etc.)
-    const impactDuration = GAME_CONFIG.animation.transformDuration;
-    
-    // Use timeout for impact animation (simpler than RAF for this case)
-    animationTimers.current.objectImpact = window.setTimeout(() => {
-      // Notify parent that object should be hammered
-      onObjectHammered(objectId);
-      
-      // Reset animation state
-      setHammerAnimation({
-        isActive: false,
-        targetObjectId: null,
-        progress: 0,
-        duration: GAME_CONFIG.animation.hammerSwingDuration
-      });
-      
-      setIsAnimating(false);
-      
-      // Clear the triggered object after a delay to allow re-triggering
-      setTimeout(() => {
-        triggeredObjects.current.delete(objectId);
-      }, 1000);
-      
-    }, impactDuration);
-  }, [onObjectHammered]);
+  const triggerObjectImpact = useCallback(
+    (objectId: string): void => {
+      // Start object impact animation (scale, shake, etc.)
+      const impactDuration = GAME_CONFIG.animation.transformDuration;
+
+      // Use timeout for impact animation (simpler than RAF for this case)
+      animationTimers.current.objectImpact = window.setTimeout(() => {
+        // Notify parent that object should be hammered
+        onObjectHammered(objectId);
+
+        // Reset animation state
+        setHammerAnimation({
+          isActive: false,
+          targetObjectId: null,
+          progress: 0,
+          duration: GAME_CONFIG.animation.hammerSwingDuration,
+        });
+
+        setIsAnimating(false);
+
+        // Clear the triggered object after a delay to allow re-triggering
+        setTimeout(() => {
+          triggeredObjects.current.delete(objectId);
+        }, 1000);
+      }, impactDuration);
+    },
+    [onObjectHammered]
+  );
 
   /**
    * Start hammer swing animation
    * Triggers visual hammer movement from raised to impact position
    */
-  const startHammerSwing = useCallback((targetObjectId: string): void => {
-    const startTime = performance.now();
-    const duration = GAME_CONFIG.animation.hammerSwingDuration;
+  const startHammerSwing = useCallback(
+    (targetObjectId: string): void => {
+      const startTime = performance.now();
+      const duration = GAME_CONFIG.animation.hammerSwingDuration;
 
-    // Clear any existing animation
-    if (animationFrameId.current) {
-      cancelAnimationFrame(animationFrameId.current);
-    }
-
-    // Set initial animation state
-    setHammerAnimation({
-      isActive: true,
-      targetObjectId,
-      progress: 0,
-      duration
-    });
-
-    setIsAnimating(true);
-
-    // Animation loop using requestAnimationFrame for smooth 60fps
-    const animateHammer = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Update animation progress
-      setHammerAnimation(prev => ({
-        ...prev,
-        progress
-      }));
-
-      if (progress < 1) {
-        // Continue animation
-        animationFrameId.current = requestAnimationFrame(animateHammer);
-      } else {
-        // Animation complete - trigger impact
-        triggerObjectImpact(targetObjectId);
+      // Clear any existing animation
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
       }
-    };
 
-    animationFrameId.current = requestAnimationFrame(animateHammer);
-  }, [triggerObjectImpact]);
+      // Set initial animation state
+      setHammerAnimation({
+        isActive: true,
+        targetObjectId,
+        progress: 0,
+        duration,
+      });
+
+      setIsAnimating(true);
+
+      // Animation loop using requestAnimationFrame for smooth 60fps
+      const animateHammer = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Update animation progress
+        setHammerAnimation((prev) => ({
+          ...prev,
+          progress,
+        }));
+
+        if (progress < 1) {
+          // Continue animation
+          animationFrameId.current = requestAnimationFrame(animateHammer);
+        } else {
+          // Animation complete - trigger impact
+          triggerObjectImpact(targetObjectId);
+        }
+      };
+
+      animationFrameId.current = requestAnimationFrame(animateHammer);
+    },
+    [triggerObjectImpact]
+  );
 
   /**
    * Manually trigger hammer animation for a specific object
    * This is the main entry point - called when user clicks/taps
    */
-  const triggerHammerAnimation = useCallback((objectId: string): void => {
-    // Don't trigger if already animating or object already triggered
-    if (isAnimating || triggeredObjects.current.has(objectId)) {
-      console.log(`Cannot trigger hammer for ${objectId}: already animating or recently triggered`);
-      return;
-    }
+  const triggerHammerAnimation = useCallback(
+    (objectId: string): void => {
+      // Don't trigger if already animating or object already triggered
+      if (isAnimating || triggeredObjects.current.has(objectId)) {
+        return;
+      }
 
-    console.log(`Manually triggering hammer animation for object: ${objectId}`);
-    triggeredObjects.current.add(objectId);
-    startHammerSwing(objectId);
-  }, [isAnimating, startHammerSwing]);
+      triggeredObjects.current.add(objectId);
+      startHammerSwing(objectId);
+    },
+    [isAnimating, startHammerSwing]
+  );
 
   /**
    * Reset all animation state
@@ -172,7 +177,7 @@ const useHammerAnimation = (
       isActive: false,
       targetObjectId: null,
       progress: 0,
-      duration: GAME_CONFIG.animation.hammerSwingDuration
+      duration: GAME_CONFIG.animation.hammerSwingDuration,
     });
 
     setIsAnimating(false);
@@ -192,7 +197,7 @@ const useHammerAnimation = (
     hammerAnimation,
     isAnimating,
     triggerHammerAnimation,
-    resetAnimation
+    resetAnimation,
   };
 };
 

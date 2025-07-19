@@ -1,7 +1,7 @@
-import React from 'react';
-import type { GameObject, ObjectMaskData } from 'types/game';
-import { getObjectDefinition, getNailDefinition } from 'data/objectDefinitions';
-import styles from './TransformableObject.module.css';
+import React from "react";
+import type { GameObject, ObjectMaskData } from "types/game";
+import { getObjectDefinition, getNailDefinition } from "data/objectDefinitions";
+import styles from "./TransformableObject.module.css";
 
 interface TransformableObjectProps {
   gameObject: GameObject;
@@ -18,13 +18,13 @@ interface TransformableObjectProps {
 const TransformableObject: React.FC<TransformableObjectProps> = ({
   gameObject,
   maskData,
-  scaleFactor
+  scaleFactor,
 }) => {
   const { objectType, nailType, state, size, position } = gameObject;
-  
+
   const objectDef = getObjectDefinition(objectType);
   const nailDef = getNailDefinition(nailType);
-  
+
   if (!objectDef || !nailDef) {
     return null;
   }
@@ -33,58 +33,65 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
 
   // Calculate masking styles for original object (hide where shadow overlaps)
   const getOriginalMaskStyles = (): React.CSSProperties => {
-    if (!maskData?.hasIntersection || state === 'hammered') {
+    if (!maskData?.hasIntersection || state === "hammered") {
       return {};
     }
 
     // Create inverse mask - hide the circular area where shadow overlaps
     return {
-      clipPath: `circle(100% at 50% 50%) subtract circle(${maskData.maskCoordinates.radius}px at ${maskData.maskCoordinates.centerX}px ${maskData.maskCoordinates.centerY}px)`
+      clipPath: `circle(100% at 50% 50%) subtract circle(${maskData.maskCoordinates.radius}px at ${maskData.maskCoordinates.centerX}px ${maskData.maskCoordinates.centerY}px)`,
     };
   };
 
   // Calculate masking styles for nail layer (show only where shadow overlaps)
   const getNailMaskStyles = (): React.CSSProperties => {
-    if (state === 'hammered') {
+    if (state === "hammered") {
       // When hammered, show full nail
       return {};
     }
 
     if (!maskData?.hasIntersection) {
-      return { display: 'none' };
+      return { display: "none" };
     }
 
     // Show only the circular area where shadow overlaps
     return {
-      clipPath: `circle(${maskData.maskCoordinates.radius}px at ${maskData.maskCoordinates.centerX}px ${maskData.maskCoordinates.centerY}px)`
+      clipPath: `circle(${maskData.maskCoordinates.radius}px at ${maskData.maskCoordinates.centerX}px ${maskData.maskCoordinates.centerY}px)`,
     };
   };
 
   return (
-    <div 
+    <div
       className={styles.container}
       style={{
         left: position.x,
         top: position.y,
         width: adjustedSize,
-        height: adjustedSize
+        height: adjustedSize,
       }}
     >
       {/* Original object - real SVG */}
-      {state !== 'hammered' && (
-        <img 
+      {state !== "hammered" && (
+        <img
           src={objectDef.svgPath}
           alt={objectDef.name}
           className={styles.originalLayer}
           style={getOriginalMaskStyles()}
         />
       )}
-      
+
       {/* Nail layer - placeholder icon until SVGs ready */}
-      {(maskData?.hasIntersection || state === 'hammered') && (
-        <div 
+      {(maskData?.hasIntersection || state === "hammered") && (
+        <div
           className={styles.nailLayer}
-          style={getNailMaskStyles()}
+          style={{
+            ...getNailMaskStyles(),
+            fontSize: "1.75em", // Make emoji 4x bigger
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1,
+          }}
         >
           {nailDef.placeholder}
         </div>

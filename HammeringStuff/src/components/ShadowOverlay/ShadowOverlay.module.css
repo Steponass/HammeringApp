@@ -11,8 +11,8 @@
 }
 
 .shadowCircle {
-  width: 100%;
-  height: 100%;
+  width: 66%;
+  height: 66%;
   border-radius: 50%;
   position: relative;
   background: radial-gradient(
@@ -51,34 +51,6 @@
   transform: scale(1.1); /* Less dramatic scaling */
 }
 
-/* Subtle ready glow effect - reduced intensity */
-.readyGlow {
-  position: absolute;
-  top: 20%;
-  left: 20%;
-  right: 20%;
-  bottom: 20%;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.3) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
-  animation: readyPulseSubtle 2s ease-in-out infinite alternate;
-}
-
-@keyframes readyPulseSubtle {
-  from {
-    opacity: 0.3;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 0.6;
-    transform: scale(1.1);
-  }
-}
-
 .hammering {
   pointer-events: none;
 }
@@ -92,33 +64,6 @@
     transparent 100%
   );
   transform: scale(1.5);
-}
-
-.hammerPulse {
-  position: absolute;
-  top: -20%;
-  left: -20%;
-  right: -20%;
-  bottom: -20%;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 140, 0, 0.4) 0%,
-    rgba(255, 140, 0, 0.2) 50%,
-    transparent 100%
-  );
-  animation: hammerPulseAnim 0.3s ease-out infinite;
-}
-
-@keyframes hammerPulseAnim {
-  from {
-    transform: scale(0.5);
-    opacity: 1;
-  }
-  to {
-    transform: scale(2);
-    opacity: 0;
-  }
 }
 
 /* Mobile touch state styles */
@@ -156,9 +101,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shadowCircle,
-  .readyGlow,
-  .hammerPulse {
+  .shadowCircle {
     animation: none !important;
     transition: none !important;
   }

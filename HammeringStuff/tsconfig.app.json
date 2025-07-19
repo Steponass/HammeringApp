@@ -29,7 +29,8 @@
       "utils/*": ["./src/utils/*"],
       "assets/*": ["./src/assets/*"],
       "data/*": ["./src/data/*"],
-      "styles/*": ["./src/styles/*"]
+      "styles/*": ["./src/styles/*"],
+      "games/*": ["./src/games/*"]
     }
   },
   "include": ["src"]
