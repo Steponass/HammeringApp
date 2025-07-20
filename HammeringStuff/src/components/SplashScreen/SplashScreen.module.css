@@ -1,0 +1,20 @@
+.splash_main {
+  background-color: var(--clr-primary);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--clr-white-ish);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  overflow: hidden;
+  gap: 48px;
+}
+
+.splash_button {
+
+}

@@ -1,0 +1,14 @@
+:root {
+--clr-primary:   oklch(0.3767 0.088   268.58);
+--clr-secondary: oklch(0.8648 0.1624  90.55);
+--clr-white-ish:     oklch(0.9851 0       0);
+--clr-black-ish:     oklch(0.1413 0.0066 285.53);
+
+--shadow-elevation-1: 
+0    2px 3px -1px hsla(0, 0%, 26%, 0.3),
+0 -0.5px 1px      hsla(0, 0%, 10%, 0.1);
+
+--shadow-elevation-2: 
+0    3px 6px      hsla(0, 0%, 16%, 0.3),
+0    2px 4px      hsla(0, 0%, 18%, 0.15);
+}
