@@ -1,0 +1,47 @@
+
+@font-face {
+  font-family: 'Jost';
+  src: url('./assets/fonts/Jost-VariableFont_wght.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* @link https://utopia.fyi/type/calculator?c=360,16,1.25,1920,18,1.333,6,1,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+
+:root {
+  /* 12.8px → 13.5034px */
+  --fontsize-s: clamp(0.8rem, 0.7899rem + 0.0451vw, 0.844rem);
+  /* 16px → 18px */
+  --fontsize-p: clamp(1rem, 0.9712rem + 0.1282vw, 1.125rem);
+  /* 20px → 23.994px */
+  --fontsize-h6: clamp(1.25rem, 1.1924rem + 0.256vw, 1.4996rem);
+  /* 25px → 31.984px */
+  --fontsize-h5: clamp(1.5625rem, 1.4618rem + 0.4477vw, 1.999rem);
+  /* 31.25px → 42.6347px */
+  --fontsize-h4: clamp(1.9531rem, 1.7889rem + 0.7298vw, 2.6647rem);
+  /* 39.0625px → 56.832px */
+  --fontsize-h3: clamp(2.4414rem, 2.1851rem + 1.1391vw, 3.552rem);
+  /* 48.8281px → 75.7571px */
+  --fontsize-h2: clamp(3.0518rem, 2.6634rem + 1.7262vw, 4.7348rem);
+  /* 61.0352px → 100.9842px */
+  --fontsize-h1: clamp(3.8147rem, 3.2385rem + 2.5608vw, 6.3115rem);
+}
+
+:where(h1) {font-size: var(--fontsize-h1)}
+:where(h2) {font-size: var(--fontsize-h2)}
+:where(h3) {font-size: var(--fontsize-h3)}
+:where(h4) {font-size: var(--fontsize-h4)}
+:where(h5) {font-size: var(--fontsize-h5)}
+:where(h6) {font-size: var(--fontsize-h6)}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  font-family: 'Jost', Arial, Helvetica, sans-serif;
+  line-height: 1.2;
+}
+
+:where(p, ul, ol, li, a, button, label, input, textarea, span) {
+  font-family: 'Jost', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+}
