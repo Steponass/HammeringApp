@@ -18,7 +18,7 @@ export const getRandomObjectPlacement = (
   // Calculate valid placement area
   const minX = margin;
   const maxX = viewportWidth - margin;
-  const minY = 60 + margin;
+  const minY = margin;
   const maxY = viewportHeight - margin - 80;
 
   // For dense placement, try a grid-based approach first

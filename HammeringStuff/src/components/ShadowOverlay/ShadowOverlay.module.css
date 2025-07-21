@@ -46,7 +46,7 @@
     rgba(220, 38, 127, var(--shadow-opacity)) 0%,
     rgba(220, 38, 127, calc(var(--shadow-opacity) * 0.7)) 40%,
     rgba(220, 38, 127, calc(var(--shadow-opacity) * 0.3)) 70%,
-    transparent 100%
+    transparent 50%
   );
   transform: scale(1.05);
 }
