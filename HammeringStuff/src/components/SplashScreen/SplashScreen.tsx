@@ -32,7 +32,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
         whileHover={{ 
           scale: 3, 
           rotate: 2,
-          boxShadow: "0 3px 4px hsla(225, 42%, 5%, 0.3)"
+          boxShadow: "0 3px 4px -1px hsla(225, 42%, 5%, 1)"
         }}
         whileTap={{ scale: 2, rotate: 4 }}
         onAnimationComplete={handleAnimationComplete}

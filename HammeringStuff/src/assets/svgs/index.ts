@@ -66,8 +66,20 @@ import cheeseSvg from "./objects/cheese.svg";
 import hamburgerSvg from "./objects/hamburger.svg";
 import hotDogSvg from "./objects/hot-dog.svg";
 import pizzaSvg from "./objects/pizza.svg";
+import nailReady1Svg from "./nails/Nail_Ready_1.svg";
+import nailReady2Svg from "./nails/Nail_Ready_2.svg";
+import nailReady3Svg from "./nails/Nail_Ready_3.svg";
+import nailDone1Svg from "./nails/Nail_Done_1.svg";
+import nailDone2Svg from "./nails/Nail_Done_2.svg";
+import nailDone3Svg from "./nails/Nail_Done_3.svg";
 
 export const SVG_ASSETS = {
+  nailReady1: nailReady1Svg,
+  nailReady2: nailReady2Svg,
+  nailReady3: nailReady3Svg,
+  nailDone1: nailDone1Svg,
+  nailDone2: nailDone2Svg,
+  nailDone3: nailDone3Svg,
   dashboard: dashboardSvg,
   key: keySvg,
   umbrella: umbrellaSvg,

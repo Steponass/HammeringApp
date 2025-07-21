@@ -11,4 +11,8 @@
 --shadow-elevation-2: 
 0    3px 6px      hsla(0, 0%, 16%, 0.3),
 0    2px 4px      hsla(0, 0%, 18%, 0.15);
+
+/* Below used as inline style due to Motion limitations */
+--shadow-splash-button-hover:
+0 3px 4px -1px hsla(225, 42%, 5%, 1);
 }

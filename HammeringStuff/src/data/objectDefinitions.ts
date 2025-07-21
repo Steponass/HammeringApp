@@ -3,36 +3,24 @@ import { SVG_ASSETS } from "../assets/svgs";
 
 // Nail types - using placeholder icons until SVGs are created
 export const NAIL_DEFINITIONS: Record<string, NailDefinition> = {
-  "common-nail": {
-    id: "common-nail",
-    name: "Common Nail",
-    svgPath: "",
+  "nailReady1": {
+    id: "nailReady1",
+    name: "Nail Ready 1",
+    svgPath: SVG_ASSETS.nailReady1,
     placeholder: "🔩",
   },
-  "wood-screw": {
-    id: "wood-screw",
-    name: "Wood Screw",
-    svgPath: "",
+  "nailReady2": {
+    id: "nailReady2",
+    name: "Nail Ready 2",
+    svgPath: SVG_ASSETS.nailReady2,
     placeholder: "🔩",
   },
-  "finishing-nail": {
-    id: "finishing-nail",
-    name: "Finishing Nail",
-    svgPath: "",
-    placeholder: "📎",
-  },
-  "brad-nail": {
-    id: "brad-nail",
-    name: "Brad Nail",
-    svgPath: "",
-    placeholder: "📌",
-  },
-  "roofing-nail": {
-    id: "roofing-nail",
-    name: "Roofing Nail",
-    svgPath: "",
-    placeholder: "⚙️",
-  },
+  "nailReady3": {
+    id: "nailReady3",
+    name: "Nail Ready 3",
+    svgPath: SVG_ASSETS.nailReady3,
+    placeholder: "🔩",
+  }
 };
 
 // Helper to randomly assign nail types
