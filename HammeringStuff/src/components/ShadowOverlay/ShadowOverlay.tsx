@@ -61,7 +61,7 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   const getShadowStyles = (): React.CSSProperties => {
     return {
       left: shadowPosition.x - shadowRadius,
-      top: shadowPosition.y - shadowRadius + 80, // Offset shadow 60px lower
+      top: shadowPosition.y - shadowRadius + 80, // Offset shadow 80px lower
       width: shadowDiameter,
       height: shadowDiameter,
       "--shadow-opacity": shadowConfig.opacity,
@@ -82,7 +82,6 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
       onClick={handleShadowClick}
       onTouchEnd={handleShadowClick}
     >
-      {/* Main shadow circle */}
       <div className={styles.shadowCircle}></div>
     </div>
   );

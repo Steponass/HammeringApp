@@ -1,4 +1,3 @@
-// Definition for different object types
 export interface ObjectDefinition {
   id: string;                   // Unique object type identifier
   name: string;                 // Human-readable name
@@ -7,13 +6,12 @@ export interface ObjectDefinition {
   nailType: string;            // Which nail this object becomes
 }
 
-// Definition for different nail types
 export interface NailDefinition {
   id: string;                   // Unique nail type identifier
   name: string;                 // Human-readable name (wood screw, railroad spike, etc.)
   svgPath: string;             // Path to the nail SVG file
   hammeredSvgPath: string;     // Path to the hammered nail SVG file
-  placeholder: string;        // Emoji placeholder until SVGs created
+  placeholder: string;        // Emoji placeholder if SVG fails
 }
 
 // Mapping between objects and their nail transformations

@@ -20,7 +20,7 @@ const useHammerAnimation = (
     setIsAnimating(true);
     setTargetObjectId(objectId);
     
-    // The animation completion will be handled by the component
+    // Animation completion will be handled by the component
     // We'll trigger the object hammering after a delay that matches the impact timing
     setTimeout(() => {
       onObjectHammered(objectId);

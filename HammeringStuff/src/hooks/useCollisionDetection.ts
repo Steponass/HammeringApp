@@ -9,19 +9,12 @@ import type {
 
 // Default shadow configuration
 const DEFAULT_SHADOW_CONFIG: ShadowConfig = {
-  radius: 60,           // 60px radius shadow circle
+  radius: 70,           // 60px radius shadow circle
   opacity: 0.3,         // Semi-transparent
   blurAmount: 4         // Soft edges
 };
 
-/**
- * Custom hook for detecting shadow-object intersections and calculating masking data
- * 
- * @param shadowPosition - Global shadow position from useMouseTracking
- * @param objects - Array of all game objects
- * @param shadowConfig - Shadow appearance and size configuration
- * @returns Intersection data and masking coordinates for each object
- */
+
 const useCollisionDetection = (
   shadowPosition: Position,
   objects: GameObject[],

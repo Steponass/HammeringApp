@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SplashScreen from "components/SplashScreen";
-import Header from "components/layout/Header";
+import Header from "components/layout/Header/Header";
 import TestGame from "games/TestGame";
 import "./styles/css-reset.css";
 import "./styles/variables.css";
