@@ -1,4 +1,3 @@
-// src/hooks/useGameState.ts
 import { useState, useCallback, useEffect } from "react";
 import type { GameObject, GameState, ObjectState } from "types/game";
 import { generateUniqueId } from "utils/helpers";
@@ -184,7 +183,7 @@ const useGameState = (): UseGameStateReturn => {
 
   /**
    * Hammer an object - transforms it to a nail
-   * This is the main game interaction
+   * Main game interaction
    */
   const hammerObject = useCallback((objectId: string): void => {
     setGameState((prevState) => {
@@ -255,11 +254,6 @@ const useGameState = (): UseGameStateReturn => {
   useEffect(() => {
     initializeGame();
   }, [initializeGame]);
-
-  /**
-   * Log game completion for debugging
-   */
-
 
   return {
     gameState,

@@ -1,4 +1,3 @@
-// src/hooks/useHammerAnimation.ts
 import { useState, useCallback } from "react";
 
 interface UseHammerAnimationReturn {
@@ -6,7 +5,7 @@ interface UseHammerAnimationReturn {
   targetObjectId: string | null;
   triggerHammerAnimation: (objectId: string) => void;
   resetAnimation: () => void;
-  onAnimationComplete: () => void; // Fixed property name
+  onAnimationComplete: () => void;
 }
 
 const useHammerAnimation = (
@@ -21,7 +20,7 @@ const useHammerAnimation = (
     setIsAnimating(true);
     setTargetObjectId(objectId);
     
-    // The animation completion will be handled by the component
+    // Animation completion will be handled by the component
     // We'll trigger the object hammering after a delay that matches the impact timing
     setTimeout(() => {
       onObjectHammered(objectId);
@@ -43,7 +42,7 @@ const useHammerAnimation = (
     targetObjectId,
     triggerHammerAnimation,
     resetAnimation,
-    onAnimationComplete, // This matches the interface
+    onAnimationComplete,
   };
 };
 

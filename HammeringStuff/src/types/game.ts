@@ -1,12 +1,10 @@
-// src/types/game.ts
-// Remove HammerAnimation from here since it belongs in animation.ts
 export interface Position {
   x: number;
   y: number;
 }
 
-export type InputMode = 'desktop' | 'mobile';
-export type ObjectState = 'normal' | 'transformed' | 'hammered';
+export type InputMode = "desktop" | "mobile";
+export type ObjectState = "normal" | "transformed" | "hammered";
 
 export interface GameObject {
   id: string;

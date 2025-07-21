@@ -106,8 +106,8 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
   // Calculate hammer position
   const hammerPosition = React.useMemo(
     () => ({
-      x: shadowPosition.x,
-      y: shadowPosition.y + 60 - 180, // Align with shadowOverlay's +60 offset, then apply -180 for visual alignment
+      x: shadowPosition.x -10,
+      y: shadowPosition.y + 60 - 160, // Align with shadowOverlay's +60 offset, then -160 for visual alignment
     }),
     [shadowPosition]
   );

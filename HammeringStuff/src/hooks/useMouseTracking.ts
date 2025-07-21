@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { Position, InputMode } from "types/game";
 
-// Define what our hook returns for better TypeScript support
 interface UseMouseTrackingReturn {
   cursorPosition: Position;
   shadowPosition: Position;
@@ -26,13 +25,12 @@ interface UseMouseTrackingReturn {
  * - Touch and drag: moves shadow continuously
  */
 const useMouseTracking = (): UseMouseTrackingReturn => {
-  // Current cursor position (follows mouse/finger exactly)
+
   const [cursorPosition, setCursorPosition] = useState<Position>({
     x: 0,
     y: 0,
   });
 
-  // Shadow position (may differ from cursor on mobile)
   const [shadowPosition, setShadowPosition] = useState<Position>({
     x: 0,
     y: 0,
@@ -44,13 +42,9 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
   // Track touch interaction state for mobile
   const [isFirstTouch, setIsFirstTouch] = useState<boolean>(true);
 
-  // Track if we've detected actual touch usage (not just capability)
   const hasDetectedTouch = useRef<boolean>(false);
 
-  // Track if user is currently dragging on mobile
   const isDragging = useRef<boolean>(false);
-
-  const HEADER_HEIGHT = 75;
 
   /**
    * Update cursor position for desktop mouse movement
@@ -60,12 +54,11 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
     (event: MouseEvent): void => {
       const newPosition: Position = {
         x: event.clientX,
-        y: event.clientY - HEADER_HEIGHT,
+        y: event.clientY,
       };
 
       setCursorPosition(newPosition);
 
-      // On desktop, shadow always follows cursor
       if (inputMode === "desktop") {
         setShadowPosition(newPosition);
       }
@@ -86,7 +79,7 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
       const touch = event.touches[0];
       const newPosition: Position = {
         x: touch.clientX,
-        y: touch.clientY - HEADER_HEIGHT,
+        y: touch.clientY,
       };
 
       setCursorPosition(newPosition);
@@ -104,31 +97,28 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
    */
   const handleTouchStart = useCallback(
     (event: TouchEvent): void => {
-      // Switch to mobile mode when we detect actual touch usage
       if (!hasDetectedTouch.current) {
         hasDetectedTouch.current = true;
         setInputMode("mobile");
       }
 
-      // Prevent default touch behavior (scrolling, zooming, etc.)
       event.preventDefault();
 
       if (event.touches.length > 0) {
         const touch = event.touches[0];
         const newPosition: Position = {
           x: touch.clientX,
-          y: touch.clientY - HEADER_HEIGHT,
+          y: touch.clientY,
         };
 
         setCursorPosition(newPosition);
 
         if (isFirstTouch) {
-          // First touch: move shadow to this position
           setShadowPosition(newPosition);
           setIsFirstTouch(false);
           isDragging.current = true;
         } else {
-          // Second touch: this will trigger hammer action in parent component
+          // Second touch: trigger hammer action in parent component
           // Reset state for next interaction cycle
           setIsFirstTouch(true);
           isDragging.current = false;
@@ -140,7 +130,6 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
 
   /**
    * Reset touch interaction state
-   * Useful for resetting after hammer action or game events
    */
   const resetTouchState = useCallback((): void => {
     setIsFirstTouch(true);
@@ -151,11 +140,10 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
    * Set up event listeners when component mounts
    */
   useEffect(() => {
-    // Mouse move handler
     const handleMouseMove = (event: MouseEvent) => {
       const newPosition: Position = {
         x: event.clientX,
-        y: event.clientY - HEADER_HEIGHT,
+        y: event.clientY,
       };
 
       setCursorPosition(newPosition);
@@ -166,7 +154,6 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
       }
     };
 
-    // Touch move handler
     const handleTouchMoveEvent = (event: TouchEvent) => {
       // Switch to mobile mode if not already detected
       if (!hasDetectedTouch.current) {
@@ -180,21 +167,18 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
         const touch = event.touches[0];
         const newPosition: Position = {
           x: touch.clientX,
-          y: touch.clientY - HEADER_HEIGHT,
+          y: touch.clientY,
         };
 
         setCursorPosition(newPosition);
 
-        // During drag, shadow follows finger
         if (isDragging.current) {
           setShadowPosition(newPosition);
         }
       }
     };
 
-    // Touch start handler
     const handleTouchStartEvent = (event: TouchEvent) => {
-      // Switch to mobile mode when we detect actual touch usage
       if (!hasDetectedTouch.current) {
         hasDetectedTouch.current = true;
         setInputMode("mobile");
@@ -206,18 +190,17 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
         const touch = event.touches[0];
         const newPosition: Position = {
           x: touch.clientX,
-          y: touch.clientY - HEADER_HEIGHT,
+          y: touch.clientY,
         };
 
         setCursorPosition(newPosition);
 
         if (isFirstTouch) {
-          // First touch: move shadow to this position
           setShadowPosition(newPosition);
           setIsFirstTouch(false);
           isDragging.current = true;
         } else {
-          // Second touch: this will trigger hammer action in parent component
+          // Second touch: trigger hammer action in parent component
           // Reset state for next interaction cycle
           setIsFirstTouch(true);
           isDragging.current = false;

@@ -19,20 +19,6 @@ export const calculateDistance = (pos1: { x: number; y: number }, pos2: { x: num
 };
 
 /**
- * Check if two circles overlap
- * Used for object placement validation
- */
-export const doCirclesOverlap = (
-  center1: { x: number; y: number }, 
-  radius1: number,
-  center2: { x: number; y: number }, 
-  radius2: number
-): boolean => {
-  const distance = calculateDistance(center1, center2);
-  return distance < (radius1 + radius2);
-};
-
-/**
  * Clamp a number between min and max values
  * Utility for keeping values within bounds
  */
