@@ -1,46 +1,17 @@
-/* src/components/HammerVisual/HammerVisual.module.css */
 .hammerVisual {
   position: fixed;
-  width: 120px;
-  height: 300px;
+  max-width: 224px;
+  /* height: 300px; */
   pointer-events: none;
   z-index: 150;
-  transition: opacity 0.3s ease-out;
-  filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.9));
 }
 
-/* Removed the readyHover class and hammerFloat animation since we're doing it in JS */
-
-/* SVG hammer styling */
 .hammerSVG {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
-}
-
-/* Motion blur effect during fast swing */
-.motionBlur {
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  background: rgba(192, 192, 192, 0.4);
-  filter: blur(6px);
-  border-radius: 50%;
-  animation: blurPulse 0.2s ease-out;
-}
-
-@keyframes blurPulse {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1.2);
-  }
 }
 
 /* Responsive adjustments */
@@ -55,12 +26,5 @@
   .hammerVisual {
     width: 80px;
     height: 200px;
-  }
-}
-
-/* Disable animations for reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .motionBlur {
-    animation: none !important;
   }
 }

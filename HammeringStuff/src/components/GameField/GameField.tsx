@@ -1,3 +1,4 @@
+// src/components/GameField/GameField.tsx
 import React from "react";
 import TransformableObject from "components/TransformableObject";
 import ShadowOverlay from "components/ShadowOverlay";
@@ -45,9 +46,13 @@ const GameField: React.FC<GameFieldProps> = ({
     shadowConfig
   );
 
-  // Hammer animation management (manual trigger only)
-  const { hammerAnimation, isAnimating, triggerHammerAnimation } =
-    useHammerAnimation(hammerObject);
+  // Hammer animation management (updated for Framer Motion)
+  const {
+    isAnimating,
+    targetObjectId,
+    triggerHammerAnimation,
+    onAnimationComplete,
+  } = useHammerAnimation(hammerObject);
 
   // Check if primary object is ready for hammering (80%+ coverage)
   const isPrimaryObjectReady = React.useMemo(() => {
@@ -62,6 +67,14 @@ const GameField: React.FC<GameFieldProps> = ({
       : false;
   }, [collisionResult]);
 
+  // Calculate scale factor based on viewport size
+  const scaleFactor = React.useMemo(() => {
+    const baseSize = 60; // Base object size from config
+    const minViewportDim = Math.min(window.innerWidth, window.innerHeight);
+    const targetSize = Math.max(baseSize, minViewportDim * 0.08);
+    return targetSize / baseSize;
+  }, []);
+
   // Handle hammer click/tap
   const handleHammerClick = React.useCallback(() => {
     if (
@@ -71,6 +84,8 @@ const GameField: React.FC<GameFieldProps> = ({
     ) {
       return;
     }
+
+    // Trigger hammer animation for the primary object
     triggerHammerAnimation(collisionResult.primaryObject);
   }, [
     isPrimaryObjectReady,
@@ -79,57 +94,40 @@ const GameField: React.FC<GameFieldProps> = ({
     triggerHammerAnimation,
   ]);
 
-  // Calculate responsive scale factor
-  const scaleFactor = React.useMemo(() => {
-    const baseWidth = 1920;
-    const currentWidth = window.innerWidth;
-    return Math.max(0.5, Math.min(1.2, currentWidth / baseWidth));
-  }, []);
-
-  // Build CSS classes for game field
-  const getGameFieldClasses = (): string => {
-    const classes = [styles.gameField];
-
-    if (className) {
-      classes.push(className);
-    }
-
-    if (isLoading) {
-      classes.push(styles.loading);
-    }
-
-    if (gameState.isGameComplete) {
-      classes.push(styles.gameComplete);
-    }
-
-    classes.push(styles[`input-${inputMode}`]);
-
-    return classes.join(" ");
-  };
-
-  // Loading state
+  // Show loading state
   if (isLoading) {
     return (
-      <div className={getGameFieldClasses()}>
+      <div
+        className={`${styles.gameField} ${styles.loading} ${className || ""}`}
+      >
         <div className={styles.loadingMessage}>
-          Setting up your hammering experience...
+          <p>Setting up the workshop...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={getGameFieldClasses()}>
-      {/* Game Header */}
+    <div
+      className={`${styles.gameField} ${
+        gameState.isGameComplete ? styles.gameComplete : ""
+      } ${styles[`input-${inputMode}`]} ${className || ""}`}
+    >
+      {/* Game Header with Stats */}
       <div className={styles.gameHeader}>
         <div className={styles.gameStats}>
           <span className={styles.statItem}>
-            Progress: {gameState.hammeredCount}/{gameState.totalCount}
+            Objects: {gameState.hammeredCount} / {gameState.totalCount}
           </span>
-          <span className={styles.statItem}>Input: {inputMode}</span>
-          {isPrimaryObjectReady && (
-            <span className={styles.statItem} style={{ color: "#e53e3e" }}>
-              Ready to hammer!
+          {collisionResult.primaryObject && (
+            <span className={styles.statItem}>
+              Coverage:{" "}
+              {Math.round(
+                (collisionResult.intersectingObjects.find(
+                  (obj) => obj.objectId === collisionResult.primaryObject
+                )?.intersectionPercentage || 0) * 100
+              )}
+              %
             </span>
           )}
         </div>
@@ -154,7 +152,7 @@ const GameField: React.FC<GameFieldProps> = ({
 
           // Check if this object is currently being animated
           const isObjectAnimating =
-            isAnimating && hammerAnimation.targetObjectId === gameObject.id;
+            isAnimating && targetObjectId === gameObject.id;
 
           return (
             <TransformableObject
@@ -163,7 +161,7 @@ const GameField: React.FC<GameFieldProps> = ({
               maskData={objectMaskData}
               scaleFactor={scaleFactor}
               isAnimating={isObjectAnimating}
-              animationProgress={hammerAnimation.progress}
+              animationProgress={0} // Not used with Framer Motion
             />
           );
         })}
@@ -179,11 +177,13 @@ const GameField: React.FC<GameFieldProps> = ({
           onHammerClick={handleHammerClick}
         />
 
-        {/* NEW: Hammer Visual Animation */}
+        {/* Hammer Visual Animation (Framer Motion) */}
         <HammerVisual
-          hammerAnimation={hammerAnimation}
-          shadowPosition={shadowPosition} // Pass shadow position for rest position
-          isVisible={true} // Always visible now
+          isAnimating={isAnimating}
+          targetObjectId={targetObjectId}
+          shadowPosition={shadowPosition}
+          isVisible={true}
+          onAnimationComplete={onAnimationComplete}
         />
       </div>
 
@@ -200,18 +200,20 @@ const GameField: React.FC<GameFieldProps> = ({
         </div>
       )}
 
-      {/* Mobile Instructions - Updated for click behavior */}
-      {inputMode === "mobile" && gameState.objects.length > 0 && (
-        <div className={styles.mobileInstructions}>
-          {isFirstTouch ? (
-            <p>Touch and drag to move the shadow over objects</p>
-          ) : isPrimaryObjectReady ? (
-            <p>Tap the shadow to hammer the object!</p>
-          ) : (
-            <p>Cover 80% of an object to make it ready for hammering</p>
-          )}
-        </div>
-      )}
+      {/* Mobile Instructions */}
+      {inputMode === "mobile" &&
+        gameState.objects.length > 0 &&
+        !gameState.isGameComplete && (
+          <div className={styles.mobileInstructions}>
+            {isFirstTouch ? (
+              <p>Touch and drag to move the shadow over objects</p>
+            ) : isPrimaryObjectReady ? (
+              <p>Tap the shadow to hammer the object!</p>
+            ) : (
+              <p>Cover 80% of an object to make it ready for hammering</p>
+            )}
+          </div>
+        )}
 
       {/* Desktop Instructions */}
       {inputMode === "desktop" &&
@@ -225,9 +227,6 @@ const GameField: React.FC<GameFieldProps> = ({
             )}
           </div>
         )}
-
-      {/* Debug Panel (Development Only) */}
-      {/* Debug panel and related code removed */}
     </div>
   );
 };

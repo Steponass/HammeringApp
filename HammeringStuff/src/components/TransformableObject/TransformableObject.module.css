@@ -22,3 +22,13 @@
   justify-content: center;
   font-size: calc(100% * 0.6);
 }
+
+.hammeredNailLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  z-index: 3; /* Above both original and nail layers */
+}

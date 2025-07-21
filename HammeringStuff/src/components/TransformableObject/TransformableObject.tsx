@@ -46,8 +46,7 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
   // Calculate masking styles for nail layer (show only where shadow overlaps)
   const getNailMaskStyles = (): React.CSSProperties => {
     if (state === "hammered") {
-      // When hammered, show full nail
-      return {};
+      return { display: "none" }; // Hide ready nail when hammered
     }
 
     if (!maskData?.hasIntersection) {
@@ -60,6 +59,16 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
     };
   };
 
+  // Calculate masking styles for hammered nail layer
+  const getHammeredNailMaskStyles = (): React.CSSProperties => {
+    if (state !== "hammered") {
+      return { display: "none" }; // Only show when hammered
+    }
+
+    // When hammered, show full nail
+    return {};
+  };
+
   return (
     <div
       className={styles.container}
@@ -70,7 +79,7 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
         height: adjustedSize,
       }}
     >
-      {/* Original object - real SVG */}
+      {/* Original object layer */}
       {state !== "hammered" && (
         <img
           src={objectDef.svgPath}
@@ -80,21 +89,24 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
         />
       )}
 
-      {/* Nail layer - placeholder icon until SVGs ready */}
-      {(maskData?.hasIntersection || state === "hammered") && (
-        <div
+      {/* Nail layer (ready state) */}
+      {maskData?.hasIntersection && state !== "hammered" && (
+        <img
+          src={nailDef.svgPath}
+          alt={`${nailDef.name} (Ready)`}
           className={styles.nailLayer}
-          style={{
-            ...getNailMaskStyles(),
-            fontSize: "1.75em", // Make emoji 4x bigger
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            lineHeight: 1,
-          }}
-        >
-          {nailDef.placeholder}
-        </div>
+          style={getNailMaskStyles()}
+        />
+      )}
+
+      {/* Hammered nail layer */}
+      {state === "hammered" && (
+        <img
+          src={nailDef.hammeredSvgPath}
+          alt={`${nailDef.name} (Hammered)`}
+          className={styles.hammeredNailLayer}
+          style={getHammeredNailMaskStyles()}
+        />
       )}
     </div>
   );

@@ -32,12 +32,12 @@ interface GameConfiguration {
 }
 
 export const GAME_CONFIG: GameConfiguration = {
-  defaultObjectCount: 35,
-  minObjectDistance: 60,
+  defaultObjectCount: 40,
+  minObjectDistance: 160,
   screenMargin: 40,
   
   shadowConfig: {
-    radius: 35,
+    radius: 45,
     opacity: 0.7,
     blurAmount: 2
   },

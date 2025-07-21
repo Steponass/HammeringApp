@@ -7,18 +7,21 @@ export const NAIL_DEFINITIONS: Record<string, NailDefinition> = {
     id: "nailReady1",
     name: "Nail Ready 1",
     svgPath: SVG_ASSETS.nailReady1,
+    hammeredSvgPath: SVG_ASSETS.nailDone1,
     placeholder: "🔩",
   },
   "nailReady2": {
     id: "nailReady2",
     name: "Nail Ready 2",
     svgPath: SVG_ASSETS.nailReady2,
+    hammeredSvgPath: SVG_ASSETS.nailDone2,
     placeholder: "🔩",
   },
   "nailReady3": {
     id: "nailReady3",
     name: "Nail Ready 3",
     svgPath: SVG_ASSETS.nailReady3,
+    hammeredSvgPath: SVG_ASSETS.nailDone3,
     placeholder: "🔩",
   }
 };

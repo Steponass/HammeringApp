@@ -1,103 +1,177 @@
 // src/components/HammerVisual/HammerVisual.tsx
 import React from "react";
+import {
+  motion,
+  useAnimationControls,
+  AnimatePresence,
+  Variants,
+} from "framer-motion";
 import type { Position } from "types/game";
-import type { HammerAnimation } from "types/animation";
 import HammerSVG from "assets/svgs/hammer/Hammer_1.svg";
 import styles from "./HammerVisual.module.css";
 
 interface HammerVisualProps {
-  hammerAnimation: HammerAnimation;
+  isAnimating: boolean;
+  targetObjectId: string | null;
   shadowPosition: Position;
   isVisible: boolean;
+  onAnimationComplete?: () => void;
 }
 
 const HammerVisual: React.FC<HammerVisualProps> = ({
-  hammerAnimation,
+  isAnimating,
+  targetObjectId,
   shadowPosition,
   isVisible,
+  onAnimationComplete,
 }) => {
-  const { isActive, progress } = hammerAnimation;
+  const controls = useAnimationControls();
 
-  // Add state for floating animation
-  const [floatOffset, setFloatOffset] = React.useState(0);
+  // Animation variants with proper typing
+  const hammerVariants: Variants = {
+    // Idle state with gentle floating
+    idle: {
+      rotate: 5,
+      scale: 0.8,
+      y: [0, -4, 0], // Gentle float up and down
+      transition: {
+        rotate: { type: "spring", damping: 10, stiffness: 100 },
+        scale: { type: "spring", damping: 10, stiffness: 100 },
+        y: {
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "loop",
+        },
+      },
+    },
 
-  // Handle floating animation when not active
-  React.useEffect(() => {
-    if (!isActive) {
-      const startTime = Date.now();
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        const floatValue = Math.sin(elapsed * 0.002) * 2; // -2px to +2px
-        setFloatOffset(floatValue);
+    // Hammer swing sequence: raise → swing → impact → recoil
+    swing: {
+      rotate: [5, 50, -30, 5],
+      scale: [0.8, 0.85, 1.1, 0.8],
+      y: [0, -10, 5, 0],
+      transition: {
+        duration: 0.6,
+        times: [0, 0.5, 0.75, 1],
+        ease: "easeInOut", // Use predefined easing
+        y: {
+          duration: 0.6,
+          times: [0, 0.5, 0.75, 1],
+          ease: "easeOut",
+        },
+      },
+    },
 
-        if (!isActive) {
-          requestAnimationFrame(animate);
-        }
-      };
-      const animationFrame = requestAnimationFrame(animate);
-
-      return () => cancelAnimationFrame(animationFrame);
-    }
-  }, [isActive]);
-
-  const getHammerTransform = (): React.CSSProperties => {
-    const restX = shadowPosition.x + 16;
-    const restY = shadowPosition.y - 256 + 60; // Offset hammer 60px lower
-
-    if (!isActive) {
-      return {
-        transform: `translate(${restX}px, ${
-          restY + floatOffset
-        }px) rotate(5deg) scale(0.8)`,
-        opacity: isVisible ? 1 : 0.7,
-      };
-    }
-
-    // Animation timing: 600ms total
-    // 300ms raise (0% to 50%)
-    // 150ms swing (50% to 75%)
-    // 150ms recoil (75% to 100%)
-
-    let rotation: number;
-    let scale: number;
-
-    if (progress < 0.5) {
-      // RAISE PHASE (0% to 50% = 300ms)
-      const raiseProgress = progress / 0.5; // Convert to 0-1 range
-
-      rotation = 5 + raiseProgress * 45; // 5° to 50°
-      scale = 0.8 + raiseProgress * 0.05; // 0.8 to 0.85
-    } else if (progress < 0.75) {
-      // SWING PHASE (50% to 75% = 150ms)
-      const swingProgress = (progress - 0.5) / 0.25; // Convert to 0-1 range
-
-      rotation = 50 + swingProgress * -80; // 50° to -30°
-      scale = 0.85 + swingProgress * 0.25; // 0.85 to 1.1
-    } else {
-      // RECOIL PHASE (75% to 100% = 150ms)
-      const recoilProgress = (progress - 0.75) / 0.25; // Convert to 0-1 range
-
-      rotation = -30 + recoilProgress * 35; // -30° back to 5°
-      scale = 1.1 + recoilProgress * -0.3; // 1.1 back to 0.8
-    }
-
-    return {
-      transform: `translate(${restX}px, ${restY}px) rotate(${rotation}deg) scale(${scale})`,
+    // Entry animation when hammer first appears
+    enter: {
       opacity: 1,
-      transformOrigin: "bottom center",
-    };
+      scale: 0.8,
+      rotate: 5,
+      y: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+
+    // Exit animation when hammer disappears
+    exit: {
+      opacity: 0,
+      scale: 0.6,
+      transition: {
+        duration: 0.2,
+        ease: "easeIn",
+      },
+    },
   };
 
-  return (
-    <div className={styles.hammerVisual} style={getHammerTransform()}>
-      {/* Your SVG Hammer */}
-      <img src={HammerSVG} alt="Hammer" className={styles.hammerSVG} />
+  // Motion blur effect variants
+  const blurVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.8,
+    },
+    visible: {
+      opacity: [0, 1, 0],
+      scale: [0.8, 1.2, 1.4],
+      transition: {
+        duration: 0.25,
+        times: [0, 0.6, 1],
+        ease: "easeOut",
+      },
+    },
+  };
 
-      {/* Motion blur during swing */}
-      {isActive && progress > 0.4 && progress < 0.9 && (
-        <div className={styles.motionBlur} />
+  // Calculate hammer position
+  const hammerPosition = React.useMemo(
+    () => ({
+      x: shadowPosition.x,
+      y: shadowPosition.y + 60 - 180, // Align with shadowOverlay's +60 offset, then apply -180 for visual alignment
+    }),
+    [shadowPosition]
+  );
+
+  // Trigger swing animation when isAnimating changes
+  React.useEffect(() => {
+    const runAnimation = async () => {
+      if (isAnimating && targetObjectId) {
+        // Stop any current animation and start swing
+        await controls.stop();
+        await controls.start("swing");
+
+        // Notify completion
+        onAnimationComplete?.();
+
+        // Return to idle state
+        await controls.start("idle");
+      } else if (!isAnimating) {
+        // Return to idle if not animating
+        await controls.start("idle");
+      }
+    };
+
+    runAnimation();
+  }, [isAnimating, targetObjectId, controls, onAnimationComplete]);
+
+  return (
+    <AnimatePresence mode="wait">
+      {isVisible && (
+        <motion.div
+          className={styles.hammerVisual}
+          style={{
+            left: hammerPosition.x, // center hammer horizontally (width: 120px)
+            top: hammerPosition.y,
+            position: "fixed",
+          }}
+          variants={hammerVariants}
+          initial="enter"
+          animate={controls}
+          exit="exit"
+        >
+          {/* Hammer SVG */}
+          <motion.img
+            src={HammerSVG}
+            alt="Hammer"
+            className={styles.hammerSVG}
+            draggable={false}
+          />
+
+          {/* Motion blur effect during swing */}
+          <AnimatePresence>
+            {isAnimating && (
+              <motion.div
+                className={styles.motionBlur}
+                variants={blurVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              />
+            )}
+          </AnimatePresence>
+        </motion.div>
       )}
-    </div>
+    </AnimatePresence>
   );
 };
 
