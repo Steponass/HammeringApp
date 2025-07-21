@@ -256,11 +256,6 @@ const useGameState = (): UseGameStateReturn => {
     initializeGame();
   }, [initializeGame]);
 
-  /**
-   * Log game completion for debugging
-   */
-
-
   return {
     gameState,
     isLoading,

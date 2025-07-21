@@ -14,17 +14,9 @@
   display: block;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .hammerVisual {
     width: 100px;
     height: 250px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hammerVisual {
-    width: 80px;
-    height: 200px;
   }
 }

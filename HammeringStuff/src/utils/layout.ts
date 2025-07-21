@@ -112,17 +112,3 @@ function getSpiralPlacement(
     y: centerY + Math.sin(angle) * radius
   };
 }
-
-/**
- * Get responsive scale factor based on viewport size
- * Adjusts for dense object placement
- */
-export const getResponsiveScaleFactor = (): number => {
-  const baseWidth = 1920;
-  const currentWidth = window.innerWidth;
-  
-  // More aggressive scaling for mobile with many objects
-  const scaleFactor = Math.max(0.4, Math.min(1.2, currentWidth / baseWidth));
-  
-  return scaleFactor;
-};

@@ -106,8 +106,8 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
   // Calculate hammer position
   const hammerPosition = React.useMemo(
     () => ({
-      x: shadowPosition.x,
-      y: shadowPosition.y + 60 - 180, // Align with shadowOverlay's +60 offset, then apply -180 for visual alignment
+      x: shadowPosition.x - 20,
+      y: shadowPosition.y + 60 - 160, // Align with shadowOverlay's +60 offset, then apply -160 for visual alignment
     }),
     [shadowPosition]
   );
@@ -149,7 +149,6 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
           animate={controls}
           exit="exit"
         >
-          {/* Hammer SVG */}
           <motion.img
             src={HammerSVG}
             alt="Hammer"

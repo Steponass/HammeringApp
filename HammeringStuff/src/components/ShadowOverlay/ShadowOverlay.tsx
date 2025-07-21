@@ -46,10 +46,6 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
       classes.push(styles.readyToHammer);
     }
 
-    if (isAnimating) {
-      classes.push(styles.hammering);
-    }
-
     if (inputMode === "mobile") {
       if (isFirstTouch) {
         classes.push(styles.firstTouch);

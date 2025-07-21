@@ -36,7 +36,7 @@
 }
 
 .readyToHammer {
-  cursor: pointer;
+  cursor: none;
   pointer-events: auto;
 }
 
@@ -48,23 +48,9 @@
     rgba(220, 38, 127, calc(var(--shadow-opacity) * 0.3)) 70%,
     transparent 100%
   );
-  transform: scale(1.1); /* Less dramatic scaling */
+  transform: scale(1.05);
 }
 
-.hammering {
-  pointer-events: none;
-}
-
-.hammering .shadowCircle {
-  background: radial-gradient(
-    circle,
-    rgba(255, 140, 0, var(--shadow-opacity)) 0%,
-    rgba(255, 140, 0, calc(var(--shadow-opacity) * 0.7)) 40%,
-    rgba(255, 140, 0, calc(var(--shadow-opacity) * 0.3)) 70%,
-    transparent 100%
-  );
-  transform: scale(1.5);
-}
 
 /* Mobile touch state styles */
 .firstTouch .shadowCircle {

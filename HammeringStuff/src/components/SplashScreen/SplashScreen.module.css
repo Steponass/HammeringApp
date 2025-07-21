@@ -2,6 +2,7 @@
   background-color: var(--clr-primary);
   width: 100vw;
   height: 100vh;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,6 +16,6 @@
   gap: 48px;
 }
 
-.splash_button {
-
+.splash_main h1 {
+    letter-spacing: clamp(-5px, calc(-1.25px - 0.3125vw), -2px);
 }

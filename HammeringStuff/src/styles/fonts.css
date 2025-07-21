@@ -50,9 +50,9 @@
 
 :where(h1, h2, h3, h4, h5, h6) {
   font-family: Jost, Arial, Helvetica, sans-serif;
-  line-height: 1.2;
+  line-height: 1.15;
   font-weight: 400;
-  letter-spacing: -2.25px;
+  letter-spacing: -1px;
 }
 
 :where(p, ul, ol, li, a, button, label, input, textarea, span) {

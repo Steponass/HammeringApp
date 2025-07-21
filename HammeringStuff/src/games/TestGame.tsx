@@ -1,19 +1,35 @@
 // src/components/TestGame.tsx
 import React from "react";
 import GameField from "components/GameField";
+import { GameState } from "types/game";
 
-const TestGame: React.FC = () => {
+interface TestGameProps {
+  gameState: GameState;
+  isLoading: boolean;
+  isAnimating: boolean;
+  hammerObject: (objectId: string) => void;
+}
+
+const TestGame: React.FC<TestGameProps> = ({
+  gameState,
+  isLoading,
+  hammerObject,
+}) => {
   return (
     <div
       style={{
         position: "absolute",
-        top: 75,
+        top: 50,
         left: 0,
         width: "100vw",
-        height: "calc(100vh - 75px)",
+        height: "calc(100vh - 50px)",
       }}
     >
-      <GameField />
+      <GameField
+        gameState={gameState}
+        isLoading={isLoading}
+        hammerObject={hammerObject}
+      />
     </div>
   );
 };

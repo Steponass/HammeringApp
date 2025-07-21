@@ -1,4 +1,3 @@
-// src/hooks/useHammerAnimation.ts
 import { useState, useCallback } from "react";
 
 interface UseHammerAnimationReturn {
@@ -6,7 +5,7 @@ interface UseHammerAnimationReturn {
   targetObjectId: string | null;
   triggerHammerAnimation: (objectId: string) => void;
   resetAnimation: () => void;
-  onAnimationComplete: () => void; // Fixed property name
+  onAnimationComplete: () => void;
 }
 
 const useHammerAnimation = (
@@ -43,7 +42,7 @@ const useHammerAnimation = (
     targetObjectId,
     triggerHammerAnimation,
     resetAnimation,
-    onAnimationComplete, // This matches the interface
+    onAnimationComplete,
   };
 };
 

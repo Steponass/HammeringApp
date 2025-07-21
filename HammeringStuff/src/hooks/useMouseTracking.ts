@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { Position, InputMode } from "types/game";
 
-// Define what our hook returns for better TypeScript support
 interface UseMouseTrackingReturn {
   cursorPosition: Position;
   shadowPosition: Position;
@@ -26,13 +25,13 @@ interface UseMouseTrackingReturn {
  * - Touch and drag: moves shadow continuously
  */
 const useMouseTracking = (): UseMouseTrackingReturn => {
-  // Current cursor position (follows mouse/finger exactly)
+
   const [cursorPosition, setCursorPosition] = useState<Position>({
     x: 0,
     y: 0,
   });
 
-  // Shadow position (may differ from cursor on mobile)
+
   const [shadowPosition, setShadowPosition] = useState<Position>({
     x: 0,
     y: 0,
@@ -44,13 +43,13 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
   // Track touch interaction state for mobile
   const [isFirstTouch, setIsFirstTouch] = useState<boolean>(true);
 
-  // Track if we've detected actual touch usage (not just capability)
+
   const hasDetectedTouch = useRef<boolean>(false);
 
-  // Track if user is currently dragging on mobile
+
   const isDragging = useRef<boolean>(false);
 
-  const HEADER_HEIGHT = 75;
+  const HEADER_HEIGHT = 50;
 
   /**
    * Update cursor position for desktop mouse movement
