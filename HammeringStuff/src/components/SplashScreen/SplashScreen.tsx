@@ -67,8 +67,8 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
           </motion.div>
         </div>
         <motion.div
-          initial={{ opacity: 0, scale: 1, y: 200 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0, rotate: -270 }}
+          animate={{ opacity: 1, scale: 1, rotate: 1 }}
           transition={{
             duration: 0.4,
             delay: 3.6,

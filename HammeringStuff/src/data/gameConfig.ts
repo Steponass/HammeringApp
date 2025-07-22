@@ -32,7 +32,7 @@ interface GameConfiguration {
 }
 
 export const GAME_CONFIG: GameConfiguration = {
-  defaultObjectCount: 40,
+  defaultObjectCount: 24,
   minObjectDistance: 160,
   screenMargin: 40,
   
