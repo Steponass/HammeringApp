@@ -6,3 +6,10 @@
   box-shadow: var(--shadow-elevation-2);
   text-align: center;
 }
+
+.notificationContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}

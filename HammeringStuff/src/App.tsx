@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import SplashScreen from "components/SplashScreen";
 import Header from "components/layout/Header/Header";
@@ -26,6 +26,7 @@ const App: React.FC = () => {
   const {
     notifications,
     addNotification,
+    addCompletionMessage,
     startRemovingNotification,
     finishRemovingNotification,
     clearAllNotifications,
@@ -74,12 +75,19 @@ const App: React.FC = () => {
     clearAllNotifications();
   }, [resetGame, clearAllNotifications]);
 
-  /**
-   * Handle the splash screen transition to game
-   */
   const handleStartGame = (): void => {
     setAppState({ showSplash: false });
   };
+
+useEffect(() => {
+  if (gameState.isGameComplete && gameState.totalCount > 0) {
+    // Add a short delay to let the final hammer animation complete
+    setTimeout(() => {
+      addCompletionMessage("You saw the world — and whacked it good.");
+    }, 800);
+  }
+}, [gameState.isGameComplete, gameState.totalCount, addCompletionMessage]);
+
 
   return (
     <div className="App">

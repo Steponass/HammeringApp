@@ -1,23 +1,36 @@
+// src/hooks/useNotifications.ts
 import { useState, useCallback } from 'react';
-import type { NotificationData } from 'types/notifications';
+import type { NotificationData, NotificationVariant } from 'types/notifications';
 
 const useNotifications = () => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
 
-  const addNotification = useCallback((message: string): void => {
+  /**
+   * Add notification with configurable behavior
+   * Different variants can have different default behaviors
+   */
+  const addNotification = useCallback((
+    message: string, 
+    variant: NotificationVariant = 'hammer'
+  ): void => {
     const newNotification: NotificationData = {
       id: `notification-${Date.now()}-${Math.random()}`,
       message,
-      isRemoving: false, // Start in visible state
+      variant,
+      isRemoving: false,
     };
 
     setNotifications(prev => [...prev, newNotification]);
   }, []);
 
   /**
-   * Phase 1: Mark notification for removal (starts exit animation)
-   * This doesn't remove the notification yet, just marks it as "leaving"
+   * Add a completion message specifically
+   * This provides a clean API for the completion use case
    */
+  const addCompletionMessage = useCallback((message: string): void => {
+    addNotification(message, 'completion');
+  }, [addNotification]);
+
   const startRemovingNotification = useCallback((id: string): void => {
     setNotifications(prev => 
       prev.map(notification => 
@@ -28,10 +41,6 @@ const useNotifications = () => {
     );
   }, []);
 
-  /**
-   * Phase 2: Actually remove notification from state (after exit animation)
-   * This is called by the component after its exit animation finishes
-   */
   const finishRemovingNotification = useCallback((id: string): void => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   }, []);
@@ -43,6 +52,7 @@ const useNotifications = () => {
   return {
     notifications,
     addNotification,
+    addCompletionMessage,
     startRemovingNotification,
     finishRemovingNotification,
     clearAllNotifications,
