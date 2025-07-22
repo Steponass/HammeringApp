@@ -1,7 +1,6 @@
 .hammerVisual {
   position: fixed;
-  max-width: 224px;
-  /* height: 300px; */
+  width: 224px;
   pointer-events: none;
   z-index: 150;
   filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.9));

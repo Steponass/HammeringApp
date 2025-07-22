@@ -97,7 +97,7 @@ export const getRandomObjectPlacement = (
   const minX = responsiveMargin;
   const maxX = viewportWidth - responsiveMargin - scaledObjectSize;
   const minY = responsiveMargin;
-  const maxY = viewportHeight - responsiveMargin - 40 - scaledObjectSize; // 80px for UI elements
+  const maxY = viewportHeight - responsiveMargin - 40 - scaledObjectSize;
 
   // For dense placement, try grid-based approach first
   // Use responsive threshold - mobile needs grid placement sooner

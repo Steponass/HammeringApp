@@ -1,4 +1,3 @@
-// utils/responsiveLayout.ts
 import { GAME_CONFIG } from "data/gameConfig";
 
 export interface ResponsiveLayoutConfig {
@@ -19,10 +18,8 @@ export interface ViewportInfo {
   isPortrait: boolean;
 }
 
-/**
+/*
  * Analyze the current viewport to understand device constraints
- * This function acts like a surveyor, measuring the available space
- * and determining what kind of device we're working with
  */
 export const getViewportInfo = (): ViewportInfo => {
   const width = window.innerWidth;
@@ -32,7 +29,7 @@ export const getViewportInfo = (): ViewportInfo => {
   const isPortrait = height > width;
 
   // Determine device type based on width and typical breakpoints
-  // Think of this as categorizing the "size of the canvas" we're working with
+
   let deviceType: ViewportInfo['deviceType'] = 'desktop';
   if (width <= 480) {
     deviceType = 'mobile';
@@ -50,10 +47,8 @@ export const getViewportInfo = (): ViewportInfo => {
   };
 };
 
-/**
+/*
  * Calculate optimal object count based on screen real estate
- * This is like determining how many puzzle pieces will fit comfortably on your table
- * We want enough objects to be challenging, but not so many that they're cramped
  */
 const calculateOptimalObjectCount = (viewport: ViewportInfo): number => {
   const { area, deviceType } = viewport;
@@ -79,10 +74,8 @@ const calculateOptimalObjectCount = (viewport: ViewportInfo): number => {
   return Math.max(minObjects, Math.min(maxObjects, adjustedCount));
 };
 
-/**
+/*
  * Calculate spacing multiplier based on screen density
- * Think of this as adjusting the "personal space bubble" around each object
- * Mobile devices need bigger bubbles because fingers are less precise than mouse cursors
  */
 const calculateSpacingMultiplier = (viewport: ViewportInfo): number => {
   const { deviceType, isPortrait } = viewport;
@@ -90,8 +83,8 @@ const calculateSpacingMultiplier = (viewport: ViewportInfo): number => {
   // Base multipliers for different device types
   // These values were determined through user testing for comfortable interaction
   const baseMultipliers = {
-    mobile: 1.4,   // 40% more spacing on mobile (for touch targets)
-    tablet: 1.2,   // 20% more spacing on tablet (hybrid interaction)
+    mobile: 1.2,   // 20% more spacing on mobile
+    tablet: 1.2,   // 20% more spacing on tablet
     desktop: 1.0   // Standard spacing on desktop (precise mouse)
   };
   
@@ -112,10 +105,8 @@ const calculateSpacingMultiplier = (viewport: ViewportInfo): number => {
   return multiplier;
 };
 
-/**
+/*
  * Calculate object scale factor for this device
- * This is like choosing the right size plates for your table
- * Smaller devices get proportionally smaller objects to maximize space usage
  */
 const calculateObjectScale = (viewport: ViewportInfo): number => {
   const { deviceType, width } = viewport;
@@ -134,8 +125,6 @@ const calculateObjectScale = (viewport: ViewportInfo): number => {
 
 /**
  * Generate complete responsive layout configuration
- * This is the main function that orchestrates all the other calculations
- * Think of it as the conductor that brings together all the musicians in the orchestra
  */
 export const getResponsiveLayoutConfig = (): ResponsiveLayoutConfig => {
   const viewport = getViewportInfo();
@@ -145,16 +134,13 @@ export const getResponsiveLayoutConfig = (): ResponsiveLayoutConfig => {
   const spacingMultiplier = calculateSpacingMultiplier(viewport);
   
   // Calculate responsive margins - smaller devices need proportionally smaller margins
-  // This ensures we use screen real estate efficiently
   const marginMultiplier = viewport.deviceType === 'mobile' ? 0.8 : 1.0;
   
   // Safety buffer scales with device type and object size
-  // Larger spacing multipliers need larger safety buffers to maintain proportion
   const baseSafetyBuffer = 20;
   const safetyBuffer = Math.floor(baseSafetyBuffer * spacingMultiplier * objectScale);
   
   // Minimum distance also scales responsively
-  // This ensures objects never get too close, regardless of their calculated spacing
   const baseMinDistance = 80;
   const minAbsoluteDistance = Math.floor(baseMinDistance * spacingMultiplier);
   

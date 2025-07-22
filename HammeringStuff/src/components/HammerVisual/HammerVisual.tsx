@@ -27,9 +27,7 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
 }) => {
   const controls = useAnimationControls();
 
-  // Animation variants with proper typing
   const hammerVariants: Variants = {
-    // Idle state with gentle floating
     idle: {
       rotate: 5,
       scale: 0.8,
@@ -63,7 +61,6 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
       },
     },
 
-    // Entry animation when hammer first appears
     enter: {
       opacity: 1,
       scale: 0.8,
@@ -75,7 +72,6 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
       },
     },
 
-    // Exit animation when hammer disappears
     exit: {
       opacity: 0,
       scale: 0.6,
@@ -86,7 +82,6 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
     },
   };
 
-  // Motion blur effect variants
   const blurVariants: Variants = {
     hidden: {
       opacity: 0,
@@ -103,7 +98,6 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
     },
   };
 
-  // Calculate hammer position
   const hammerPosition = React.useMemo(
     () => ({
       x: shadowPosition.x - 20,

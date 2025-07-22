@@ -9,7 +9,7 @@ import type {
 
 // Default shadow configuration
 const DEFAULT_SHADOW_CONFIG: ShadowConfig = {
-  radius: 70,           // 60px radius shadow circle
+  radius: 70,
   opacity: 0.3,         // Semi-transparent
   blurAmount: 4         // Soft edges
 };

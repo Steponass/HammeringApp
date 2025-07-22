@@ -8,7 +8,7 @@ export interface ObjectDefinition {
 
 export interface NailDefinition {
   id: string;                   // Unique nail type identifier
-  name: string;                 // Human-readable name (wood screw, railroad spike, etc.)
+  name: string;                 // Human-readable name
   svgPath: string;             // Path to the nail SVG file
   hammeredSvgPath: string;     // Path to the hammered nail SVG file
   placeholder: string;        // Emoji placeholder if SVG fails

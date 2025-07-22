@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className={styles.header}>
-      <h1 className={styles.header_title}>Nail everything.</h1>
+      <h1 className={styles.header_title}>Hammer away</h1>
       <div className={styles.game_stats}>
         <span className={styles.stat_item}>
           Nailed: <AnimatedCounter value={hammeredCount} />/{totalCount}

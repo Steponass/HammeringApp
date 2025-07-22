@@ -1,4 +1,3 @@
-// hooks/useGameState.ts
 import { useState, useCallback, useEffect } from "react";
 import type { GameObject, GameState, ObjectState } from "types/game";
 import { generateUniqueId } from "utils/helpers";
@@ -18,16 +17,8 @@ interface UseGameStateReturn {
   getObjectsInState: (state: ObjectState) => GameObject[];
 }
 
-/**
- * Pure utility functions that don't depend on any component state
- * Moving these outside the component prevents them from being recreated on every render
- * Think of these as tools in a workshop - you don't need to forge new tools every time you use them
- */
-
-/**
+/*
  * Shuffle an array using the Fisher-Yates algorithm
- * This function is "pure" because it always produces the same type of result
- * given the same type of input, and it doesn't depend on any external state
  */
 const shuffleArray = <T>(array: T[]): T[] => {
   const arr = array.slice(); // Create a copy to avoid mutating the original
@@ -38,10 +29,8 @@ const shuffleArray = <T>(array: T[]): T[] => {
   return arr;
 };
 
-/**
+/*
  * Check if two objects overlap using circle-based collision detection
- * Another pure function - it only cares about the two objects passed to it
- * and doesn't need to know anything about the component's state
  */
 const objectsOverlap = (objectA: GameObject, objectB: GameObject): boolean => {
   const deltaX = objectA.position.x - objectB.position.x;
@@ -51,10 +40,8 @@ const objectsOverlap = (objectA: GameObject, objectB: GameObject): boolean => {
   return centerTocentereDistance < objectA.radius + objectB.radius;
 };
 
-/**
+/*
  * Find all overlapping pairs in an array of objects
- * This function is also pure - it just processes the array it receives
- * and returns a result without needing any external context
  */
 const findOverlappingPairs = (objects: GameObject[]): [number, number][] => {
   const overlappingPairs: [number, number][] = [];
@@ -81,16 +68,8 @@ const useGameState = (): UseGameStateReturn => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  /**
-   * Now that our utility functions are outside the component, 
-   * our useCallback hooks can have stable dependencies
-   * This is like having a set of reliable tools that don't change between cooking sessions
-   */
-
-  /**
+  /*
    * Resolve any overlaps that might have occurred during initial placement
-   * Since findOverlappingPairs is now stable (defined outside), this useCallback
-   * won't be recreated unnecessarily, improving performance
    */
   const resolveAnyRemainingOverlaps = useCallback((
     objects: GameObject[], 
@@ -103,16 +82,9 @@ const useGameState = (): UseGameStateReturn => {
       const overlappingPairs = findOverlappingPairs(objects);
       
       if (overlappingPairs.length === 0) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`✅ Object placement successful with ${objects.length} objects`);
-        }
         break;
       }
       
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`🔄 Retry ${retryAttempts + 1}: Found ${overlappingPairs.length} overlapping pairs`);
-      }
-
       const overlapCounts = new Map<number, number>();
       overlappingPairs.forEach(([indexA, indexB]) => {
         overlapCounts.set(indexA, (overlapCounts.get(indexA) || 0) + 1);
@@ -149,13 +121,6 @@ const useGameState = (): UseGameStateReturn => {
       retryAttempts++;
     }
 
-    if (retryAttempts >= maxRetryAttempts) {
-      const remainingOverlaps = findOverlappingPairs(objects);
-      if (remainingOverlaps.length > 0) {
-        console.warn(`⚠️ Could not resolve all overlaps. ${remainingOverlaps.length} pairs still overlap.`);
-      }
-    }
-
     return objects;
   }, []); // Empty dependency array because findOverlappingPairs is now stable
 
@@ -180,7 +145,6 @@ const useGameState = (): UseGameStateReturn => {
       const objectDefinition = getObjectDefinition(objectType);
       
       if (!objectDefinition) {
-        console.warn(`⚠️ Object definition not found for type: ${objectType}`);
         continue;
       }
 
@@ -234,13 +198,7 @@ const useGameState = (): UseGameStateReturn => {
         isGameComplete: false,
         gameStartTime: Date.now(),
       });
-
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`🎮 Game initialized with ${initialGameObjects.length} objects`);
-      }
-    } catch (error) {
-      console.error("❌ Failed to initialize game:", error);
-      
+    } catch {
       setGameState({
         objects: [],
         hammeredCount: 0,
@@ -285,9 +243,6 @@ const useGameState = (): UseGameStateReturn => {
       );
 
       if (!targetObject || targetObject.state === "hammered") {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`⚠️ Cannot hammer object ${objectId}: ${!targetObject ? 'not found' : 'already hammered'}`);
-        }
         return previousGameState;
       }
 
@@ -304,11 +259,6 @@ const useGameState = (): UseGameStateReturn => {
       
       const isGameComplete = newHammeredCount === previousGameState.totalCount;
 
-      if (process.env.NODE_ENV === 'development' && isGameComplete) {
-        const gameTimeSeconds = (Date.now() - previousGameState.gameStartTime) / 1000;
-        console.log(`🎉 Game completed in ${gameTimeSeconds.toFixed(1)} seconds!`);
-      }
-
       return {
         ...previousGameState,
         objects: updatedObjects,
@@ -322,9 +272,6 @@ const useGameState = (): UseGameStateReturn => {
    * Reset the game to initial state
    */
   const resetGame = useCallback((): void => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔄 Resetting game...');
-    }
     initializeGame();
   }, [initializeGame]);
 

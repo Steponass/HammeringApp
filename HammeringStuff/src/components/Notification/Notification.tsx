@@ -25,7 +25,7 @@ const Notification: React.FC<NotificationProps> = ({
     switch (variant) {
       case 'completion':
         return {
-          autoRemoveDelay: 5000,
+          autoRemoveDelay: 7000,
           className: styles.completionNotification,
           animations: {
             initial: { opacity: 0, scale: 0.5, y: 0 },

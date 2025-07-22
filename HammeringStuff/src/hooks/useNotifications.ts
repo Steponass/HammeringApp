@@ -1,14 +1,9 @@
-// src/hooks/useNotifications.ts
 import { useState, useCallback } from 'react';
 import type { NotificationData, NotificationVariant } from 'types/notifications';
 
 const useNotifications = () => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
 
-  /**
-   * Add notification with configurable behavior
-   * Different variants can have different default behaviors
-   */
   const addNotification = useCallback((
     message: string, 
     variant: NotificationVariant = 'hammer'
@@ -23,9 +18,8 @@ const useNotifications = () => {
     setNotifications(prev => [...prev, newNotification]);
   }, []);
 
-  /**
-   * Add a completion message specifically
-   * This provides a clean API for the completion use case
+  /*
+   * Add a completion message
    */
   const addCompletionMessage = useCallback((message: string): void => {
     addNotification(message, 'completion');

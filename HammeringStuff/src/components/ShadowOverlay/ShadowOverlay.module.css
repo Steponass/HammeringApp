@@ -15,13 +15,11 @@
   height: 70%;
   border-radius: 40%;
   position: relative;
-  background: radial-gradient(
-    circle,
-    rgba(0, 0, 0, var(--shadow-opacity)) 0%,
-    rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.7)) 40%,
-    rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.3)) 70%,
-    transparent 100%
-  );
+  background: radial-gradient(circle,
+      rgba(0, 0, 0, var(--shadow-opacity)) 0%,
+      rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.7)) 40%,
+      rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.3)) 70%,
+      transparent 100%);
   filter: blur(var(--shadow-blur));
   transition: all 0.15s ease-out;
 }
@@ -41,48 +39,37 @@
 }
 
 .readyToHammer .shadowCircle {
-  background: radial-gradient(
-    circle,
-    rgba(220, 38, 127, var(--shadow-opacity)) 0%,
-    rgba(220, 38, 127, calc(var(--shadow-opacity) * 0.7)) 40%,
-    rgba(220, 38, 127, calc(var(--shadow-opacity) * 0.3)) 70%,
-    transparent 50%
-  );
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 
 /* Mobile touch state styles */
 .firstTouch .shadowCircle {
-  background: radial-gradient(
-    circle,
-    rgba(59, 130, 246, var(--shadow-opacity)) 0%,
-    rgba(59, 130, 246, calc(var(--shadow-opacity) * 0.7)) 40%,
-    rgba(59, 130, 246, calc(var(--shadow-opacity) * 0.3)) 70%,
-    transparent 100%
-  );
+  background: radial-gradient(circle,
+      rgba(0, 0, 0, var(--shadow-opacity)) 0%,
+      rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.7)) 40%,
+      rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.3)) 70%,
+      transparent 100%);
 }
 
 .tapToHammer .shadowCircle {
-  background: radial-gradient(
-    circle,
-    rgba(16, 185, 129, var(--shadow-opacity)) 0%,
-    rgba(16, 185, 129, calc(var(--shadow-opacity) * 0.7)) 40%,
-    rgba(16, 185, 129, calc(var(--shadow-opacity) * 0.3)) 70%,
-    transparent 100%
-  );
+  background: radial-gradient(circle,
+      rgba(0, 0, 0, var(--shadow-opacity)) 0%,
+      rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.7)) 40%,
+      rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.3)) 70%,
+      transparent 100%);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .shadowOverlay {
-    transform: scale(1.1);
+    transform: scale(0.8);
   }
 }
 
 @media (max-width: 480px) {
   .shadowOverlay {
-    transform: scale(1.2);
+    transform: scale(0.6);
   }
 }
 
@@ -91,7 +78,7 @@
     animation: none !important;
     transition: none !important;
   }
-  
+
   .readyToHammer .shadowCircle,
   .hammering .shadowCircle {
     transform: none;
