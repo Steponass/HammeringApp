@@ -1,4 +1,5 @@
 import React from "react";
+import { getResponsiveLayoutConfig } from 'utils/responsiveLayout';
 import TransformableObject from "components/TransformableObject";
 import ShadowOverlay from "components/ShadowOverlay";
 import HammerVisual from "components/HammerVisual/HammerVisual";
@@ -56,12 +57,12 @@ const GameField: React.FC<GameFieldProps> = ({
   }, [collisionResult]);
 
   // Calculate scale factor based on viewport size
+  // UNIFIED SCALING: Use the same scale calculation as the responsive layout system
+  // This ensures that objects are rendered at the exact size our placement algorithm expects
   const scaleFactor = React.useMemo(() => {
-    const baseSize = 60; // Base object size from config
-    const minViewportDim = Math.min(window.innerWidth, window.innerHeight);
-    const targetSize = Math.max(baseSize, minViewportDim * 0.08);
-    return targetSize / baseSize;
-  }, []);
+    const responsiveConfig = getResponsiveLayoutConfig();
+    return responsiveConfig.objectScale;
+  }, []); // We recalculate this rarely since viewport changes are infrequent
 
   const {
     isAnimating,

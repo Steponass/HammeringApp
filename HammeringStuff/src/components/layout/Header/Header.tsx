@@ -1,6 +1,7 @@
 import styles from "./Header.module.css";
 import React from "react";
-import { motion } from "motion/react"
+import { motion } from "motion/react";
+import AnimatedCounter from "../../AnimatedCounter/AnimatedCounter";
 
 interface HeaderProps {
   hammeredCount: number;
@@ -15,24 +16,24 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className={styles.header}>
-      <h5>Hammer time</h5>
-      <div className={styles.gameStats}>
-        <span className={styles.statItem}>
-          Hammered: {hammeredCount}/{totalCount}
+      <h1 className={styles.header_title}>Nail everything.</h1>
+      <div className={styles.game_stats}>
+        <span className={styles.stat_item}>
+          Nailed: <AnimatedCounter value={hammeredCount} />/{totalCount}
         </span>
         <motion.button
-        className={styles.reset_button}
-        onClick={resetGame}
-        whileHover={{ 
-          scale: 1.05, 
-          rotate: 2,
-          boxShadow: "0 2px 4px -1px hsla(225, 42%, 5%, 1)"
-        }}
-        whileTap={{ scale: 0.95, rotate: 3 }}
-        type="button"
-      >
-        Reset
-      </motion.button>
+          className={styles.reset_button}
+          onClick={resetGame}
+          whileHover={{
+            scale: 1.05,
+            rotate: 2,
+            boxShadow: "0 2px 4px -1px hsla(225, 42%, 5%, 1)",
+          }}
+          whileTap={{ scale: 0.95, rotate: 3 }}
+          type="button"
+        >
+          Reset
+        </motion.button>
       </div>
     </header>
   );

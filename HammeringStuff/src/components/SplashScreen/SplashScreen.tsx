@@ -25,7 +25,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
         scale: 10,
       }}
       transition={{
-        duration: 1.5,
+        duration: 1.2,
         ease: "easeIn",
       }}
       style={{
@@ -43,6 +43,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
       <main className={styles.splash_main}>
         <div>
           <motion.div
+          className={styles.splash_text_container}
             initial={{ opacity: 0, scale: 1, y: -300 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -55,6 +56,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
           </motion.div>
 
           <motion.div
+          className={styles.splash_text_container}
             initial={{ opacity: 0, scale: 1, y: 500 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{

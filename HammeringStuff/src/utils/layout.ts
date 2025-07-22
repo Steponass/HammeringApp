@@ -1,4 +1,3 @@
-// utils/layout.ts - Fixed version
 import type { GameObject, PlacementConfig } from "types/game";
 import { calculateDistance } from "./helpers";
 import { getResponsiveLayoutConfig, type ResponsiveLayoutConfig } from "./responsiveLayout";
@@ -98,7 +97,7 @@ export const getRandomObjectPlacement = (
   const minX = responsiveMargin;
   const maxX = viewportWidth - responsiveMargin - scaledObjectSize;
   const minY = responsiveMargin;
-  const maxY = viewportHeight - responsiveMargin - 80 - scaledObjectSize; // 80px for UI elements
+  const maxY = viewportHeight - responsiveMargin - 40 - scaledObjectSize; // 80px for UI elements
 
   // For dense placement, try grid-based approach first
   // Use responsive threshold - mobile needs grid placement sooner

@@ -16,8 +16,15 @@
   gap: 48px;
 }
 
-.splash_main h1 {
-    letter-spacing: clamp(-5px, calc(-1.25px - 0.3125vw), -2px);
+.splash_text_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    text-align: center;
+}
+
+.splash_text_container h1 {
+  letter-spacing: clamp(-5px, calc(-1.25px - 0.3125vw), -2px);
 }
 
 .splash_button {

@@ -5,7 +5,7 @@ import { generateUniqueId } from "utils/helpers";
 import { getRandomObjectPlacement } from "utils/layout";
 import { GAME_CONFIG } from "data/gameConfig";
 import { getAllObjectTypes, getObjectDefinition } from "data/objectDefinitions";
-import { getResponsiveLayoutConfig, logResponsiveInfo } from "utils/responsiveLayout";
+import { getResponsiveLayoutConfig } from "utils/responsiveLayout";
 
 interface UseGameStateReturn {
   gameState: GameState;
@@ -166,11 +166,6 @@ const useGameState = (): UseGameStateReturn => {
   const generateInitialObjects = useCallback((): GameObject[] => {
     const responsiveConfig = getResponsiveLayoutConfig();
     const objectCount = responsiveConfig.objectCount;
-    
-    if (process.env.NODE_ENV === 'development') {
-      logResponsiveInfo();
-      console.log(`🎯 Generating ${objectCount} objects for current device`);
-    }
     
     const maxPlacementAttempts = GAME_CONFIG.difficulty.placementAttempts || 100;
     

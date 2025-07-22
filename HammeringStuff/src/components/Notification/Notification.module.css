@@ -1,0 +1,8 @@
+.notification {
+  background: var(--clr-primary);
+  color: var(--clr-white-ish);
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-elevation-2);
+  text-align: center;
+}

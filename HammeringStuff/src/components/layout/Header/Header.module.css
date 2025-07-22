@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  padding-inline: 12px;
+  padding-inline: 24px;
   padding-block: 8px;
   height: 50px;
   background: var(--clr-primary);
@@ -15,14 +15,19 @@
   box-shadow: 0 2px 3px 3px hsl(0, 0%, 0%);
 }
 
-.gameStats {
+.header_title {
+  font-size: var(--fontsize-h6);
+}
+
+.game_stats {
   display: flex;
-  gap: 24px;
+  gap: 16px;
   align-items: center;
 }
 
-.statItem {
+.stat_item {
   color: var(--clr-white-ish);
+  font-weight: 450;
 }
 
 .reset_button {

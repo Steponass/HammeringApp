@@ -167,29 +167,3 @@ export const getResponsiveLayoutConfig = (): ResponsiveLayoutConfig => {
     minAbsoluteDistance,
   };
 };
-
-/**
- * Debug function to understand what's happening on current device
- * This is like having a diagnostic tool that shows you exactly what decisions
- * the responsive system is making and why
- */
-export const logResponsiveInfo = (): void => {
-  const viewport = getViewportInfo();
-  const config = getResponsiveLayoutConfig();
-  
-  console.group('🔧 Responsive Layout Debug Info');
-  console.log('📱 Viewport:', {
-    size: `${viewport.width}x${viewport.height}`,
-    area: viewport.area.toLocaleString(),
-    deviceType: viewport.deviceType,
-    isPortrait: viewport.isPortrait
-  });
-  console.log('⚙️ Layout Config:', {
-    objectCount: config.objectCount,
-    objectScale: `${Math.round(config.objectScale * 100)}%`,
-    spacingMultiplier: `${Math.round(config.spacingMultiplier * 100)}%`,
-    safetyBuffer: `${config.safetyBuffer}px`,
-    minDistance: `${config.minAbsoluteDistance}px`
-  });
-  console.groupEnd();
-};
