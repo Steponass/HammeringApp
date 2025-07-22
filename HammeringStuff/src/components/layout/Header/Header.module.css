@@ -4,6 +4,7 @@
   left: 0;
   width: 100vw;
   padding-inline: 12px;
+  padding-block: 8px;
   height: 50px;
   background: var(--clr-primary);
   color: var(--clr-white-ish);
@@ -22,4 +23,8 @@
 
 .statItem {
   color: var(--clr-white-ish);
+}
+
+.reset_button {
+  padding-block: 2px;
 }

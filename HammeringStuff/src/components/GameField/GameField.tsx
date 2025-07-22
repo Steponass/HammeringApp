@@ -1,4 +1,3 @@
-// src/components/GameField/GameField.tsx
 import React from "react";
 import TransformableObject from "components/TransformableObject";
 import ShadowOverlay from "components/ShadowOverlay";
@@ -15,22 +14,16 @@ interface GameFieldProps {
   shadowConfig?: ShadowConfig;
   className?: string;
   gameState: GameState;
-  isLoading: boolean;
   hammerObject: (objectId: string) => void;
 }
 
-/**
- * Main game field component that orchestrates the hammer game
- * Now supports click-to-hammer interaction with visual hammer animation
- */
 const GameField: React.FC<GameFieldProps> = ({
   shadowConfig = GAME_CONFIG.shadowConfig,
   className,
   gameState,
-  isLoading,
   hammerObject,
 }) => {
-  // Mouse/touch position tracking
+
   const { shadowPosition, inputMode, isFirstTouch } = useMouseTracking();
 
   // Offset shadow position for collision logic
@@ -77,7 +70,6 @@ const GameField: React.FC<GameFieldProps> = ({
     onAnimationComplete,
   } = useHammerAnimation(hammerObject);
 
-  // Handle hammer click/tap
   const handleHammerClick = React.useCallback(() => {
     if (
       !isPrimaryObjectReady ||
@@ -94,35 +86,18 @@ const GameField: React.FC<GameFieldProps> = ({
     triggerHammerAnimation,
   ]);
 
-  // Show loading state
-  if (isLoading) {
-    return (
-      <div
-        className={`${styles.gameField} ${styles.loading} ${className || ""}`}
-      >
-        <div className={styles.loadingMessage}>
-          <p>Setting up the workshop...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div
       className={`${styles.gameField} ${
         gameState.isGameComplete ? styles.gameComplete : ""
       } ${styles[`input-${inputMode}`]} ${className || ""}`}
     >
-      {/* Main Game Area */}
       <div className={styles.gameArea}>
-        {/* Render all game objects */}
         {gameState.objects.map((gameObject) => {
-          // Find collision data for this object
           const objectMaskData = collisionResult.intersectingObjects.find(
             (maskData) => maskData.objectId === gameObject.id
           );
 
-          // Check if this object is currently being animated
           const isObjectAnimating =
             isAnimating && gameObject.id === targetObjectId;
 
@@ -133,7 +108,7 @@ const GameField: React.FC<GameFieldProps> = ({
               maskData={objectMaskData}
               scaleFactor={scaleFactor}
               isAnimating={isObjectAnimating}
-              animationProgress={0} // Not used with Framer Motion
+              animationProgress={0}
             />
           );
         })}

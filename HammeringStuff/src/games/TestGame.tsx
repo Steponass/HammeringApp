@@ -11,7 +11,6 @@ interface TestGameProps {
 
 const TestGame: React.FC<TestGameProps> = ({
   gameState,
-  isLoading,
   hammerObject,
 }) => {
   return (
@@ -26,7 +25,6 @@ const TestGame: React.FC<TestGameProps> = ({
     >
       <GameField
         gameState={gameState}
-        isLoading={isLoading}
         hammerObject={hammerObject}
       />
     </div>

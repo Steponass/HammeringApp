@@ -11,9 +11,9 @@
 }
 
 .shadowCircle {
-  width: 66%;
-  height: 66%;
-  border-radius: 50%;
+  width: 70%;
+  height: 70%;
+  border-radius: 40%;
   position: relative;
   background: radial-gradient(
     circle,

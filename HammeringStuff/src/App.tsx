@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import SplashScreen from "components/SplashScreen";
 import Header from "components/layout/Header/Header";
 import TestGame from "games/TestGame";
@@ -17,6 +18,7 @@ const App: React.FC = () => {
     showSplash: true,
   });
   const { gameState, isLoading, resetGame, hammerObject } = useGameState();
+
   // For now, set isAnimating to false (or wire up if available)
   const isAnimating = false;
 
@@ -24,24 +26,32 @@ const App: React.FC = () => {
     setAppState({ showSplash: false });
   };
 
-  if (appState.showSplash) {
-    return <SplashScreen onStartGame={handleStartGame} />;
-  }
-
   return (
     <div className="App">
-      <Header
-        hammeredCount={gameState.hammeredCount}
-        totalCount={gameState.totalCount}
-        resetGame={resetGame}
-        isLoading={isLoading}
-      />
-      <TestGame
-        gameState={gameState}
-        isLoading={isLoading}
-        isAnimating={isAnimating}
-        hammerObject={hammerObject}
-      />
+      <AnimatePresence mode="wait">
+        {appState.showSplash ? (
+          <SplashScreen key="splash" onStartGame={handleStartGame} />
+        ) : (
+          <motion.div
+          key="game"
+          initial={{ opacity: 1, scale: 3 }}
+          animate={{ opacity: 1, scale: 1  }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+        <Header
+          hammeredCount={gameState.hammeredCount}
+          totalCount={gameState.totalCount}
+          resetGame={resetGame}
+        />
+        <TestGame
+          gameState={gameState}
+          isLoading={isLoading}
+          isAnimating={isAnimating}
+          hammerObject={hammerObject}
+        />
+        </motion.div>
+      )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -19,3 +19,7 @@
 .splash_main h1 {
     letter-spacing: clamp(-5px, calc(-1.25px - 0.3125vw), -2px);
 }
+
+.splash_button {
+  box-shadow: var(--shadow-splash-button-hover);
+}
