@@ -1,4 +1,3 @@
-// src/components/HammerVisual/HammerVisual.tsx
 import React from "react";
 import {
   motion,
@@ -134,7 +133,7 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
         <motion.div
           className={styles.hammerVisual}
           style={{
-            left: hammerPosition.x, // center hammer horizontally (width: 120px)
+            left: hammerPosition.x,
             top: hammerPosition.y,
             position: "fixed",
           }}

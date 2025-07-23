@@ -25,12 +25,10 @@ interface UseMouseTrackingReturn {
  * - Touch and drag: moves shadow continuously
  */
 const useMouseTracking = (): UseMouseTrackingReturn => {
-
   const [cursorPosition, setCursorPosition] = useState<Position>({
     x: 0,
     y: 0,
   });
-
 
   const [shadowPosition, setShadowPosition] = useState<Position>({
     x: 0,
@@ -43,13 +41,47 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
   // Track touch interaction state for mobile
   const [isFirstTouch, setIsFirstTouch] = useState<boolean>(true);
 
-
   const hasDetectedTouch = useRef<boolean>(false);
-
-
   const isDragging = useRef<boolean>(false);
 
   const HEADER_HEIGHT = 50;
+
+  /**
+   * Check if the touch target is within the header area or is a button/interactive element
+   * This prevents game touch handlers from interfering with UI elements
+   */
+  const isHeaderElement = useCallback((target: EventTarget | null): boolean => {
+    if (!target || !(target instanceof Element)) {
+      return false;
+    }
+    
+    // Check if the element or any of its parents is within the header or is a button
+    let current: Element | null = target;
+    while (current) {
+      // Check for header element
+      if (current.closest('header')) {
+        return true;
+      }
+      
+      // Check for reset button specifically
+      if (current.closest('[class*="reset_button"]')) {
+        return true;
+      }
+      
+      // Check for any button elements
+      if (current.tagName === 'BUTTON') {
+        return true;
+      }
+      
+      // Check for any interactive elements that should not be interfered with
+      if (current.hasAttribute('data-no-touch-override')) {
+        return true;
+      }
+      
+      current = current.parentElement;
+    }
+    return false;
+  }, []);
 
   /**
    * Update cursor position for desktop mouse movement
@@ -77,6 +109,11 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
    * Updates both cursor and shadow position during drag
    */
   const updateTouchPosition = useCallback((event: TouchEvent): void => {
+    // Check if this touch is on a header element - if so, don't interfere
+    if (isHeaderElement(event.target)) {
+      return;
+    }
+
     // Prevent scrolling while interacting
     event.preventDefault();
 
@@ -95,7 +132,7 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
         setShadowPosition(newPosition);
       }
     }
-  }, []);
+  }, [isHeaderElement]);
 
   /**
    * Handle initial touch start events
@@ -103,6 +140,11 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
    */
   const handleTouchStart = useCallback(
     (event: TouchEvent): void => {
+      // Check if this touch is on a header element - if so, don't interfere
+      if (isHeaderElement(event.target)) {
+        return;
+      }
+
       // Switch to mobile mode when we detect actual touch usage
       if (!hasDetectedTouch.current) {
         hasDetectedTouch.current = true;
@@ -134,7 +176,7 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
         }
       }
     },
-    [isFirstTouch]
+    [isFirstTouch, isHeaderElement]
   );
 
   /**
@@ -167,6 +209,11 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
 
     // Touch move handler
     const handleTouchMoveEvent = (event: TouchEvent) => {
+      // Check if this touch is on a header element - if so, don't interfere
+      if (isHeaderElement(event.target)) {
+        return;
+      }
+
       // Switch to mobile mode if not already detected
       if (!hasDetectedTouch.current) {
         hasDetectedTouch.current = true;
@@ -193,6 +240,11 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
 
     // Touch start handler
     const handleTouchStartEvent = (event: TouchEvent) => {
+      // Check if this touch is on a header element - if so, don't interfere
+      if (isHeaderElement(event.target)) {
+        return;
+      }
+
       // Switch to mobile mode when we detect actual touch usage
       if (!hasDetectedTouch.current) {
         hasDetectedTouch.current = true;
@@ -225,7 +277,12 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
     };
 
     // Touch end handler
-    const handleTouchEndEvent = () => {
+    const handleTouchEndEvent = (event: TouchEvent) => {
+      // Check if this touch is on a header element - if so, don't interfere
+      if (isHeaderElement(event.target)) {
+        return;
+      }
+
       isDragging.current = false;
     };
 
@@ -248,7 +305,7 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
       document.removeEventListener("touchmove", handleTouchMoveEvent);
       document.removeEventListener("touchend", handleTouchEndEvent);
     };
-  }, [isFirstTouch]); // Only depend on isFirstTouch
+  }, [isFirstTouch, isHeaderElement]); // Added isHeaderElement to dependencies
 
   // Return all the data and functions that components will need
   return {

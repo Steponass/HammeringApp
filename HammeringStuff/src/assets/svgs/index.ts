@@ -18,10 +18,8 @@ import teaSvg from "./objects/tea.svg";
 import shoppingCardSvg from "./objects/shopping-card.svg";
 import medKitSvg from "./objects/med-kit.svg";
 import magnifyingGlassSvg from "./objects/magnifying-glass.svg";
-import wristWatchSvg from "./objects/wrist-watch.svg";
 import ringSvg from "./objects/ring.svg";
 import slippersSvg from "./objects/slippers.svg";
-import headsetSvg from "./objects/headset.svg";
 import discountLabelSvg from "./objects/discount-label.svg";
 import lampSvg from "./objects/lamp.svg";
 import helicopterSvg from "./objects/helicopter.svg";
@@ -44,7 +42,6 @@ import hammerSvg from "./objects/hammer.svg";
 import dinnerLoveSvg from "./objects/dinner-love.svg";
 import giftHeart2Svg from "./objects/gift-heart-2.svg";
 import fileHeartSvg from "./objects/-file-heart.svg";
-import redSnazzyShortsSvg from "./objects/red-snazzy-shorts.svg";
 import grayTshirtSvg from "./objects/gray-tshirt.svg";
 import greenPantsSvg from "./objects/green-pants.svg";
 import lightbulbSvg from "./objects/lightbulb.svg";
@@ -66,6 +63,17 @@ import cheeseSvg from "./objects/cheese.svg";
 import hamburgerSvg from "./objects/hamburger.svg";
 import hotDogSvg from "./objects/hot-dog.svg";
 import pizzaSvg from "./objects/pizza.svg";
+import bookSvg from "./objects/0-book.svg"
+import leafSvg from "./objects/0-leaf.svg"
+import champagnePopSvg from "./objects/0-champagne-pop.svg"
+import smartPhoneGraphSvg from "./objects/0-smartphone-graph.svg"
+import smartPhoneDollarSvg from "./objects/0-smartphone-dollar.svg"
+import laptopMailSvg from "./objects/0-laptop-mail.svg"
+import atomSvg from "./objects/0-atom.svg"
+import sushiSvg from "./objects/0-sushi.svg"
+import headsetSvg from "./objects/0-headset.svg"
+
+
 import nailReady1Svg from "./nails/Nail_Ready_1.svg";
 import nailReady2Svg from "./nails/Nail_Ready_2.svg";
 import nailReady3Svg from "./nails/Nail_Ready_3.svg";
@@ -100,10 +108,8 @@ export const SVG_ASSETS = {
   "shopping-card": shoppingCardSvg,
   "med-kit": medKitSvg,
   "magnifying-glass": magnifyingGlassSvg,
-  "wrist-watch": wristWatchSvg,
   ring: ringSvg,
   slippers: slippersSvg,
-  headset: headsetSvg,
   "discount-label": discountLabelSvg,
   lamp: lampSvg,
   helicopter: helicopterSvg,
@@ -126,7 +132,6 @@ export const SVG_ASSETS = {
   "dinner-love": dinnerLoveSvg,
   "gift-heart-2": giftHeart2Svg,
   "file-heart": fileHeartSvg,
-  "red-snazzy-shorts": redSnazzyShortsSvg,
   "gray-tshirt": grayTshirtSvg,
   "green-pants": greenPantsSvg,
   lightbulb: lightbulbSvg,
@@ -148,6 +153,15 @@ export const SVG_ASSETS = {
   hamburger: hamburgerSvg,
   "hot-dog": hotDogSvg,
   pizza: pizzaSvg,
+  book: bookSvg,
+  leaf: leafSvg,
+  champagnePop: champagnePopSvg,
+  smartPhoneGraph: smartPhoneGraphSvg,
+  smartPhoneDollar: smartPhoneDollarSvg,
+  laptopMail: laptopMailSvg,
+  atom: atomSvg,
+  sushi: sushiSvg,
+  headset: headsetSvg,
 } as const;
 
 export type SvgAssetKey = keyof typeof SVG_ASSETS;

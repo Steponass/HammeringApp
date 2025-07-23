@@ -3,27 +3,27 @@ import { SVG_ASSETS } from "../assets/svgs";
 
 // Nail types - using placeholder icons until SVGs are created
 export const NAIL_DEFINITIONS: Record<string, NailDefinition> = {
-  "nailReady1": {
+  nailReady1: {
     id: "nailReady1",
     name: "Nail Ready 1",
     svgPath: SVG_ASSETS.nailReady1,
     hammeredSvgPath: SVG_ASSETS.nailDone1,
     placeholder: "🔩",
   },
-  "nailReady2": {
+  nailReady2: {
     id: "nailReady2",
     name: "Nail Ready 2",
     svgPath: SVG_ASSETS.nailReady2,
     hammeredSvgPath: SVG_ASSETS.nailDone2,
     placeholder: "🔩",
   },
-  "nailReady3": {
+  nailReady3: {
     id: "nailReady3",
     name: "Nail Ready 3",
     svgPath: SVG_ASSETS.nailReady3,
     hammeredSvgPath: SVG_ASSETS.nailDone3,
     placeholder: "🔩",
-  }
+  },
 };
 
 // Helper to randomly assign nail types
@@ -264,13 +264,6 @@ export const OBJECT_DEFINITIONS: Record<string, ObjectDefinition> = {
     baseSize: getRandomBaseSize(),
     nailType: getRandomNailType(),
   },
-  "wrist-watch": {
-    id: "wrist-watch",
-    name: "Wrist Watch",
-    svgPath: SVG_ASSETS["wrist-watch"],
-    baseSize: getRandomBaseSize(),
-    nailType: getRandomNailType(),
-  },
   ring: {
     id: "ring",
     name: "Ring",
@@ -282,13 +275,6 @@ export const OBJECT_DEFINITIONS: Record<string, ObjectDefinition> = {
     id: "slippers",
     name: "Slippers",
     svgPath: SVG_ASSETS.slippers,
-    baseSize: getRandomBaseSize(),
-    nailType: getRandomNailType(),
-  },
-  headset: {
-    id: "headset",
-    name: "Headset",
-    svgPath: SVG_ASSETS.headset,
     baseSize: getRandomBaseSize(),
     nailType: getRandomNailType(),
   },
@@ -359,13 +345,6 @@ export const OBJECT_DEFINITIONS: Record<string, ObjectDefinition> = {
     id: "red-shoe",
     name: "Red Shoe",
     svgPath: SVG_ASSETS["red-shoe"],
-    baseSize: getRandomBaseSize(),
-    nailType: getRandomNailType(),
-  },
-  "red-snazzy-shorts": {
-    id: "red-snazzy-shorts",
-    name: "Red Snazzy Shorts",
-    svgPath: SVG_ASSETS["red-snazzy-shorts"],
     baseSize: getRandomBaseSize(),
     nailType: getRandomNailType(),
   },
@@ -513,6 +492,69 @@ export const OBJECT_DEFINITIONS: Record<string, ObjectDefinition> = {
     id: "pizza",
     name: "Pizza",
     svgPath: SVG_ASSETS.pizza,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+  book: {
+    id: "book",
+    name: "book",
+    svgPath: SVG_ASSETS.book,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+  leaf: {
+    id: "leaf",
+    name: "leaf",
+    svgPath: SVG_ASSETS.leaf,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+  champagnePop: {
+    id: "champagnePop",
+    name: "champagnePop",
+    svgPath: SVG_ASSETS.champagnePop,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+  smartPhoneGraph: {
+    id: "smartPhoneGraph",
+    name: "smartPhoneGraph",
+    svgPath: SVG_ASSETS.smartPhoneGraph,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+  smartPhoneDollar: {
+    id: "smartPhoneDollar",
+    name: "smartPhoneDollar",
+    svgPath: SVG_ASSETS.smartPhoneDollar,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+  laptopMail: {
+    id: "laptopMail",
+    name: "laptopMail",
+    svgPath: SVG_ASSETS.laptopMail,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+  atom: {
+    id: "atom",
+    name: "atom",
+    svgPath: SVG_ASSETS.atom,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+  sushi: {
+    id: "sushi",
+    name: "sushi",
+    svgPath: SVG_ASSETS.sushi,
+    baseSize: getRandomBaseSize(),
+    nailType: getRandomNailType(),
+  },
+    headset: {
+    id: "headset",
+    name: "headset",
+    svgPath: SVG_ASSETS.headset,
     baseSize: getRandomBaseSize(),
     nailType: getRandomNailType(),
   },

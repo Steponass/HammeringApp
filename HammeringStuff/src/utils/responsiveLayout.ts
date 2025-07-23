@@ -90,12 +90,6 @@ const calculateSpacingMultiplier = (viewport: ViewportInfo): number => {
   
   let multiplier = baseMultipliers[deviceType];
   
-  // Extra adjustment for very small mobile screens
-  // Small phones need even more generous spacing
-  if (deviceType === 'mobile' && viewport.width < 375) {
-    multiplier *= 1.2; // Even more spacing for small phones
-  }
-  
   // Portrait mode creates height constraints, so we need slightly more spacing
   // to prevent objects from feeling cramped vertically
   if (isPortrait && deviceType !== 'desktop') {
@@ -109,16 +103,11 @@ const calculateSpacingMultiplier = (viewport: ViewportInfo): number => {
  * Calculate object scale factor for this device
  */
 const calculateObjectScale = (viewport: ViewportInfo): number => {
-  const { deviceType, width } = viewport;
+  const { deviceType } = viewport;
   
   // Start with configured scale factors from your game config
   const baseScale = GAME_CONFIG.responsive.scaleFactors[deviceType];
   
-  // Additional scaling for very small screens
-  // If someone has a really tiny phone, make objects even smaller
-  if (deviceType === 'mobile' && width < 375) {
-    return baseScale * 0.9; // 10% smaller on very small phones
-  }
   
   return baseScale;
 };
