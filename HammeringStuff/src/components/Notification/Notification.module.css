@@ -13,3 +13,7 @@
   align-items: center;
   gap: 12px;
 }
+
+.completionNotification {
+  box-shadow: var(--shadow-elevation-3);
+}

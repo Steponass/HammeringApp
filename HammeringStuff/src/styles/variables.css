@@ -12,6 +12,12 @@
 0    3px 6px      hsla(0, 0%, 16%, 0.3),
 0    2px 4px      hsla(0, 0%, 18%, 0.15);
 
+/* Completion message */
+--shadow-elevation-3: 
+0     4px  8px      hsla(0, 0%, 16%, 0.7),
+0    16px 16px -2px hsla(0, 0%, 18%, 0.3);
+
+
 /* Below used as inline style due to Motion limitations */
 --shadow-splash-button-hover:
 0 3px 4px -1px hsla(225, 42%, 5%, 1);
