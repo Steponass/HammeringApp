@@ -3,12 +3,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, left, top, width, height;
 }
 
 .originalLayer {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: opacity 0.2s ease-out;
 }
 
 .nailLayer {
@@ -22,6 +25,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(100% * 0.6);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
 @media (max-width: 768px) {
@@ -38,4 +42,71 @@
   height: 95%;
   object-fit: contain;
   z-index: 3; /* Above both original and nail layers */
+  transition: opacity 0.2s ease-out;
+}
+
+.container.repositioning {
+  transition: 
+    left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    top 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.2, 0, 0.2, 1),
+    height 0.3s cubic-bezier(0.2, 0, 0.2, 1),
+    opacity 0.2s ease-out,
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: left, top, width, height, opacity, transform;
+}
+
+.container.position-transitioning {
+  transform: scale(0.998); /* Very subtle scale change to indicate movement */
+  opacity: 0.97;
+
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.container.hammer-animating.repositioning {
+  transition-delay: 0.1s; /* Slight delay to let hammer animation start first */
+}
+
+@media (max-width: 768px) {
+  .container.repositioning {
+    /* EXPLANATION: Faster transitions on mobile for more responsive feel
+       Touch devices benefit from snappier feedback */
+    transition-duration: 0.25s;
+  }
+  
+  .container.position-transitioning {
+    /* EXPLANATION: Less pronounced effects on mobile to conserve battery and performance */
+    transform: scale(0.999);
+    filter: none; /* Remove shadows on mobile for better performance */
+  }
+}
+
+@media (max-width: 480px) {
+  .container.repositioning {
+    /* EXPLANATION: Even faster transitions on very small screens
+       Small touch targets need immediate feedback */
+    transition-duration: 0.2s;
+  }
+}
+
+/* EXPLANATION: Support for high refresh rate displays for smoother animations */
+@media (min-resolution: 120dpi) {
+  .container.repositioning {
+    /* EXPLANATION: High DPI displays can handle more sophisticated transitions
+       We can use longer durations for more elegant movement */
+    transition-duration: 0.35s;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+}
+
+/* EXPLANATION: Accessibility support for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .container.repositioning,
+  .container.position-transitioning {
+    /* EXPLANATION: Respect user preferences while still providing some feedback
+       We maintain functionality while reducing visual motion */
+    transition: opacity 0.1s ease !important;
+    transform: none !important;
+    filter: none !important;
+  }
 }

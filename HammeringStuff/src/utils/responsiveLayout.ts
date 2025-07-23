@@ -7,6 +7,7 @@ export interface ResponsiveLayoutConfig {
   marginMultiplier: number;
   safetyBuffer: number;
   minAbsoluteDistance: number;
+  deviceType: 'mobile' | 'tablet' | 'desktop';
 }
 
 export interface ViewportInfo {
@@ -140,5 +141,6 @@ export const getResponsiveLayoutConfig = (): ResponsiveLayoutConfig => {
     marginMultiplier,
     safetyBuffer,
     minAbsoluteDistance,
+    deviceType: viewport.deviceType, // Include the deviceType in the returned config
   };
 };
