@@ -109,13 +109,15 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
     },
   };
 
-  const hammerPosition = React.useMemo(
-    () => ({
-      x: shadowPosition.x +15,
-      y: shadowPosition.y + 60 - 165, // Align with shadowOverlay's +60 offset, then apply -150 for visual alignment
-    }),
-    [shadowPosition]
-  );
+const hammerPosition = React.useMemo(() => {
+  const isMobileDevice = window.innerWidth <= 768;
+  const responsiveVerticalOffset = isMobileDevice ? -95 : -165;
+  
+  return {
+    x: shadowPosition.x + 15,
+    y: shadowPosition.y + 60 + responsiveVerticalOffset,
+  };
+}, [shadowPosition]);
 
   // Trigger swing animation when isAnimating changes
   React.useEffect(() => {

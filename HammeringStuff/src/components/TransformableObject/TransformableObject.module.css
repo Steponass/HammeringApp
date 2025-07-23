@@ -24,6 +24,12 @@
   font-size: calc(100% * 0.6);
 }
 
+@media (max-width: 768px) {
+  .nailLayer {
+    scale: 1;
+  }
+}
+
 .hammeredNailLayer {
   position: absolute;
   top: 0;
