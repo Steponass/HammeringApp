@@ -46,7 +46,7 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
     // Hammer swing sequence: raise → swing → impact → recoil
     swing: {
       rotate: [5, 50, -30, 5],
-      scale: [0.8, 0.85, 1.05, 0.8],
+      scale: [0.8, 0.85, 1, 0.8],
       scaleX: [1, 0.98, 1.03, 1.06, 1],
       scaleY: [1, 1.01, 1.03, 0.96, 1],
       y: [0, -10, 5, 0],
@@ -111,8 +111,8 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
 
   const hammerPosition = React.useMemo(
     () => ({
-      x: shadowPosition.x,
-      y: shadowPosition.y + 60 - 150, // Align with shadowOverlay's +60 offset, then apply -150 for visual alignment
+      x: shadowPosition.x +15,
+      y: shadowPosition.y + 60 - 165, // Align with shadowOverlay's +60 offset, then apply -150 for visual alignment
     }),
     [shadowPosition]
   );

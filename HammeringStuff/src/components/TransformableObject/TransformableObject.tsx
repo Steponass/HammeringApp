@@ -1,4 +1,5 @@
 import React from "react";
+import { motion, AnimatePresence } from "motion/react";
 import type { GameObject, ObjectMaskData } from "types/game";
 import { getObjectDefinition, getNailDefinition } from "data/objectDefinitions";
 import styles from "./TransformableObject.module.css";
@@ -100,14 +101,31 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
       )}
 
       {/* Hammered nail layer */}
-      {state === "hammered" && (
-        <img
-          src={nailDef.hammeredSvgPath}
-          alt={`${nailDef.name} (Hammered)`}
-          className={styles.hammeredNailLayer}
-          style={getHammeredNailMaskStyles()}
-        />
-      )}
+<AnimatePresence>
+  {state === "hammered" && (
+    <motion.img
+      src={nailDef.hammeredSvgPath}
+      alt={`${nailDef.name} (Hammered)`}
+      className={styles.hammeredNailLayer}
+      style={getHammeredNailMaskStyles()}
+      initial={{ 
+        y: 0, 
+        scaleY: 1, 
+        scaleX: 1 
+      }}
+      animate={{ 
+        y: [0, 3, -2, 0],
+        scaleY: [1, 0.97, 1.03, 1],
+        scaleX: [1, 1.03, 0.97, 1],
+      }}
+      transition={{
+        duration: 0.2,
+        ease: "easeInOut",
+        times: [0, 0.2, 0.6, 1],
+      }}
+    />
+  )}
+</AnimatePresence>
     </div>
   );
 };
