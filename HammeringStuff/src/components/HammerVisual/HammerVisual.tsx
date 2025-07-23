@@ -30,12 +30,12 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
     idle: {
       rotate: 5,
       scale: 0.8,
-      y: [0, -4, 0], // Gentle float up and down
+      y: [0, -4, 0],
       transition: {
         rotate: { type: "spring", damping: 10, stiffness: 100 },
         scale: { type: "spring", damping: 10, stiffness: 100 },
         y: {
-          duration: 2,
+          duration: 2.5,
           repeat: Infinity,
           ease: "easeInOut",
           repeatType: "loop",
@@ -46,17 +46,29 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
     // Hammer swing sequence: raise → swing → impact → recoil
     swing: {
       rotate: [5, 50, -30, 5],
-      scale: [0.8, 0.85, 1.1, 0.8],
+      scale: [0.8, 0.85, 1.05, 0.8],
+      scaleX: [1, 0.98, 1.03, 1.06, 1],
+      scaleY: [1, 1.01, 1.03, 0.96, 1],
       y: [0, -10, 5, 0],
       transition: {
         duration: 0.6,
-        times: [0, 0.5, 0.75, 1],
-        ease: "easeInOut", // Use predefined easing
-        y: {
-          duration: 0.6,
-          times: [0, 0.5, 0.75, 1],
-          ease: "easeOut",
-        },
+        times: [0, 0.3, 0.6, 0.85, 1],
+        ease: "easeInOut",
+      scaleX: {
+        duration: 0.6,
+        times: [0, 0.3, 0.6, 0.85, 1],
+        ease: "easeInOut",
+      },
+      scaleY: {
+        duration: 0.6,
+        times: [0, 0.3, 0.6, 0.85, 1],
+        ease: "easeInOut",
+      },
+      y: {
+        duration: 0.6,
+        times: [0, 0.3, 0.6, 1], // Only 4 keyframes for Y
+        ease: "easeOut",
+      },
       },
     },
 
@@ -99,7 +111,7 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
 
   const hammerPosition = React.useMemo(
     () => ({
-      x: shadowPosition.x - 20,
+      x: shadowPosition.x,
       y: shadowPosition.y + 60 - 150, // Align with shadowOverlay's +60 offset, then apply -150 for visual alignment
     }),
     [shadowPosition]
@@ -136,6 +148,7 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
             left: hammerPosition.x,
             top: hammerPosition.y,
             position: "fixed",
+            transformOrigin: "50% 80%",
           }}
           variants={hammerVariants}
           initial="enter"

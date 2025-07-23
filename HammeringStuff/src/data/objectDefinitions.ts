@@ -24,6 +24,13 @@ export const NAIL_DEFINITIONS: Record<string, NailDefinition> = {
     hammeredSvgPath: SVG_ASSETS.nailDone3,
     placeholder: "🔩",
   },
+    nailReady4: {
+    id: "nailReady4",
+    name: "Nail Ready 4",
+    svgPath: SVG_ASSETS.nailReady4,
+    hammeredSvgPath: SVG_ASSETS.nailDone4,
+    placeholder: "🔩",
+  },
 };
 
 // Helper to randomly assign nail types
