@@ -15,7 +15,6 @@
 
 @media (max-width: 768px) {
   .hammerVisual {
-    width: 100px;
-    height: 250px;
+    width: 128px;
   }
 }
