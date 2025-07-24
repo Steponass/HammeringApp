@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import SplashScreen from "components/SplashScreen";
 import Header from "components/layout/Header/Header";
@@ -80,29 +80,31 @@ const App: React.FC = () => {
     acknowledgeSignificantChange,
   ]);
 
+  const usedHammerMessagesRef = useRef<string[]>([]);
+
+  // Update the handleHammerObject function
   const handleHammerObject = useCallback(
     (objectId: string): void => {
       setIsAnimating(true);
-
+  
       hammerObject(objectId);
-
+  
       const targetObject = gameState.objects.find((obj) => obj.id === objectId);
-
-      // Only proceed if we found the object and it's not already hammered
+  
       if (targetObject && targetObject.state !== "hammered") {
         const newHammeredCount = gameState.hammeredCount + 1;
-
-        // Check if the new count is even (every 2nd, 4th, 6th, etc.)
         const shouldShowNotification = newHammeredCount % 2 === 0;
-
+  
         if (shouldShowNotification) {
           setTimeout(() => {
-            const randomMessage = getRandomHammerMessage();
+            // Use your new function with used messages tracking
+            const randomMessage = getRandomHammerMessage(usedHammerMessagesRef.current);
+            usedHammerMessagesRef.current = [...usedHammerMessagesRef.current, randomMessage];
             addNotification(randomMessage);
           }, 100);
         }
       }
-
+  
       setTimeout(() => {
         setIsAnimating(false);
       }, 500);

@@ -203,22 +203,6 @@ const useHammerAnimation = (
     }
   }, [isAnimating, isMobileDevice]);
 
-  /**
-   * Development debugging
-   */
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      if (isAnimating && targetObjectId) {
-        console.log(`🔨 Hammer animation started for object: ${targetObjectId}`);
-        console.log(`⏱️  Impact will occur in 450ms`);
-        
-        if (isMobileDevice()) {
-          console.log(`📱 Mobile optimizations active`);
-        }
-      }
-    }
-  }, [isAnimating, targetObjectId, isMobileDevice]);
-
   return {
     isAnimating,
     targetObjectId,

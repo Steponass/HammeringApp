@@ -1,4 +1,4 @@
-const MESSAGES = [
+const HAMMER_NOTIFICATION_MESSAGES = [
   "Whack it good",
   "Fix it your way",
   "Don't think — smash",
@@ -30,6 +30,15 @@ const MESSAGES = [
   "Pain points resolved"
 ];
 
-export const getRandomHammerMessage = (): string => {
-  return MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+export const getRandomHammerMessage = (usedMessages: string[] = []): string => {
+  const availableMessages = HAMMER_NOTIFICATION_MESSAGES.filter(
+    message => !usedMessages.includes(message)
+  );
+  
+  const randomIndex = Math.floor(Math.random() * availableMessages.length);
+  return availableMessages[randomIndex];
+};
+
+export const getAllHammerMessages = (): readonly string[] => {
+  return HAMMER_NOTIFICATION_MESSAGES;
 };

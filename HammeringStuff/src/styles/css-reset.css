@@ -1,6 +1,7 @@
 /* CSS Reset based on Josh W Comeau and Step's own choices. Edited Dec'24 */
 /* May '25 - styling for 'a' is now with :where */
 /* June '25 - removed font-inherit for button, input */
+/* Jul '25 -  overflow-wrap: normal; - for this project only */
 
 *,
 *::before,
@@ -53,7 +54,7 @@ h3,
 h4,
 h5,
 h6 {
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
 }
 
 p {

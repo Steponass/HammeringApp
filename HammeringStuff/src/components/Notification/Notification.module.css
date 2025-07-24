@@ -16,5 +16,5 @@
 
 .completionNotification {
   box-shadow: var(--shadow-elevation-3);
-  max-width: 320px;
+  width: min(296px, 90%);
 }
