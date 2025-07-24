@@ -50,6 +50,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
               delay: 0.4,
               duration: 0.4,
               ease: "easeOut",
+              
             }}
           >
             <h1>If all you have is a hammer,</h1>
@@ -83,6 +84,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
             whileHover={{
               scale: 3,
               rotate: 2,
+              
               boxShadow: "0 3px 4px -1px hsla(225, 42%, 5%, 1)",
             }}
             whileTap={{

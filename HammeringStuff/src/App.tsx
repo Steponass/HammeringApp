@@ -82,7 +82,6 @@ const App: React.FC = () => {
 
   const usedHammerMessagesRef = useRef<string[]>([]);
 
-  // Update the handleHammerObject function
   const handleHammerObject = useCallback(
     (objectId: string): void => {
       setIsAnimating(true);
@@ -97,7 +96,6 @@ const App: React.FC = () => {
   
         if (shouldShowNotification) {
           setTimeout(() => {
-            // Use your new function with used messages tracking
             const randomMessage = getRandomHammerMessage(usedHammerMessagesRef.current);
             usedHammerMessagesRef.current = [...usedHammerMessagesRef.current, randomMessage];
             addNotification(randomMessage);
@@ -112,9 +110,6 @@ const App: React.FC = () => {
     [hammerObject, gameState.objects, gameState.hammeredCount, addNotification]
   );
 
-  /*
-   * Reset function that clears all notifications and  resets responsive system state for a clean start
-   */
   const handleResetGame = useCallback((): void => {
     setIsAnimating(false);
     resetGame();

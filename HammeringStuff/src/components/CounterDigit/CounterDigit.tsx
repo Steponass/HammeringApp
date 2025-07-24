@@ -12,23 +12,23 @@ const CounterDigit: React.FC<CounterDigitProps> = ({ digit, digitIndex }) => {
     <div className={styles.digit_container}>
       <AnimatePresence mode="wait">
         <motion.span
-          key={`${digitIndex}-${digit}`} // Unique key per position and value
+          key={`${digitIndex}-${digit}`}
           className={styles.digit}
-          initial={{ 
+          initial={{
             y: 20,
-            opacity: 0.7 
+            opacity: 0.7,
           }}
-          animate={{ 
+          animate={{
             y: 0,
-            opacity: 1 
+            opacity: 1,
           }}
-          exit={{ 
+          exit={{
             y: -20,
-            opacity: 0.7 
+            opacity: 0.7,
           }}
           transition={{
             duration: 0.2,
-            ease: "easeOut"
+            ease: "easeOut",
           }}
         >
           {digit}

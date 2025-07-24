@@ -14,7 +14,6 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const valueString = value.toString();
   
   // Split into individual digits and reverse for easier indexing
-  // (rightmost digit gets index 0)
   const digits = valueString.split('').reverse();
 
   return (

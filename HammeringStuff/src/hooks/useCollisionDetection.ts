@@ -7,13 +7,11 @@ import type {
   ShadowConfig 
 } from 'types/game';
 
-// Default shadow configuration
 const DEFAULT_SHADOW_CONFIG: ShadowConfig = {
   radius: 50,
-  opacity: 0.3,         // Semi-transparent
+  opacity: 0.3,
   blurAmount: 4         // Soft edges
 };
-
 
 const useCollisionDetection = (
   shadowPosition: Position,
@@ -21,8 +19,7 @@ const useCollisionDetection = (
   shadowConfig: ShadowConfig = DEFAULT_SHADOW_CONFIG
 ): CollisionDetectionResult => {
 
-  /**
-   * Calculate if a circle intersects with a rectangle
+  /*
    * Used to determine basic shadow-object overlap
    */
   const calculateCircleRectIntersection = (
@@ -50,7 +47,7 @@ const useCollisionDetection = (
     return distanceSquared <= (circleRadius * circleRadius);
   };
 
-  /**
+  /*
    * Calculate what percentage of the object is covered by shadow
    * Approximation based on how much of shadow circle overlaps object bounds
    */
@@ -60,15 +57,12 @@ const useCollisionDetection = (
     objectCenter: Position,
     objectSize: number
   ): number => {
-    // Calculate distance between shadow center and object center
     const deltaX = shadowCenter.x - objectCenter.x;
     const deltaY = shadowCenter.y - objectCenter.y;
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-    // Calculate object radius from size
     const objectRadius = objectSize / 2;
 
-    // If shadow completely contains object
     if (distance + objectRadius <= shadowRadius) {
       return 1.0; // 100% covered
     }
@@ -77,17 +71,14 @@ const useCollisionDetection = (
     if (distance >= shadowRadius + objectRadius) {
       return 0.0; // 0% covered
     }
-
     // Approximate percentage for partial intersection
-    // This is a simplified calculation - could be more precise if needed
     const overlapDistance = shadowRadius + objectRadius - distance;
     const maxOverlap = Math.min(shadowRadius, objectRadius) * 2;
     return Math.min(1.0, overlapDistance / maxOverlap);
   };
 
-  /**
+  /*
    * Convert global shadow position to coordinates relative to object
-   * This is what we'll use for CSS clip-path positioning
    */
   const calculateRelativePosition = (
     shadowPosition: Position,
@@ -99,28 +90,8 @@ const useCollisionDetection = (
     };
   };
 
-  /**
-   * Check if object is fully covered by shadow
-   * Useful for different visual effects or game mechanics
-   */
-  const isObjectFullyCovered = (
-    shadowCenter: Position,
-    shadowRadius: number,
-    objectCenter: Position,
-    objectSize: number
-  ): boolean => {
-    const deltaX = shadowCenter.x - objectCenter.x;
-    const deltaY = shadowCenter.y - objectCenter.y;
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    const objectRadius = objectSize / 2;
-    
-    // Object is fully covered if shadow radius encompasses entire object
-    return distance + objectRadius <= shadowRadius;
-  };
-
-  /**
-   * Main collision detection calculation
-   * Uses useMemo for performance - only recalculates when inputs change
+  /*
+   * Main collision detection
    */
   const collisionResult = useMemo((): CollisionDetectionResult => {
     const intersectingObjects: ObjectMaskData[] = [];
@@ -161,14 +132,6 @@ const useCollisionDetection = (
           object.size
         );
 
-        // Check if entire object is covered
-        const isFullyCovered = isObjectFullyCovered(
-          shadowPosition,
-          shadowConfig.radius,
-          objectCenter,
-          object.size
-        );
-
         // Add to results
         intersectingObjects.push({
           objectId: object.id,
@@ -179,7 +142,6 @@ const useCollisionDetection = (
             radius: shadowConfig.radius
           },
           intersectionPercentage,
-          isFullyCovered
         });
       }
     });

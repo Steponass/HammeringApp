@@ -41,7 +41,6 @@ export interface ObjectMaskData {
     radius: number;
   };
   intersectionPercentage: number;
-  isFullyCovered: boolean;
 }
 
 export interface CollisionDetectionResult {

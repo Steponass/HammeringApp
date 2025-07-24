@@ -1,4 +1,4 @@
-/**
+/*
  * Generate a unique ID for game objects
  * Uses timestamp + random number for uniqueness
  */
@@ -8,7 +8,7 @@ export const generateUniqueId = (): string => {
   return `obj_${timestamp}_${randomPart}`;
 };
 
-/**
+/*
  * Calculate distance between two positions
  * Used for collision detection and placement validation
  */
@@ -16,12 +16,4 @@ export const calculateDistance = (pos1: { x: number; y: number }, pos2: { x: num
   const deltaX = pos1.x - pos2.x;
   const deltaY = pos1.y - pos2.y;
   return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-};
-
-/**
- * Clamp a number between min and max values
- * Utility for keeping values within bounds
- */
-export const clamp = (value: number, min: number, max: number): number => {
-  return Math.min(Math.max(value, min), max);
 };

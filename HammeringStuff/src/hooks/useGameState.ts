@@ -18,10 +18,9 @@ interface UseGameStateReturn {
   resetGame: () => void;
   getObjectById: (objectId: string) => GameObject | undefined;
   getObjectsInState: (state: ObjectState) => GameObject[];
-  repositionObjects: (oldConfig: ResponsiveLayoutConfig, newConfig: ResponsiveLayoutConfig) => void; // New: Manual repositioning trigger
+  repositionObjects: (oldConfig: ResponsiveLayoutConfig, newConfig: ResponsiveLayoutConfig) => void;
 }
 
-// Your existing helper functions remain exactly the same
 const shuffleArray = <T>(array: T[]): T[] => {
   const arr = array.slice();
   for (let i = arr.length - 1; i > 0; i--) {
@@ -64,15 +63,11 @@ const useGameState = (): UseGameStateReturn => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
-  // NEW: Track when we're repositioning objects for UI feedback
   const [isRepositioning, setIsRepositioning] = useState<boolean>(false);
 
-  // NEW: Track animation states for edge case handling
-  // This helps us know when to delay repositioning to avoid conflicts
   const isHammerAnimating = useRef<boolean>(false);
   const repositionTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  // Your existing helper function for resolving overlaps
   const resolveAnyRemainingOverlaps = useCallback((
     objects: GameObject[], 
     maxAttempts: number
@@ -115,7 +110,7 @@ const useGameState = (): UseGameStateReturn => {
     return workingObjects;
   }, []);
 
-  // Your existing object generation function
+  
   const generateInitialObjects = useCallback((): GameObject[] => {
     const responsiveConfig = getResponsiveLayoutConfig();
     const objectCount = responsiveConfig.objectCount;
@@ -165,17 +160,12 @@ const useGameState = (): UseGameStateReturn => {
     return resolvedObjects;
   }, [resolveAnyRemainingOverlaps]);
 
-  // NEW: The key function that handles responsive repositioning
-  // This is where the magic happens when the viewport changes
+
   const repositionObjects = useCallback((
     oldConfig: ResponsiveLayoutConfig, 
     newConfig: ResponsiveLayoutConfig
   ): void => {
-    // EXPLANATION: This edge case handling implements your preference for
-    // "continue animation, reposition others" when hammer is in progress
     if (shouldDelayRepositioning(isHammerAnimating.current, false)) {
-      // If we're currently hammering an object, queue the repositioning for later
-      // This prevents jarring interruptions to user interactions
       if (repositionTimeoutRef.current) {
         clearTimeout(repositionTimeoutRef.current);
       }
@@ -186,12 +176,9 @@ const useGameState = (): UseGameStateReturn => {
       return;
     }
 
-    // Set the repositioning flag for UI feedback
-    // This allows your components to show loading states or disable interactions
     setIsRepositioning(true);
 
     setGameState(previousGameState => {
-      // Handle the edge case where no objects exist to reposition
       if (previousGameState.objects.length === 0) {
         setIsRepositioning(false);
         return previousGameState;
