@@ -1,4 +1,3 @@
-// components/GameField/GameField.tsx - Fixed version that matches your existing interfaces
 import React, { useMemo, useRef, useEffect } from "react";
 import { getResponsiveLayoutConfig } from 'utils/responsiveLayout';
 import type { ResponsiveLayoutConfig } from 'utils/responsiveLayout';

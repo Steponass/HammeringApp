@@ -11,7 +11,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999999;
+  z-index: 98765;
   overflow: hidden;
   gap: 48px;
 }
@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-    text-align: center;
+  text-align: center;
 }
 
 .splash_text_container h1 {

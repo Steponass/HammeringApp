@@ -1,4 +1,5 @@
 import React from 'react';
+import { AnimatePresence } from 'motion/react';
 import Notification from 'components/Notification/Notification';
 import type { NotificationData } from 'types/notifications';
 import styles from './NotificationSystem.module.css';
@@ -16,10 +17,6 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
 }) => {
   if (notifications.length === 0) return null;
 
-  /**
-   * Group notifications by their positioning needs
-   * This allows us to render different types in different containers
-   */
   const groupedNotifications = notifications.reduce((groups, notification) => {
     const variant = notification.variant || 'hammer';
     const position = variant === 'completion' ? 'center' : 'bottom-center';
@@ -33,33 +30,35 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
 
   return (
     <>
-      {/* Bottom-center notifications (hammer messages) */}
       {groupedNotifications['bottom-center'] && (
         <div className={`${styles.notificationSystem} ${styles.bottomCenter}`}>
-          {groupedNotifications['bottom-center'].map((notification, index) => (
-            <Notification
-              key={notification.id}
-              notification={notification}
-              onStartRemoving={onStartRemoving}
-              onFinishRemoving={onFinishRemoving}
-              index={index}
-            />
-          ))}
+          <AnimatePresence mode="popLayout">
+            {groupedNotifications['bottom-center'].map((notification, index) => (
+              <Notification
+                key={notification.id}
+                notification={notification}
+                onStartRemoving={onStartRemoving}
+                onFinishRemoving={onFinishRemoving}
+                index={index}
+              />
+            ))}
+          </AnimatePresence>
         </div>
       )}
 
-      {/* Center notifications (completion messages) */}
       {groupedNotifications['center'] && (
         <div className={`${styles.notificationSystem} ${styles.center}`}>
-          {groupedNotifications['center'].map((notification, index) => (
-            <Notification
-              key={notification.id}
-              notification={notification}
-              onStartRemoving={onStartRemoving}
-              onFinishRemoving={onFinishRemoving}
-              index={index}
-            />
-          ))}
+          <AnimatePresence mode="popLayout">
+            {groupedNotifications['center'].map((notification, index) => (
+              <Notification
+                key={notification.id}
+                notification={notification}
+                onStartRemoving={onStartRemoving}
+                onFinishRemoving={onFinishRemoving}
+                index={index}
+              />
+            ))}
+          </AnimatePresence>
         </div>
       )}
     </>

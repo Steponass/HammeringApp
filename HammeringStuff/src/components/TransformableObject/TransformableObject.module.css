@@ -70,42 +70,18 @@
 
 @media (max-width: 768px) {
   .container.repositioning {
-    /* EXPLANATION: Faster transitions on mobile for more responsive feel
-       Touch devices benefit from snappier feedback */
     transition-duration: 0.25s;
   }
   
   .container.position-transitioning {
-    /* EXPLANATION: Less pronounced effects on mobile to conserve battery and performance */
     transform: scale(0.999);
-    filter: none; /* Remove shadows on mobile for better performance */
+    filter: none;
   }
 }
 
-@media (max-width: 480px) {
-  .container.repositioning {
-    /* EXPLANATION: Even faster transitions on very small screens
-       Small touch targets need immediate feedback */
-    transition-duration: 0.2s;
-  }
-}
-
-/* EXPLANATION: Support for high refresh rate displays for smoother animations */
-@media (min-resolution: 120dpi) {
-  .container.repositioning {
-    /* EXPLANATION: High DPI displays can handle more sophisticated transitions
-       We can use longer durations for more elegant movement */
-    transition-duration: 0.35s;
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-}
-
-/* EXPLANATION: Accessibility support for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .container.repositioning,
   .container.position-transitioning {
-    /* EXPLANATION: Respect user preferences while still providing some feedback
-       We maintain functionality while reducing visual motion */
     transition: opacity 0.1s ease !important;
     transform: none !important;
     filter: none !important;

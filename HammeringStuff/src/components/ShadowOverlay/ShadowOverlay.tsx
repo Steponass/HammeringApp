@@ -1,4 +1,3 @@
-// src/components/ShadowOverlay/ShadowOverlay.tsx
 import React from "react";
 import type { Position, InputMode, ShadowConfig } from "types/game";
 import styles from "./ShadowOverlay.module.css";
@@ -22,11 +21,9 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   isAnimating,
   onHammerClick,
 }) => {
-  // Calculate shadow size based on configuration
   const shadowRadius = shadowConfig.radius;
   const shadowDiameter = shadowRadius * 2;
 
-  // Handle click/tap events
   const handleShadowClick = (event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -36,7 +33,6 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
     }
   };
 
-  // Get shadow classes based on current state
   const getShadowClasses = (): string => {
     const classes = [styles.shadowOverlay];
 
@@ -61,11 +57,10 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
     return classes.join(" ");
   };
 
-  // Calculate shadow positioning
   const getShadowStyles = (): React.CSSProperties => {
     return {
       left: shadowPosition.x - shadowRadius,
-      top: shadowPosition.y - shadowRadius + 70, // Offset shadow 70px lower
+      top: shadowPosition.y - shadowRadius + 70, // Offset shadow 70px lower - KEY VISUAL PARAMETER
       width: shadowDiameter,
       height: shadowDiameter,
       "--shadow-opacity": shadowConfig.opacity,
@@ -74,7 +69,6 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
     } as React.CSSProperties;
   };
 
-  // Don't render shadow at origin position
   if (shadowPosition.x === 0 && shadowPosition.y === 0) {
     return null;
   }

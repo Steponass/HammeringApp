@@ -54,9 +54,6 @@ const Notification: React.FC<NotificationProps> = ({
 
   const config = getVariantConfig(variant);
 
-  /**
-   * Auto-removal logic - only for auto-removing variants
-   */
   useEffect(() => {
     if (!isRemoving && config.autoRemoveDelay > 0) {
       const timer = setTimeout(() => {
@@ -67,7 +64,6 @@ const Notification: React.FC<NotificationProps> = ({
     }
   }, [id, isRemoving, onStartRemoving, config.autoRemoveDelay]);
 
-
   const handleAnimationComplete = (): void => {
     if (isRemoving) {
       onFinishRemoving(id);
@@ -76,6 +72,7 @@ const Notification: React.FC<NotificationProps> = ({
 
   return (
     <motion.div
+      layout
       className={`${styles.notification} ${config.className}`}
       initial={config.animations.initial}
       animate={{
@@ -84,14 +81,20 @@ const Notification: React.FC<NotificationProps> = ({
         scale: isRemoving ? 0.8 : config.animations.animate.scale,
         y: isRemoving ? (variant === 'completion' ? -20 : 50) : config.animations.animate.y,
       }}
+      exit={config.animations.exit}
       transition={{
         type: "spring",
-        damping: 25,
-        stiffness: 300,
+        damping: 12,
+        stiffness: 150,
         duration: isRemoving ? 0.3 : undefined,
+
+        layout: {
+          type: "spring",
+          damping: 15,
+          stiffness: 100,
+        }
       }}
       onAnimationComplete={handleAnimationComplete}
-
     >
       <div className={styles.notificationContent}>
         <span className={styles.message}>{message}</span>

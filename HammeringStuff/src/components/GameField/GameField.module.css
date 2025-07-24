@@ -2,22 +2,20 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-image: linear-gradient(
-    340deg,
-    hsl(225deg 42% 31%) 0%,
-    hsl(225deg 41% 36%) 8%,
-    hsl(226deg 40% 41%) 17%,
-    hsl(225deg 39% 45%) 25%,
-    hsl(225deg 38% 50%) 33%,
-    hsl(225deg 37% 55%) 42%,
-    hsl(225deg 36% 59%) 50%,
-    hsl(224deg 36% 64%) 58%,
-    hsl(224deg 34% 69%) 67%,
-    hsl(225deg 34% 74%) 75%,
-    hsl(223deg 33% 78%) 83%,
-    hsl(224deg 32% 83%) 92%,
-    hsl(224deg 31% 88%) 100%
-  );
+  background-image: linear-gradient(340deg,
+      hsl(225deg 42% 31%) 0%,
+      hsl(225deg 41% 36%) 8%,
+      hsl(226deg 40% 41%) 17%,
+      hsl(225deg 39% 45%) 25%,
+      hsl(225deg 38% 50%) 33%,
+      hsl(225deg 37% 55%) 42%,
+      hsl(225deg 36% 59%) 50%,
+      hsl(224deg 36% 64%) 58%,
+      hsl(224deg 34% 69%) 67%,
+      hsl(225deg 34% 74%) 75%,
+      hsl(223deg 33% 78%) 83%,
+      hsl(224deg 32% 83%) 92%,
+      hsl(224deg 31% 88%) 100%);
 
   cursor: none;
   user-select: none;
@@ -36,148 +34,84 @@
 }
 
 .gameField.repositioning {
-  /* EXPLANATION: Very subtle visual indication that repositioning is happening
+  /* Very subtle visual indication that repositioning is happening
      This helps users understand that the system is working, not broken or slow */
   opacity: 0.98;
-  /* EXPLANATION: Optional subtle blur during repositioning to indicate motion
-     This is commented out by default but available if you want more pronounced feedback */
-  /* filter: blur(0.5px); */
 }
 
 .gameField.repositioning .gameArea {
-  /* EXPLANATION: During repositioning, we temporarily disable interactions
-     This prevents confusing user interactions while objects are moving */
   pointer-events: none;
-  /* EXPLANATION: Subtle background tint to indicate system activity
-     The color should be very subtle to avoid being distracting */
   background-color: rgba(255, 255, 255, 0.01);
 }
 
-/* NEW: Responsive resizing state - when viewport is actively changing */
 .gameField.resizing {
-  /* EXPLANATION: During active viewport changes, we might want slightly different feedback
-     This distinguishes between user-initiated repositioning and viewport-driven changes */
-  opacity: 0.99;
+  opacity: 0.95;
 }
 
-/* NEW: Enhanced input mode styles with responsive awareness */
 .gameField.input-mobile.repositioning {
-  /* EXPLANATION: Mobile devices might benefit from slightly more pronounced feedback
-     Touch users need clearer visual cues about system state changes */
   opacity: 0.96;
-  transition: opacity 0.15s ease-out; /* Faster transitions on mobile for responsiveness */
+  transition: opacity 0.15s ease-out;
 }
 
 .gameField.input-desktop.repositioning {
-  /* EXPLANATION: Desktop users with precise mouse control can handle more subtle feedback
-     This creates device-appropriate user experience */
   opacity: 0.99;
 }
 
-/* NEW: Game completion state with responsive awareness */
-.gameField.gameComplete {
-  /* EXPLANATION: Your existing game completion styles enhanced with responsive considerations
-     When the game is complete, responsive behavior should be more subtle */
-  opacity: 1;
-  pointer-events: auto; /* Re-enable interactions for game completion celebration */
-}
 
-.gameField.gameComplete.repositioning {
-  /* EXPLANATION: Even during game completion, responsive changes should be smooth
-     This ensures consistent behavior across all game states */
-  opacity: 0.98;
-}
-
-/* NEW: Responsive transition animations for enhanced visual feedback */
-/* EXPLANATION: These animations provide subtle motion cues during responsive operations */
+/* Responsive transition animations for enhanced visual feedback */
 
 @keyframes responsiveAdaptation {
-  0% { 
-    opacity: 1; 
-    transform: scale(1); 
+  0% {
+    opacity: 1;
+    transform: scale(1);
   }
-  50% { 
-    opacity: 0.97; 
-    transform: scale(0.999); /* Very subtle scale change */
+
+  50% {
+    opacity: 0.97;
+    transform: scale(0.999);
+    /* Very subtle scale change */
   }
-  100% { 
-    opacity: 1; 
-    transform: scale(1); 
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
 @keyframes responsivePulse {
-  0%, 100% { 
-    background-color: rgba(59, 130, 246, 0.02); 
+
+  0%,
+  100% {
+    background-color: rgba(59, 130, 246, 0.02);
   }
-  50% { 
-    background-color: rgba(59, 130, 246, 0.05); 
+
+  50% {
+    background-color: rgba(59, 130, 246, 0.05);
   }
 }
 
-/* EXPLANATION: Apply animations only when appropriate responsive states are active */
 .gameField.repositioning .gameArea {
   animation: responsivePulse 2s ease-in-out infinite;
 }
 
-/* NEW: Enhanced responsive breakpoints for device-specific behavior */
-/* EXPLANATION: Different devices have different performance characteristics and user expectations
-   These breakpoints ensure optimal experience across all device types */
-
-@media (max-width: 768px) {
-  .gameField.repositioning {
-    /* EXPLANATION: Mobile devices benefit from faster, more pronounced transitions
-       Touch interactions require clearer feedback than mouse interactions */
-    transition: opacity 0.15s ease-out;
-    opacity: 0.95; /* More noticeable feedback on mobile */
-  }
-  
-  .gameArea {
-    /* EXPLANATION: Faster background transitions on mobile for snappier feel */
-    transition: background-color 0.2s ease-out;
-  }
-}
-
-@media (max-width: 480px) {
-  .gameField.repositioning {
-    /* EXPLANATION: Very small screens need even clearer feedback
-       Users on small devices might not notice subtle changes */
-    opacity: 0.93;
-  }
-}
-
-/* EXPLANATION: Support for users who prefer reduced motion for accessibility or comfort */
 @media (prefers-reduced-motion: reduce) {
+
   .gameField,
   .gameArea {
-    /* EXPLANATION: Respect user preferences for reduced motion
-       This is crucial for accessibility and user comfort */
     transition: none !important;
     animation: none !important;
   }
-  
+
   .gameField.repositioning {
-    /* EXPLANATION: Provide feedback without motion for reduced-motion users
-       We can still indicate system state through opacity changes */
     opacity: 0.95;
-    transition: opacity 0.1s ease-out; /* Very fast, minimal transition */
+    transition: opacity 0.1s ease-out;
+    /* Very fast, minimal transition */
   }
 }
 
-/* NEW: High contrast mode support for accessibility */
 @media (prefers-contrast: high) {
   .gameField.repositioning {
-    /* EXPLANATION: High contrast users need more pronounced visual feedback
-       Subtle opacity changes might not be visible in high contrast modes */
     opacity: 0.9;
     border: 1px solid rgba(0, 0, 0, 0.1);
   }
-}
-
-/* NEW: Enhanced focus management during responsive transitions */
-.gameField.repositioning *:focus {
-  /* EXPLANATION: During repositioning, focus indicators should remain visible
-     This maintains accessibility during responsive transitions */
-  outline: 2px solid #0066cc;
-  outline-offset: 2px;
 }
