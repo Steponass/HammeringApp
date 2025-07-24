@@ -46,6 +46,10 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
       classes.push(styles.readyToHammer);
     }
 
+    if (isAnimating) {
+      classes.push(styles.hammering);
+    }
+
     if (inputMode === "mobile") {
       if (isFirstTouch) {
         classes.push(styles.firstTouch);
@@ -61,7 +65,7 @@ const ShadowOverlay: React.FC<ShadowOverlayProps> = ({
   const getShadowStyles = (): React.CSSProperties => {
     return {
       left: shadowPosition.x - shadowRadius,
-      top: shadowPosition.y - shadowRadius + 80, // Offset shadow 80px lower
+      top: shadowPosition.y - shadowRadius + 70, // Offset shadow 70px lower
       width: shadowDiameter,
       height: shadowDiameter,
       "--shadow-opacity": shadowConfig.opacity,

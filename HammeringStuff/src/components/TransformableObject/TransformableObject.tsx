@@ -182,7 +182,8 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
             initial={{ 
               y: 0, 
               scaleY: 1, 
-              scaleX: 1 
+              scaleX: 1,
+              opacity: 1
             }}
             animate={{ 
               y: responsiveTransitionActive ? [0, 2, -1, 0] : [0, 3, -2, 0],
