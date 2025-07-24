@@ -1,4 +1,3 @@
-// src/utils/notificationMessages.ts
 const MESSAGES = [
   "Whack it good",
   "Fix it your way",
@@ -10,8 +9,13 @@ const MESSAGES = [
   "Knock sense into it",
   "Nail your destiny",
   "This isn’t therapy",
+  "Disruption achieved",
+  "Roadblock? What roadblock?",
+  "Louder than insight",
   "Don’t overthink — overpower",
   "Big impact. Zero nuance",
+  "Feedback loop terminated",
+  "Crisis downgraded to “handled”",
   "Good ideas died so this could happen",
   "You simplified it. Into rubble",
   "Never let complexity get in your way",

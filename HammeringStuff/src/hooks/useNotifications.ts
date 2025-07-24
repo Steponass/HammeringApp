@@ -18,9 +18,6 @@ const useNotifications = () => {
     setNotifications(prev => [...prev, newNotification]);
   }, []);
 
-  /*
-   * Add a completion message
-   */
   const addCompletionMessage = useCallback((message: string): void => {
     addNotification(message, 'completion');
   }, [addNotification]);

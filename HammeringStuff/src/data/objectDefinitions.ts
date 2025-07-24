@@ -341,13 +341,6 @@ export const OBJECT_DEFINITIONS: Record<string, ObjectDefinition> = {
     baseSize: getRandomBaseSize(),
     nailType: getRandomNailType(),
   },
-  trilby: {
-    id: "trilby",
-    name: "Trilby",
-    svgPath: SVG_ASSETS.trilby,
-    baseSize: getRandomBaseSize(),
-    nailType: getRandomNailType(),
-  },
   "red-shoe": {
     id: "red-shoe",
     name: "Red Shoe",

@@ -17,15 +17,11 @@ const Notification: React.FC<NotificationProps> = ({
 }) => {
   const { id, message, isRemoving = false, variant = 'hammer' } = notification;
 
-  /**
-   * Get configuration based on notification variant
-   * This is where we define the different behaviors
-   */
   const getVariantConfig = (variant: NotificationVariant) => {
     switch (variant) {
       case 'completion':
         return {
-          autoRemoveDelay: 7000,
+          autoRemoveDelay: 9000,
           className: styles.completionNotification,
           animations: {
             initial: { opacity: 0, scale: 0.5, y: 0 },

@@ -28,7 +28,6 @@ import bikeSvg from "./objects/bike.svg";
 import car2Svg from "./objects/car-2.svg";
 import minibusSvg from "./objects/minibus.svg";
 import sunHatSvg from "./objects/sun-hat.svg";
-import trilbySvg from "./objects/trilby.svg";
 import redShoeSvg from "./objects/red-shoe.svg";
 import basketballSvg from "./objects/basketball.svg";
 import skateSvg from "./objects/skate.svg";
@@ -122,7 +121,6 @@ export const SVG_ASSETS = {
   "car-2": car2Svg,
   minibus: minibusSvg,
   "sun-hat": sunHatSvg,
-  trilby: trilbySvg,
   "red-shoe": redShoeSvg,
   basketball: basketballSvg,
   skate: skateSvg,
