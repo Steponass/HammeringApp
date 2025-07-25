@@ -44,13 +44,14 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
         <div>
           <motion.div
             className={styles.splash_text_container}
-            initial={{ opacity: 0, scale: 1, y: -300 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9, y: -300 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{
-              delay: 0.4,
-              duration: 0.4,
-              ease: "easeOut",
-              
+              delay: 0.8,
+              type: "spring",
+              damping: 20,
+              stiffness: 120,
+              mass: 1.2,
             }}
           >
             <h1>If all you have is a hammer,</h1>
@@ -58,24 +59,28 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
 
           <motion.div
             className={styles.splash_text_container}
-            initial={{ opacity: 0, scale: 1, y: 500 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9, y: 500 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{
-              duration: 0.4,
-              delay: 2,
-              ease: "easeOut",
+              delay: 2.4,
+              type: "spring",
+              damping: 20,
+              stiffness: 120,
+              mass: 1.2,
             }}
           >
             <h1>everything looks like a nail.</h1>
           </motion.div>
         </div>
         <motion.div
-          initial={{ opacity: 0, scale: 0, rotate: -270 }}
+          initial={{ opacity: 0, scale: 0.2, rotate: -270 }}
           animate={{ opacity: 1, scale: 1, rotate: 1 }}
           transition={{
-            duration: 0.4,
-            delay: 3.6,
-            ease: "easeOut",
+            delay: 4.6,
+            type: "spring",
+            damping: 18,
+            stiffness: 150,
+            mass: 1.1,
           }}
         >
           <motion.button
@@ -83,15 +88,24 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
             onClick={handleStartClick}
             whileHover={{
               scale: 3,
-              rotate: 2,
-              
+              rotate: [2, -2],
               boxShadow: "0 3px 4px -1px hsla(225, 42%, 5%, 1)",
+              transition: {
+                scale: { duration: 0.3 },
+                boxShadow: { duration: 0.3 },
+                rotate: {
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut",
+                },
+              },
             }}
-            whileTap={{
-              scale: 2,
-              rotate: 4,
-              boxShadow: "0 3px 4px -1px hsla(225, 42%, 5%, 1)",
-            }}
+            // whileTap={{
+            //   scale: 2,
+            //   rotate: 3,
+            //   boxShadow: "0 3px 4px -1px hsla(225, 42%, 5%, 1)",
+            // }}
             onKeyDown={handleKeyDown}
             type="button"
           >
