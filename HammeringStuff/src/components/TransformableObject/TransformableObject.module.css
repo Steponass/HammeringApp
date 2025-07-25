@@ -28,12 +28,6 @@
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
-@media (max-width: 768px) {
-  .nailLayer {
-    scale: 1;
-  }
-}
-
 .hammeredNailLayer {
   position: absolute;
   top: 0;
@@ -44,6 +38,15 @@
   z-index: 3; /* Above both original and nail layers */
   transition: opacity 0.2s ease-out;
   will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .nailLayer {
+    scale: 1;
+  }
+  .hammeredNailLayer {
+    scale: 0.9;
+  }
 }
 
 .container.repositioning {

@@ -21,7 +21,7 @@ const Notification: React.FC<NotificationProps> = ({
     switch (variant) {
       case 'completion':
         return {
-          autoRemoveDelay: 9000,
+          autoRemoveDelay: 8000,
           className: styles.completionNotification,
           animations: {
             initial: { opacity: 0, scale: 0.5, y: 0 },
@@ -37,7 +37,7 @@ const Notification: React.FC<NotificationProps> = ({
       case 'hammer':
       default:
         return {
-          autoRemoveDelay: 5000,
+          autoRemoveDelay: 4500,
           className: styles.hammerNotification,
           animations: {
             initial: { opacity: 0, y: 50, scale: 0.8 },
