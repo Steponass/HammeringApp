@@ -159,7 +159,11 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
             src={nailDef.hammeredSvgPath}
             alt={`${nailDef.name} (Hammered)`}
             className={styles.hammeredNailLayer}
-            style={getHammeredNailMaskStyles()}
+            style={{
+              ...getHammeredNailMaskStyles(),
+              willChange: 'transform',
+              transform: 'translateZ(0)', // Force hardware acceleration to try make animations work on first render
+            }}
             initial={{
               y: 0,
               scaleY: 1,
@@ -176,6 +180,7 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
               ease: "easeInOut",
               times: [0, 0.2, 0.6, 1],
             }}
+            
           />
         )}
       </AnimatePresence>

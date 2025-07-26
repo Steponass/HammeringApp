@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "motion/react";
 import SplashScreen from "components/SplashScreen";
 import Header from "components/layout/Header/Header";
 import TestGame from "games/TestGame";
-import { NAIL_DEFINITIONS } from "data/objectDefinitions";
 import NotificationSystem from "components/NotificationSystem/NotificationSystem";
 import useGameState from "hooks/useGameState";
 import useViewportChange from "hooks/useViewportChange";
@@ -51,28 +50,6 @@ const App: React.FC = () => {
   } = useNotifications();
 
   const [isAnimating, setIsAnimating] = useState(false);
-
-
-  // Trying to preload hammerednail SVGs to fix visual bug of them not animating.
-  const preloadHammeredImages = useCallback(() => {
-    Object.values(NAIL_DEFINITIONS).forEach(nailDef => {
-      const img = new Image();
-      img.src = nailDef.hammeredSvgPath;
-      
-      // Optional: Add load/error logging for debugging
-      img.onload = () => {
-        console.log(`Preloaded hammered nail: ${nailDef.name}`);
-      };
-      img.onerror = () => {
-        console.warn(`Failed to preload hammered nail: ${nailDef.name}`);
-      };
-    });
-  }, []);
-
-  // Add this useEffect to run preloading when component mounts
-  useEffect(() => {
-    preloadHammeredImages();
-  }, [preloadHammeredImages]);
 
   useEffect(() => {
     if (
@@ -152,8 +129,6 @@ const App: React.FC = () => {
     }
   }, [gameState.isGameComplete, gameState.totalCount, addCompletionMessage]);
 
-
-  
   return (
     <div className="App">
       <AnimatePresence mode="wait">
