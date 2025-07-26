@@ -26,7 +26,7 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
   const previousXRef = useRef(gameObject.position.x);
   const previousYRef = useRef(gameObject.position.y);
   const [isPositionTransitioning, setIsPositionTransitioning] = useState(false);
-  const [animateClass, setAnimateClass] = useState('');
+  const [shouldAnimate, setShouldAnimate] = useState(false);
 
   useEffect(() => {
     const currentX = gameObject.position.x;
@@ -50,20 +50,16 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
       return () => clearTimeout(transitionTimeout);
     }
 
-    // Always update coordinate references for the next comparison
     previousXRef.current = currentX;
     previousYRef.current = currentY;
   }, [gameObject.position.x, gameObject.position.y, isRepositioning]);
 
-  // Handle CSS animation trigger for hammered nail
+  // Handle animation trigger - remove the setTimeout delay
   useEffect(() => {
     if (gameObject.state === "hammered") {
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
-        setAnimateClass('animate');
-      }, 50);
+      setShouldAnimate(true);
     } else {
-      setAnimateClass('');
+      setShouldAnimate(false);
     }
   }, [gameObject.state]);
 
@@ -138,13 +134,6 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
     };
   };
 
-  const getHammeredNailMaskStyles = (): React.CSSProperties => {
-    if (gameObject.state !== "hammered") {
-      return { display: "none" };
-    }
-    return {};
-  };
-
   return (
     <div className={containerClassName} style={containerStyle}>
       {gameObject.state !== "hammered" && (
@@ -165,18 +154,19 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
         />
       )}
 
-      {gameObject.state === "hammered" && (
-        <img
-          src={nailDef.hammeredSvgPath}
-          alt={`${nailDef.name} (Hammered)`}
-          className={`${styles.hammeredNailLayer} ${animateClass ? styles.animate : ''}`}
-          style={{
-            ...getHammeredNailMaskStyles(),
-            willChange: 'transform',
-            transform: 'translateZ(0)',
-          }}
-        />
-      )}
+      {/* Always render hammered nail, control visibility with CSS */}
+      <img
+        src={nailDef.hammeredSvgPath}
+        alt={`${nailDef.name} (Hammered)`}
+        className={`${styles.hammeredNailLayer} ${shouldAnimate ? styles.animate : ''}`}
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)',
+          opacity: gameObject.state === "hammered" ? 1 : 0,
+          visibility: gameObject.state === "hammered" ? 'visible' : 'hidden',
+          pointerEvents: gameObject.state === "hammered" ? 'auto' : 'none',
+        }}
+      />
     </div>
   );
 };
