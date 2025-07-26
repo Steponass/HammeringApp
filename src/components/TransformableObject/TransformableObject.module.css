@@ -38,6 +38,26 @@
   z-index: 3; /* Above both original and nail layers */
   transition: opacity 0.2s ease-out;
   will-change: transform;
+  transform: translateZ(0);
+}
+
+.hammeredNailLayer.animate {
+  animation: nailHammerEffect 0.2s ease-in-out forwards;
+}
+
+@keyframes nailHammerEffect {
+  0% {
+    transform: translateY(0) scaleY(1) scaleX(1);
+  }
+  20% {
+    transform: translateY(3px) scaleY(0.97) scaleX(1.03);
+  }
+  60% {
+    transform: translateY(-2px) scaleY(1.03) scaleX(0.97);
+  }
+  100% {
+    transform: translateY(0) scaleY(1) scaleX(1);
+  }
 }
 
 @media (max-width: 768px) {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import type { GameObject, ObjectMaskData } from "types/game";
 import { getObjectDefinition, getNailDefinition } from "data/objectDefinitions";
 import styles from "./TransformableObject.module.css";
@@ -27,6 +26,7 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
   const previousXRef = useRef(gameObject.position.x);
   const previousYRef = useRef(gameObject.position.y);
   const [isPositionTransitioning, setIsPositionTransitioning] = useState(false);
+  const [animateClass, setAnimateClass] = useState('');
 
   useEffect(() => {
     const currentX = gameObject.position.x;
@@ -54,6 +54,18 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
     previousXRef.current = currentX;
     previousYRef.current = currentY;
   }, [gameObject.position.x, gameObject.position.y, isRepositioning]);
+
+  // Handle CSS animation trigger for hammered nail
+  useEffect(() => {
+    if (gameObject.state === "hammered") {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        setAnimateClass('animate');
+      }, 50);
+    } else {
+      setAnimateClass('');
+    }
+  }, [gameObject.state]);
 
   const adjustedSize = useMemo(() => {
     return gameObject.size * scaleFactor;
@@ -153,37 +165,18 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
         />
       )}
 
-      <AnimatePresence>
-        {gameObject.state === "hammered" && (
-          <motion.img
-            src={nailDef.hammeredSvgPath}
-            alt={`${nailDef.name} (Hammered)`}
-            className={styles.hammeredNailLayer}
-            style={{
-              ...getHammeredNailMaskStyles(),
-              willChange: 'transform',
-              transform: 'translateZ(0)', // Force hardware acceleration to try make animations work on first render
-            }}
-            initial={{
-              y: 0,
-              scaleY: 1,
-              scaleX: 1,
-              opacity: 1,
-            }}
-            animate={{
-              y: [0, 3, -2, 0],
-              scaleY: [1, 0.97, 1.03, 1],
-              scaleX: [1, 1.03, 0.97, 1],
-            }}
-            transition={{
-              duration: 0.2,
-              ease: "easeInOut",
-              times: [0, 0.2, 0.6, 1],
-            }}
-            
-          />
-        )}
-      </AnimatePresence>
+      {gameObject.state === "hammered" && (
+        <img
+          src={nailDef.hammeredSvgPath}
+          alt={`${nailDef.name} (Hammered)`}
+          className={`${styles.hammeredNailLayer} ${animateClass ? styles.animate : ''}`}
+          style={{
+            ...getHammeredNailMaskStyles(),
+            willChange: 'transform',
+            transform: 'translateZ(0)',
+          }}
+        />
+      )}
     </div>
   );
 };
