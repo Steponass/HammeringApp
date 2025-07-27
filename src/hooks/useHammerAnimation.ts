@@ -39,44 +39,7 @@ const useHammerAnimation = (
    * Pre-warm animation layers on mobile to prevent first-time lag
    * This ensures the GPU layers are ready before the animation starts
    */
-  const preWarmMobileAnimations = useCallback((objectId: string): void => {
-    if (!isMobileDevice()) return;
-    
-    // Find the target object's hammer layer element
-    const objectElement = document.querySelector(`[data-object-id="${objectId}"]`);
-    if (!objectElement) return;
-    
-    const hammerLayer = objectElement.querySelector('.hammeredNailLayer, [class*="hammeredNailLayer"]');
-    if (!hammerLayer) return;
-    
-    // Force hardware acceleration and pre-initialize transform matrix
-    const element = hammerLayer as HTMLElement;
-    element.style.willChange = 'transform, opacity';
-    element.style.transform = 'translateZ(0)';
-    
-    // Trigger a micro-animation to initialize GPU layers
-    const preWarmAnimation = element.animate([
-      { 
-        transform: 'translateZ(0) scale(1)', 
-        opacity: 0 
-      },
-      { 
-        transform: 'translateZ(0.001px) scale(1.001)', 
-        opacity: 0.001 
-      }
-    ], { 
-      duration: 16, // One frame at 60fps
-      fill: 'forwards',
-      easing: 'linear'
-    });
-    
-    // Clean up the pre-warm animation
-    preWarmAnimation.addEventListener('finish', () => {
-      element.style.transform = '';
-      element.style.opacity = '';
-      preWarmAnimation.cancel();
-    });
-  }, [isMobileDevice]);
+ 
 
   /**
    * Clear all animation timeouts
@@ -118,11 +81,7 @@ const useHammerAnimation = (
       return;
     }
 
-    // Clear any existing timeouts
     clearAllTimeouts();
-    
-    // Pre-warm animations on mobile devices
-    preWarmMobileAnimations(objectId);
     
     // Set animation state immediately (hammer starts swinging)
     setIsAnimating(true);
@@ -152,7 +111,6 @@ const useHammerAnimation = (
     clearAllTimeouts, 
     resetAnimationState, 
     isMobileDevice,
-    preWarmMobileAnimations
   ]);
 
   /**

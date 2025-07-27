@@ -1,9 +1,8 @@
 const COMPLETION_MESSAGES = [
   "Success, by any means necessary. Go again ↗️",
   "You took initiative. The world adjusted. Again? ↗️", 
-  "Another masterpiece in blunt force. Go again ↗️",
   "No lessons learned. That's commitment. Reset ↗️",
-  "Brute force wins again. Replay the glory ↗️",
+  "Brute force wins. Replay the glory ↗️",
   "Simplicity achieved through pressure. Smash on ↗️",
   "Believe. Achieve. Hammer. Repeat ↗️",
   "Greatness requires friction. You removed it all. Reset ↗️",
