@@ -96,8 +96,14 @@ const App: React.FC = () => {
   
         if (shouldShowNotification) {
           setTimeout(() => {
-            const randomMessage = getRandomHammerMessage(usedHammerMessagesRef.current);
-            usedHammerMessagesRef.current = [...usedHammerMessagesRef.current, randomMessage];
+            const { message: randomMessage, shouldResetUsed } = getRandomHammerMessage(usedHammerMessagesRef.current);
+            
+            if (shouldResetUsed) {
+              usedHammerMessagesRef.current = [randomMessage];
+            } else {
+              usedHammerMessagesRef.current = [...usedHammerMessagesRef.current, randomMessage];
+            }
+            
             addNotification(randomMessage);
           }, 100);
         }

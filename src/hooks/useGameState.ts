@@ -294,7 +294,6 @@ const useGameState = (): UseGameStateReturn => {
     initializeGame();
   }, [initializeGame]);
 
-  // Your existing utility functions remain unchanged
   const updateObjectState = useCallback(
     (objectId: string, newState: ObjectState): void => {
       setGameState((previousGameState) => {
