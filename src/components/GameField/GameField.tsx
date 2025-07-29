@@ -38,20 +38,6 @@ const GameField: React.FC<GameFieldProps> = ({
 
   // Effect to detect responsive configuration changes
   useEffect(() => {
-    if (responsiveConfig && previousResponsiveConfigRef.current) {
-      const configChanged =
-        responsiveConfig.deviceType !==
-          previousResponsiveConfigRef.current.deviceType ||
-        Math.abs(
-          responsiveConfig.objectScale -
-            previousResponsiveConfigRef.current.objectScale
-        ) > 0.05;
-
-      if (configChanged) {
-        console.log("Responsive configuration changed");
-      }
-    }
-
     if (responsiveConfig) {
       previousResponsiveConfigRef.current = responsiveConfig;
     }

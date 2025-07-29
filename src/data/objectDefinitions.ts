@@ -34,15 +34,15 @@ export const NAIL_DEFINITIONS: Record<string, NailDefinition> = {
 };
 
 // Helper to randomly assign nail types
-const getNailTypes = () => Object.keys(NAIL_DEFINITIONS);
 const getRandomNailType = (): string => {
+  const getNailTypes = () => Object.keys(NAIL_DEFINITIONS);
   const nailTypes = getNailTypes();
   return nailTypes[Math.floor(Math.random() * nailTypes.length)];
 };
 
-// Helper to randomly assign base size between 56px and 72px
+// Helper to randomly assign base size between 56px and 68px
 const getRandomBaseSize = (): number => {
-  return Math.floor(Math.random() * (72 - 56 + 1)) + 56;
+  return Math.floor(Math.random() * (68 - 56 + 1)) + 56;
 };
 
 // Real object definitions using actual SVG files
@@ -264,8 +264,8 @@ export const OBJECT_DEFINITIONS: Record<string, ObjectDefinition> = {
     baseSize: getRandomBaseSize(),
     nailType: getRandomNailType(),
   },
-  "-file-heart": {
-    id: "-file-heart",
+  "file-heart": {
+    id: "file-heart",
     name: "File Heart",
     svgPath: SVG_ASSETS["file-heart"],
     baseSize: getRandomBaseSize(),

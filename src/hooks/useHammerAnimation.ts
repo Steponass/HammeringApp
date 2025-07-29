@@ -8,15 +8,6 @@ interface UseHammerAnimationReturn {
   onAnimationComplete: () => void;
 }
 
-/**
- * Hook for managing hammer animation state and timing
- * 
- * REFACTOR NOTES:
- * - Maintains realistic 450ms impact delay for better game feel
- * - Adds mobile-specific optimizations to prevent animation skipping
- * - Pre-warms animation layers on mobile devices
- * - Better cleanup and edge case handling
- */
 const useHammerAnimation = (
   onObjectHammered: (objectId: string) => void
 ): UseHammerAnimationReturn => {
@@ -35,13 +26,8 @@ const useHammerAnimation = (
     return window.innerWidth <= 768 || 'ontouchstart' in window;
   }, []);
 
-  /**
-   * Pre-warm animation layers on mobile to prevent first-time lag
-   * This ensures the GPU layers are ready before the animation starts
-   */
- 
 
-  /**
+  /*
    * Clear all animation timeouts
    */
   const clearAllTimeouts = useCallback((): void => {
@@ -96,7 +82,7 @@ const useHammerAnimation = (
     }, 450);
     
     // Mobile devices get slightly faster total animation for better responsiveness
-    const totalAnimationDuration = isMobileDevice() ? 550 : 600;
+    const totalAnimationDuration = isMobileDevice() ? 520 : 600;
     
     // Schedule cleanup after animation completes
     cleanupTimeoutRef.current = setTimeout(() => {
@@ -139,27 +125,6 @@ const useHammerAnimation = (
       clearAllTimeouts();
     };
   }, [clearAllTimeouts]);
-
-  /**
-   * Mobile-specific initialization
-   * Add global styles for better mobile animation performance
-   */
-  useEffect(() => {
-    if (isMobileDevice()) {
-      // Add mobile-optimized CSS custom properties
-      document.documentElement.style.setProperty('--mobile-animation-ready', '1');
-      
-      // Ensure smooth scrolling is disabled during animations to prevent interference
-      const originalOverflow = document.body.style.overflow;
-      if (isAnimating) {
-        document.body.style.overflow = 'hidden';
-      }
-      
-      return () => {
-        document.body.style.overflow = originalOverflow;
-      };
-    }
-  }, [isAnimating, isMobileDevice]);
 
   return {
     isAnimating,

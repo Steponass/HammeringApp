@@ -1,4 +1,3 @@
-// hooks/useViewportChange.ts - Fixed version
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getResponsiveLayoutConfig } from 'utils/responsiveLayout';
 import type { ResponsiveLayoutConfig } from 'utils/responsiveLayout';

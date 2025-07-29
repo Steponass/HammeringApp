@@ -1,5 +1,5 @@
 import React from "react";
-import CounterDigit from "../CounterDigit/CounterDigit";
+import CounterDigit from "./CounterDigit/CounterDigit";
 import styles from "./AnimatedCounter.module.css";
 
 interface AnimatedCounterProps {
