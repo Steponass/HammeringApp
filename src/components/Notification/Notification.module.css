@@ -9,11 +9,13 @@
 
 .notificationContent {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .completionNotification {
   box-shadow: var(--shadow-elevation-3);
+  padding: 24px;
 }

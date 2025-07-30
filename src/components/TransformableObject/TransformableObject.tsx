@@ -99,12 +99,10 @@ const TransformableObject: React.FC<TransformableObjectProps> = ({
   const containerClassName = useMemo(() => {
     const classes = [styles.container];
 
-    if (isRepositioning) classes.push("repositioning");
-    if (isPositionTransitioning) classes.push("position-transitioning");
     if (isAnimating) classes.push("hammer-animating");
 
     return classes.join(" ");
-  }, [isRepositioning, isPositionTransitioning, isAnimating]);
+  }, [isAnimating]);
 
   if (!objectDef || !nailDef) {
     return null;

@@ -1,53 +1,59 @@
-import React, { useEffect } from 'react';
-import { motion } from 'motion/react';
-import type { NotificationData, NotificationVariant } from 'types/notifications';
-import styles from './Notification.module.css';
+import React, { useEffect } from "react";
+import { motion } from "motion/react";
+import type {
+  NotificationData,
+  NotificationVariant,
+} from "types/notifications";
+import ResetButton from "components/ResetButton/ResetButton";
+import styles from "./Notification.module.css";
 
 interface NotificationProps {
   notification: NotificationData;
   onStartRemoving: (id: string) => void;
   onFinishRemoving: (id: string) => void;
   index: number;
+  resetGame: () => void;
 }
 
 const Notification: React.FC<NotificationProps> = ({
   notification,
   onStartRemoving,
   onFinishRemoving,
+  resetGame,
 }) => {
-  const { id, message, isRemoving = false, variant = 'hammer' } = notification;
+  const { id, message, isRemoving = false, variant = "hammer" } = notification;
 
   const getVariantConfig = (variant: NotificationVariant) => {
     switch (variant) {
-      case 'completion':
+      case "completion":
         return {
           autoRemoveDelay: 8000,
           className: styles.completionNotification,
           animations: {
             initial: { opacity: 0, scale: 0.5, y: 0 },
-            animate: { 
-              opacity: 1, 
-              scale: 1, 
+            animate: {
+              opacity: 1,
+              scale: 1,
               y: 0,
-              x: 0
+              x: 0,
             },
-            exit: { opacity: 0, scale: 0.8, y: -20 }
-          }
+            exit: { opacity: 0, scale: 0.8, y: -20 },
+          },
         };
-      case 'hammer':
+      case "hammer":
       default:
         return {
-          autoRemoveDelay: 4500,
+          autoRemoveDelay: 4200,
           className: styles.hammerNotification,
           animations: {
             initial: { opacity: 0, y: 50, scale: 0.8 },
-            animate: { 
-              opacity: 1, 
-              y: 0, 
+            animate: {
+              opacity: 1,
+              y: 0,
               scale: 1,
             },
-            exit: { opacity: 0, y: 50, scale: 0.8 }
-          }
+            exit: { opacity: 0, y: 50, scale: 0.8 },
+          },
         };
     }
   };
@@ -59,7 +65,7 @@ const Notification: React.FC<NotificationProps> = ({
       const timer = setTimeout(() => {
         onStartRemoving(id);
       }, config.autoRemoveDelay);
-      
+
       return () => clearTimeout(timer);
     }
   }, [id, isRemoving, onStartRemoving, config.autoRemoveDelay]);
@@ -79,7 +85,11 @@ const Notification: React.FC<NotificationProps> = ({
         ...config.animations.animate,
         opacity: isRemoving ? 0 : config.animations.animate.opacity,
         scale: isRemoving ? 0.8 : config.animations.animate.scale,
-        y: isRemoving ? (variant === 'completion' ? -20 : 50) : config.animations.animate.y,
+        y: isRemoving
+          ? variant === "completion"
+            ? -20
+            : 50
+          : config.animations.animate.y,
       }}
       exit={config.animations.exit}
       transition={{
@@ -92,12 +102,15 @@ const Notification: React.FC<NotificationProps> = ({
           type: "spring",
           damping: 15,
           stiffness: 100,
-        }
+        },
       }}
       onAnimationComplete={handleAnimationComplete}
     >
       <div className={styles.notificationContent}>
         <span className={styles.message}>{message}</span>
+        {variant === "completion" && (
+          <ResetButton buttonText="Replay" resetGame={resetGame} />
+        )}
       </div>
     </motion.div>
   );

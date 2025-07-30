@@ -40,7 +40,7 @@ import drugSvg from "./objects/drug.svg";
 import hammerSvg from "./objects/hammer.svg";
 import dinnerLoveSvg from "./objects/dinner-love.svg";
 import giftHeart2Svg from "./objects/gift-heart-2.svg";
-import fileHeartSvg from "./objects/-file-heart.svg";
+import fileHeartSvg from "./objects/file-heart.svg";
 import grayTshirtSvg from "./objects/gray-tshirt.svg";
 import greenPantsSvg from "./objects/green-pants.svg";
 import lightbulbSvg from "./objects/lightbulb.svg";

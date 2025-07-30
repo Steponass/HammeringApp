@@ -85,30 +85,34 @@ const App: React.FC = () => {
   const handleHammerObject = useCallback(
     (objectId: string): void => {
       setIsAnimating(true);
-  
+
       hammerObject(objectId);
-  
+
       const targetObject = gameState.objects.find((obj) => obj.id === objectId);
-  
+
       if (targetObject && targetObject.state !== "hammered") {
         const newHammeredCount = gameState.hammeredCount + 1;
         const shouldShowNotification = newHammeredCount % 2 === 0;
-  
+
         if (shouldShowNotification) {
           setTimeout(() => {
-            const { message: randomMessage, shouldResetUsed } = getRandomHammerMessage(usedHammerMessagesRef.current);
-            
+            const { message: randomMessage, shouldResetUsed } =
+              getRandomHammerMessage(usedHammerMessagesRef.current);
+
             if (shouldResetUsed) {
               usedHammerMessagesRef.current = [randomMessage];
             } else {
-              usedHammerMessagesRef.current = [...usedHammerMessagesRef.current, randomMessage];
+              usedHammerMessagesRef.current = [
+                ...usedHammerMessagesRef.current,
+                randomMessage,
+              ];
             }
-            
+
             addNotification(randomMessage);
           }, 100);
         }
       }
-  
+
       setTimeout(() => {
         setIsAnimating(false);
       }, 500);
@@ -171,6 +175,7 @@ const App: React.FC = () => {
               notifications={notifications}
               onStartRemoving={startRemovingNotification}
               onFinishRemoving={finishRemovingNotification}
+              resetGame={handleResetGame}
             />
           </motion.div>
         )}
