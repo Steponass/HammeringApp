@@ -46,26 +46,26 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
     // Hammer swing sequence: raise → swing → impact → recoil
     swing: {
       rotate: [5, 50, -30, 5],
-      scale: [0.8, 0.85, 1, 0.8],
-      scaleX: [1, 0.98, 1.1, 1.06, 1],
-      scaleY: [1, 1.08, 0.9, 0.75, 1],
+      scale: [0.8, 0.85, 0.95, 0.8],
+      scaleX: [1, 0.98, 1.04, 1.02, 1],
+      scaleY: [1, 1.05, 0.93, 0.8, 1],
       y: [0, -10, 5, 0],
       transition: {
-        duration: 0.6,
+        duration: 0.5,
         times: [0, 0.3, 0.6, 0.85, 1],
         ease: "easeInOut",
       scaleX: {
-        duration: 0.6,
+        duration: 0.5,
         times: [0, 0.3, 0.6, 0.85, 1],
         ease: "easeInOut",
       },
       scaleY: {
-        duration: 0.6,
+        duration: 0.5,
         times: [0, 0.3, 0.6, 0.85, 1],
         ease: "easeInOut",
       },
       y: {
-        duration: 0.6,
+        duration: 0.5,
         times: [0, 0.3, 0.6, 1], // Only 4 keyframes for Y
         ease: "easeOut",
       },
@@ -78,7 +78,7 @@ const hammerPosition = React.useMemo(() => {
   const responsiveVerticalOffset = isMobileDevice ? -105 : -173;
   
   return {
-    x: shadowPosition.x + 18,
+    x: shadowPosition.x + 12,
     y: shadowPosition.y + 60 + responsiveVerticalOffset,
   };
 }, [shadowPosition]);
