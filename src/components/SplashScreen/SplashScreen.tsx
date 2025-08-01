@@ -101,11 +101,6 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                 },
               },
             }}
-            // whileTap={{
-            //   scale: 2,
-            //   rotate: 3,
-            //   boxShadow: "0 3px 4px -1px hsla(225, 42%, 5%, 1)",
-            // }}
             onKeyDown={handleKeyDown}
             type="button"
           >

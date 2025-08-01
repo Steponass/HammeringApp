@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import SplashScreen from "components/SplashScreen";
 import Header from "components/layout/Header/Header";
-import TestGame from "games/TestGame";
+import Game from "games/Game";
 import NotificationSystem from "components/NotificationSystem/NotificationSystem";
 import useGameState from "hooks/useGameState";
 import useViewportChange from "hooks/useViewportChange";
@@ -161,7 +161,7 @@ const App: React.FC = () => {
               resetGame={handleResetGame}
             />
 
-            <TestGame
+            <Game
               gameState={gameState}
               isLoading={isLoading}
               isAnimating={isAnimating}

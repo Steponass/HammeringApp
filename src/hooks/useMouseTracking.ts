@@ -6,24 +6,9 @@ interface UseMouseTrackingReturn {
   shadowPosition: Position;
   inputMode: InputMode;
   isFirstTouch: boolean;
-  updateCursorPosition: (event: MouseEvent) => void;
-  updateTouchPosition: (event: TouchEvent) => void;
-  handleTouchStart: (event: TouchEvent) => void;
   resetTouchState: () => void;
 }
 
-/**
- * Custom hook for tracking mouse/touch position and managing input modes
- *
- * Desktop behavior:
- * - Shadow follows mouse cursor exactly
- * - Click events handled by parent components
- *
- * Mobile behavior:
- * - First touch: moves shadow to touch position
- * - Second touch: triggers hammer action (handled by parent)
- * - Touch and drag: moves shadow continuously
- */
 const useMouseTracking = (): UseMouseTrackingReturn => {
   const [cursorPosition, setCursorPosition] = useState<Position>({
     x: 0,
@@ -35,10 +20,7 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
     y: 0,
   });
 
-  // Track what input method we're using - start with desktop as default
   const [inputMode, setInputMode] = useState<InputMode>("desktop");
-
-  // Track touch interaction state for mobile
   const [isFirstTouch, setIsFirstTouch] = useState<boolean>(true);
 
   const hasDetectedTouch = useRef<boolean>(false);
@@ -46,34 +28,38 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
 
   const HEADER_HEIGHT = 50;
 
-  /**
+  /*
+   * Extract position calculation to eliminate duplication
+   */
+  const calculatePosition = useCallback((clientX: number, clientY: number): Position => {
+    return {
+      x: clientX,
+      y: clientY - HEADER_HEIGHT,
+    };
+  }, []);
+
+  /*
    * Check if the touch target is within the header area or is a button/interactive element
-   * This prevents game touch handlers from interfering with UI elements
    */
   const isHeaderElement = useCallback((target: EventTarget | null): boolean => {
     if (!target || !(target instanceof Element)) {
       return false;
     }
     
-    // Check if the element or any of its parents is within the header or is a button
     let current: Element | null = target;
     while (current) {
-      // Check for header element
       if (current.closest('header')) {
         return true;
       }
-      
-      // Check for reset button specifically
+
       if (current.closest('[class*="reset_button"]')) {
         return true;
       }
       
-      // Check for any button elements
       if (current.tagName === 'BUTTON') {
         return true;
       }
       
-      // Check for any interactive elements that should not be interfered with
       if (current.hasAttribute('data-no-touch-override')) {
         return true;
       }
@@ -83,202 +69,83 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
     return false;
   }, []);
 
-  /**
-   * Update cursor position for desktop mouse movement
-   * On desktop, shadow follows cursor exactly
+  /*
+   * Switch to mobile mode when touch is first detected
    */
-  const updateCursorPosition = useCallback(
-    (event: MouseEvent): void => {
-      const newPosition: Position = {
-        x: event.clientX,
-        y: event.clientY - HEADER_HEIGHT,
-      };
-
-      setCursorPosition(newPosition);
-
-      // On desktop, shadow always follows cursor
-      if (inputMode === "desktop") {
-        setShadowPosition(newPosition);
-      }
-    },
-    [inputMode]
-  );
-
-  /**
-   * Handle touch movement (when user drags finger)
-   * Updates both cursor and shadow position during drag
-   */
-  const updateTouchPosition = useCallback((event: TouchEvent): void => {
-    // Check if this touch is on a header element - if so, don't interfere
-    if (isHeaderElement(event.target)) {
-      return;
+  const enableMobileMode = useCallback((): void => {
+    if (!hasDetectedTouch.current) {
+      hasDetectedTouch.current = true;
+      setInputMode("mobile");
     }
+  }, []);
 
-    // Prevent scrolling while interacting
-    event.preventDefault();
-
-    // Only handle if we have at least one touch point
-    if (event.touches.length > 0) {
-      const touch = event.touches[0];
-      const newPosition: Position = {
-        x: touch.clientX,
-        y: touch.clientY - HEADER_HEIGHT,
-      };
-
-      setCursorPosition(newPosition);
-
-      // During drag, shadow follows finger
-      if (isDragging.current) {
-        setShadowPosition(newPosition);
-      }
-    }
-  }, [isHeaderElement]);
-
-  /**
-   * Handle initial touch start events
-   * Manages mobile interaction flow: first touch moves shadow, second touch hammers
-   */
-  const handleTouchStart = useCallback(
-    (event: TouchEvent): void => {
-      // Check if this touch is on a header element - if so, don't interfere
-      if (isHeaderElement(event.target)) {
-        return;
-      }
-
-      // Switch to mobile mode when we detect actual touch usage
-      if (!hasDetectedTouch.current) {
-        hasDetectedTouch.current = true;
-        setInputMode("mobile");
-      }
-
-      // Prevent default touch behavior (scrolling, zooming, etc.)
-      event.preventDefault();
-
-      if (event.touches.length > 0) {
-        const touch = event.touches[0];
-        const newPosition: Position = {
-          x: touch.clientX,
-          y: touch.clientY - HEADER_HEIGHT,
-        };
-
-        setCursorPosition(newPosition);
-
-        if (isFirstTouch) {
-          // First touch: move shadow to this position
-          setShadowPosition(newPosition);
-          setIsFirstTouch(false);
-          isDragging.current = true;
-        } else {
-          // Second touch: this will trigger hammer action in parent component
-          // Reset state for next interaction cycle
-          setIsFirstTouch(true);
-          isDragging.current = false;
-        }
-      }
-    },
-    [isFirstTouch, isHeaderElement]
-  );
-
-  /**
+  /*
    * Reset touch interaction state
-   * Useful for resetting after hammer action or game events
    */
   const resetTouchState = useCallback((): void => {
     setIsFirstTouch(true);
     isDragging.current = false;
   }, []);
 
-  /**
+  /*
    * Set up event listeners when component mounts
    */
   useEffect(() => {
-    // Mouse move handler
-    const handleMouseMove = (event: MouseEvent) => {
-      const newPosition: Position = {
-        x: event.clientX,
-        y: event.clientY - HEADER_HEIGHT,
-      };
-
+    const handleMouseMove = (event: MouseEvent): void => {
+      const newPosition = calculatePosition(event.clientX, event.clientY);
       setCursorPosition(newPosition);
 
-      // Always update shadow on mouse move if we haven't switched to mobile
       if (!hasDetectedTouch.current) {
         setShadowPosition(newPosition);
       }
     };
 
-    // Touch move handler
-    const handleTouchMoveEvent = (event: TouchEvent) => {
-      // Check if this touch is on a header element - if so, don't interfere
+    const handleTouchStart = (event: TouchEvent): void => {
       if (isHeaderElement(event.target)) {
         return;
       }
 
-      // Switch to mobile mode if not already detected
-      if (!hasDetectedTouch.current) {
-        hasDetectedTouch.current = true;
-        setInputMode("mobile");
-      }
-
+      enableMobileMode();
       event.preventDefault();
 
       if (event.touches.length > 0) {
         const touch = event.touches[0];
-        const newPosition: Position = {
-          x: touch.clientX,
-          y: touch.clientY - HEADER_HEIGHT,
-        };
-
-        setCursorPosition(newPosition);
-
-        // During drag, shadow follows finger
-        if (isDragging.current) {
-          setShadowPosition(newPosition);
-        }
-      }
-    };
-
-    // Touch start handler
-    const handleTouchStartEvent = (event: TouchEvent) => {
-      // Check if this touch is on a header element - if so, don't interfere
-      if (isHeaderElement(event.target)) {
-        return;
-      }
-
-      // Switch to mobile mode when we detect actual touch usage
-      if (!hasDetectedTouch.current) {
-        hasDetectedTouch.current = true;
-        setInputMode("mobile");
-      }
-
-      event.preventDefault();
-
-      if (event.touches.length > 0) {
-        const touch = event.touches[0];
-        const newPosition: Position = {
-          x: touch.clientX,
-          y: touch.clientY - HEADER_HEIGHT,
-        };
-
+        const newPosition = calculatePosition(touch.clientX, touch.clientY);
+        
         setCursorPosition(newPosition);
 
         if (isFirstTouch) {
-          // First touch: move shadow to this position
           setShadowPosition(newPosition);
           setIsFirstTouch(false);
           isDragging.current = true;
         } else {
-          // Second touch: this will trigger hammer action in parent component
-          // Reset state for next interaction cycle
           setIsFirstTouch(true);
           isDragging.current = false;
         }
       }
     };
 
-    // Touch end handler
-    const handleTouchEndEvent = (event: TouchEvent) => {
-      // Check if this touch is on a header element - if so, don't interfere
+    const handleTouchMove = (event: TouchEvent): void => {
+      if (isHeaderElement(event.target)) {
+        return;
+      }
+
+      enableMobileMode();
+      event.preventDefault();
+
+      if (event.touches.length > 0) {
+        const touch = event.touches[0];
+        const newPosition = calculatePosition(touch.clientX, touch.clientY);
+        
+        setCursorPosition(newPosition);
+
+        if (isDragging.current) {
+          setShadowPosition(newPosition);
+        }
+      }
+    };
+
+    const handleTouchEnd = (event: TouchEvent): void => {
       if (isHeaderElement(event.target)) {
         return;
       }
@@ -286,36 +153,24 @@ const useMouseTracking = (): UseMouseTrackingReturn => {
       isDragging.current = false;
     };
 
-    // Add event listeners to document for global coverage
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
-    document.addEventListener("touchstart", handleTouchStartEvent, {
-      passive: false,
-    });
-    document.addEventListener("touchmove", handleTouchMoveEvent, {
-      passive: false,
-    });
-    document.addEventListener("touchend", handleTouchEndEvent, {
-      passive: true,
-    });
+    document.addEventListener("touchstart", handleTouchStart, { passive: false });
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    document.addEventListener("touchend", handleTouchEnd, { passive: true });
 
-    // Cleanup function: remove all event listeners
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("touchstart", handleTouchStartEvent);
-      document.removeEventListener("touchmove", handleTouchMoveEvent);
-      document.removeEventListener("touchend", handleTouchEndEvent);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [isFirstTouch, isHeaderElement]); // Added isHeaderElement to dependencies
+  }, [isFirstTouch, calculatePosition, isHeaderElement, enableMobileMode]);
 
-  // Return all the data and functions that components will need
   return {
     cursorPosition,
     shadowPosition,
     inputMode,
     isFirstTouch,
-    updateCursorPosition,
-    updateTouchPosition,
-    handleTouchStart,
     resetTouchState,
   };
 };

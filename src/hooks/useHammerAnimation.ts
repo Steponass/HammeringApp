@@ -14,22 +14,14 @@ const useHammerAnimation = (
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [targetObjectId, setTargetObjectId] = useState<string | null>(null);
   
-  // Track timeouts for proper cleanup
   const impactTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cleanupTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isComponentMountedRef = useRef<boolean>(true);
 
-  /**
-   * Detect if we're on a mobile device
-   */
   const isMobileDevice = useCallback((): boolean => {
     return window.innerWidth <= 768 || 'ontouchstart' in window;
   }, []);
 
-
-  /*
-   * Clear all animation timeouts
-   */
   const clearAllTimeouts = useCallback((): void => {
     if (impactTimeoutRef.current) {
       clearTimeout(impactTimeoutRef.current);
@@ -41,9 +33,6 @@ const useHammerAnimation = (
     }
   }, []);
 
-  /**
-   * Reset animation state to initial values
-   */
   const resetAnimationState = useCallback((): void => {
     if (!isComponentMountedRef.current) return;
     
@@ -52,16 +41,14 @@ const useHammerAnimation = (
     clearAllTimeouts();
   }, [clearAllTimeouts]);
 
-  /**
+  /*
    * Trigger hammer animation with mobile optimizations
-   * 
-   * KEEPS the 450ms delay but adds mobile-specific preparations
    */
+
   const triggerHammerAnimation = useCallback((objectId: string): void => {
     // Prevent multiple concurrent animations
     if (isAnimating) return;
     
-    // Validate input
     if (!objectId || typeof objectId !== 'string') {
       console.warn('triggerHammerAnimation: Invalid objectId provided');
       return;
@@ -69,22 +56,17 @@ const useHammerAnimation = (
 
     clearAllTimeouts();
     
-    // Set animation state immediately (hammer starts swinging)
     setIsAnimating(true);
     setTargetObjectId(objectId);
     
-    // MAINTAIN ORIGINAL TIMING: Impact happens at 450ms (75% through 600ms)
-    // This preserves the realistic feel where nail transforms at hammer impact
     impactTimeoutRef.current = setTimeout(() => {
       if (isComponentMountedRef.current) {
         onObjectHammered(objectId);
       }
-    }, 450);
+    }, 400);
     
-    // Mobile devices get slightly faster total animation for better responsiveness
-    const totalAnimationDuration = isMobileDevice() ? 520 : 600;
+    const totalAnimationDuration = isMobileDevice() ? 450 : 500;
     
-    // Schedule cleanup after animation completes
     cleanupTimeoutRef.current = setTimeout(() => {
       if (isComponentMountedRef.current) {
         resetAnimationState();
@@ -99,7 +81,7 @@ const useHammerAnimation = (
     isMobileDevice,
   ]);
 
-  /**
+  /*
    * Handle animation completion from external components
    */
   const onAnimationComplete = useCallback((): void => {
@@ -107,14 +89,14 @@ const useHammerAnimation = (
     resetAnimationState();
   }, [resetAnimationState]);
 
-  /**
+  /*
    * Manual animation reset
    */
   const resetAnimation = useCallback((): void => {
     resetAnimationState();
   }, [resetAnimationState]);
 
-  /**
+  /*
    * Component lifecycle management
    */
   useEffect(() => {

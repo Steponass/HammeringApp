@@ -4,18 +4,18 @@ const HAMMER_NOTIFICATION_MESSAGES = [
   "Form follows force",
   "Hammer: 1, Logic: 0",
   "There goes nuance",
-  "Subtlety is overrated anyway",
   "You're consistent, at least",
   "Knock sense into it",
-  "Nail your destiny",
   "This isn’t therapy",
   "No finesse? No problem.",
   "Roadblock? What roadblock?",
   "Louder than insight",
   "Don’t overthink — overpower",
   "Big impact. Zero nuance",
+  "Textbook case right here",
+  "Your instincts were right again",
+  "Why pivot when you can pummel?",
   "Broken? Or redefined?",
-  "Crisis downgraded to “handled”",
   "Good ideas died so this could happen",
   "If it resists, it’s wrong",
   "Never let complexity get in your way",
@@ -29,9 +29,7 @@ const HAMMER_NOTIFICATION_MESSAGES = [
   "No blockers left",
   "Pain points resolved",
   "Nothing subtle ever scaled",
-  "Iteration by force",
   "Efficiency redefined",
-  "Elegant isn’t for everyone"
 ];
 
 export const getRandomHammerMessage = (

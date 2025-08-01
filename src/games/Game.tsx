@@ -3,7 +3,7 @@ import GameField from "components/GameField";
 import { GameState } from "types/game";
 import type { ResponsiveLayoutConfig } from "utils/responsiveLayout";
 
-interface TestGameProps {
+interface GameProps {
   gameState: GameState;
   isLoading: boolean;
   isAnimating: boolean;
@@ -13,7 +13,7 @@ interface TestGameProps {
   hammerObject: (objectId: string) => void;
 }
 
-const TestGame: React.FC<TestGameProps> = ({
+const Game: React.FC<GameProps> = ({
   gameState,
   isAnimating,
   isRepositioning = false,
@@ -61,4 +61,4 @@ const TestGame: React.FC<TestGameProps> = ({
   );
 };
 
-export default TestGame;
+export default Game;
