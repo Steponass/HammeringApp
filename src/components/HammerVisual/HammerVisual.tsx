@@ -75,11 +75,12 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
 
 const hammerPosition = React.useMemo(() => {
   const isMobileDevice = window.innerWidth <= 768;
-  const responsiveVerticalOffset = isMobileDevice ? -105 : -173;
+  const responsiveVerticalOffset = isMobileDevice ? -108 : -173;
+  const responsiveHorizontalOffset = isMobileDevice ? 3 : 10;
   
   return {
-    x: shadowPosition.x + 12,
-    y: shadowPosition.y + 60 + responsiveVerticalOffset,
+    x: shadowPosition.x + responsiveHorizontalOffset,
+    y: shadowPosition.y + 56 + responsiveVerticalOffset,
   };
 }, [shadowPosition]);
 
