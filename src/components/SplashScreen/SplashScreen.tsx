@@ -87,7 +87,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
             className={styles.splash_button}
             onClick={handleStartClick}
             whileHover={{
-              scale: 3,
+              scale: 2.5,
               rotate: [2, -2],
               boxShadow: "0 3px 4px -1px hsla(225, 42%, 5%, 1)",
               transition: {
