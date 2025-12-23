@@ -10,10 +10,7 @@ import { getRandomObjectPlacement } from "utils/layout";
 import { GAME_CONFIG } from "data/gameConfig";
 import { getAllObjectTypes, getObjectDefinition } from "data/objectDefinitions";
 import { getResponsiveLayoutConfig } from "utils/responsiveLayout";
-import {
-  repositionExistingObjects,
-  shouldDelayRepositioning,
-} from "utils/repositioning";
+import { repositionExistingObjects } from "utils/repositioning";
 import type { ResponsiveLayoutConfig } from "utils/responsiveLayout";
 
 interface UseGameStateReturn {
@@ -76,7 +73,6 @@ const useGameState = (): UseGameStateReturn => {
 
   const [isRepositioning, setIsRepositioning] = useState<boolean>(false);
 
-  const isHammerAnimating = useRef<boolean>(false);
   const repositionTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const resolveAnyRemainingOverlaps = useCallback(
@@ -177,17 +173,6 @@ const useGameState = (): UseGameStateReturn => {
       oldConfig: ResponsiveLayoutConfig,
       newConfig: ResponsiveLayoutConfig
     ): void => {
-      if (shouldDelayRepositioning(isHammerAnimating.current, false)) {
-        if (repositionTimeoutRef.current) {
-          clearTimeout(repositionTimeoutRef.current);
-        }
-
-        repositionTimeoutRef.current = setTimeout(() => {
-          repositionObjects(oldConfig, newConfig);
-        }, 200); // Brief delay to let current animation complete
-        return;
-      }
-
       setIsRepositioning(true);
 
       setGameState((previousGameState) => {
@@ -221,17 +206,13 @@ const useGameState = (): UseGameStateReturn => {
     []
   );
 
-  // Track hammer animation state for better edge case handling
   const hammerObject = useCallback((objectId: string): void => {
-    isHammerAnimating.current = true;
-
     setGameState((previousGameState) => {
       const targetObject = previousGameState.objects.find(
         (gameObject) => gameObject.id === objectId
       );
 
       if (!targetObject || targetObject.state === "hammered") {
-        isHammerAnimating.current = false;
         return previousGameState;
       }
 
@@ -247,11 +228,6 @@ const useGameState = (): UseGameStateReturn => {
       ).length;
 
       const isGameComplete = newHammeredCount === previousGameState.totalCount;
-
-      // Clear the animation flag after the typical hammer animation duration
-      setTimeout(() => {
-        isHammerAnimating.current = false;
-      }, 500);
 
       return {
         ...previousGameState,
@@ -295,7 +271,6 @@ const useGameState = (): UseGameStateReturn => {
       clearTimeout(repositionTimeoutRef.current);
     }
 
-    isHammerAnimating.current = false;
     setIsRepositioning(false);
 
     initializeGame();

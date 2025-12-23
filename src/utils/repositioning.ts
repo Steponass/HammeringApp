@@ -1,4 +1,3 @@
-// utils/repositioning.ts - Fixed version
 import type { GameObject, PlacementConfig } from 'types/game';
 import type { ResponsiveLayoutConfig } from 'utils/responsiveLayout';
 import { getRandomObjectPlacement } from 'utils/layout';

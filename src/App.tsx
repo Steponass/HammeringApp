@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import SplashScreen from "components/SplashScreen";
 import Header from "components/layout/Header/Header";
@@ -7,7 +7,7 @@ import NotificationSystem from "components/NotificationSystem/NotificationSystem
 import useGameState from "hooks/useGameState";
 import useViewportChange from "hooks/useViewportChange";
 import useNotifications from "hooks/useNotifications";
-import { getRandomHammerMessage } from "data/notificationMessages";
+import useHammerAnimation from "hooks/useHammerAnimation";
 import { getRandomCompletionMessage } from "data/completionMessages";
 import "./styles/css-reset.css";
 import "./styles/variables.css";
@@ -42,14 +42,39 @@ const App: React.FC = () => {
 
   const {
     notifications,
-    addNotification,
+    addHammerNotification,
     addCompletionMessage,
     startRemovingNotification,
     finishRemovingNotification,
     clearAllNotifications,
   } = useNotifications();
 
-  const [isAnimating, setIsAnimating] = useState(false);
+  const {
+    isAnimating,
+    targetObjectId,
+    triggerHammerAnimation,
+    resetAnimation,
+  } = useHammerAnimation((objectId: string) => {
+    hammerObject(objectId);
+
+    const newHammeredCount = gameState.hammeredCount + 1;
+    const shouldShowNotification = newHammeredCount % 2 === 0;
+
+    if (shouldShowNotification) {
+      setTimeout(() => {
+        addHammerNotification();
+      }, 100);
+    }
+  });
+
+  useEffect(() => {
+    if (gameState.isGameComplete && gameState.totalCount > 0) {
+      setTimeout(() => {
+        const randomCompletionMessage = getRandomCompletionMessage();
+        addCompletionMessage(randomCompletionMessage);
+      }, 700);
+    }
+  }, [gameState.isGameComplete, gameState.totalCount, addCompletionMessage]);
 
   useEffect(() => {
     if (
@@ -80,64 +105,15 @@ const App: React.FC = () => {
     acknowledgeSignificantChange,
   ]);
 
-  const usedHammerMessagesRef = useRef<string[]>([]);
-
-  const handleHammerObject = useCallback(
-    (objectId: string): void => {
-      setIsAnimating(true);
-
-      hammerObject(objectId);
-
-      const targetObject = gameState.objects.find((obj) => obj.id === objectId);
-
-      if (targetObject && targetObject.state !== "hammered") {
-        const newHammeredCount = gameState.hammeredCount + 1;
-        const shouldShowNotification = newHammeredCount % 2 === 0;
-
-        if (shouldShowNotification) {
-          setTimeout(() => {
-            const { message: randomMessage, shouldResetUsed } =
-              getRandomHammerMessage(usedHammerMessagesRef.current);
-
-            if (shouldResetUsed) {
-              usedHammerMessagesRef.current = [randomMessage];
-            } else {
-              usedHammerMessagesRef.current = [
-                ...usedHammerMessagesRef.current,
-                randomMessage,
-              ];
-            }
-
-            addNotification(randomMessage);
-          }, 100);
-        }
-      }
-
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, 500);
-    },
-    [hammerObject, gameState.objects, gameState.hammeredCount, addNotification]
-  );
-
   const handleResetGame = useCallback((): void => {
-    setIsAnimating(false);
+    resetAnimation();
     resetGame();
     clearAllNotifications();
-  }, [resetGame, clearAllNotifications]);
+  }, [resetAnimation, resetGame, clearAllNotifications]);
 
   const handleStartGame = (): void => {
     setAppState({ showSplash: false });
   };
-
-  useEffect(() => {
-    if (gameState.isGameComplete && gameState.totalCount > 0) {
-      setTimeout(() => {
-        const randomCompletionMessage = getRandomCompletionMessage();
-        addCompletionMessage(randomCompletionMessage);
-      }, 700);
-    }
-  }, [gameState.isGameComplete, gameState.totalCount, addCompletionMessage]);
 
   return (
     <div className="App">
@@ -168,7 +144,8 @@ const App: React.FC = () => {
               isRepositioning={isRepositioning}
               isResizing={isResizing}
               responsiveConfig={responsiveConfig}
-              hammerObject={handleHammerObject}
+              targetObjectId={targetObjectId}
+              triggerHammerAnimation={triggerHammerAnimation}
             />
 
             <NotificationSystem

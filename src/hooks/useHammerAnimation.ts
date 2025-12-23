@@ -63,9 +63,9 @@ const useHammerAnimation = (
       if (isComponentMountedRef.current) {
         onObjectHammered(objectId);
       }
-    }, 400);
+    }, 300);
     
-    const totalAnimationDuration = isMobileDevice() ? 450 : 500;
+    const totalAnimationDuration = isMobileDevice() ? 325 : 400;
     
     cleanupTimeoutRef.current = setTimeout(() => {
       if (isComponentMountedRef.current) {

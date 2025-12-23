@@ -10,7 +10,8 @@ interface GameProps {
   isRepositioning?: boolean;
   isResizing?: boolean;
   responsiveConfig?: ResponsiveLayoutConfig;
-  hammerObject: (objectId: string) => void;
+  targetObjectId: string | null;
+  triggerHammerAnimation: (objectId: string) => void;
 }
 
 const Game: React.FC<GameProps> = ({
@@ -19,7 +20,8 @@ const Game: React.FC<GameProps> = ({
   isRepositioning = false,
   isResizing = false,
   responsiveConfig,
-  hammerObject,
+  targetObjectId,
+  triggerHammerAnimation,
 }) => {
   
 
@@ -54,7 +56,8 @@ const Game: React.FC<GameProps> = ({
         isAnimating={isAnimating}
         isRepositioning={isRepositioning}
         responsiveConfig={responsiveConfig}
-        hammerObject={hammerObject}
+        targetObjectId={targetObjectId}
+        triggerHammerAnimation={triggerHammerAnimation}
       />
       
     </div>

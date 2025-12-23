@@ -6,7 +6,6 @@ import ShadowOverlay from "components/ShadowOverlay";
 import HammerVisual from "components/HammerVisual/HammerVisual";
 import useMouseTracking from "hooks/useMouseTracking";
 import useCollisionDetection from "hooks/useCollisionDetection";
-import useHammerAnimation from "hooks/useHammerAnimation";
 import type { ShadowConfig, GameState } from "types/game";
 import { GAME_CONFIG } from "data/gameConfig";
 import styles from "./GameField.module.css";
@@ -18,16 +17,19 @@ interface GameFieldProps {
   isAnimating?: boolean;
   isRepositioning?: boolean;
   responsiveConfig?: ResponsiveLayoutConfig;
-  hammerObject: (objectId: string) => void;
+  targetObjectId: string | null;
+  triggerHammerAnimation: (objectId: string) => void;
 }
 
 const GameField: React.FC<GameFieldProps> = ({
   shadowConfig = GAME_CONFIG.shadowConfig,
   className,
   gameState,
+  isAnimating = false,
   isRepositioning = false,
   responsiveConfig,
-  hammerObject,
+  targetObjectId,
+  triggerHammerAnimation,
 }) => {
   const { shadowPosition, inputMode, isFirstTouch } = useMouseTracking();
 
@@ -81,17 +83,10 @@ const GameField: React.FC<GameFieldProps> = ({
     return currentResponsiveConfig.objectScale;
   }, [responsiveConfig]);
 
-  const {
-    isAnimating: isHammerAnimating,
-    targetObjectId,
-    triggerHammerAnimation,
-    onAnimationComplete,
-  } = useHammerAnimation(hammerObject);
-
   const handleHammerClick = React.useCallback(() => {
     if (
       !isPrimaryObjectReady ||
-      isHammerAnimating ||
+      isAnimating ||
       isRepositioning ||
       !collisionResult.primaryObject
     ) {
@@ -100,7 +95,7 @@ const GameField: React.FC<GameFieldProps> = ({
     triggerHammerAnimation(collisionResult.primaryObject);
   }, [
     isPrimaryObjectReady,
-    isHammerAnimating,
+    isAnimating,
     isRepositioning,
     collisionResult.primaryObject,
     triggerHammerAnimation,
@@ -131,7 +126,7 @@ const GameField: React.FC<GameFieldProps> = ({
           );
 
           const isObjectAnimating =
-            isHammerAnimating && gameObject.id === targetObjectId;
+            isAnimating && gameObject.id === targetObjectId;
 
           return (
             <TransformableObject
@@ -151,16 +146,15 @@ const GameField: React.FC<GameFieldProps> = ({
           isFirstTouch={isFirstTouch}
           shadowConfig={shadowConfig}
           isPrimaryObjectReady={isPrimaryObjectReady}
-          isAnimating={isHammerAnimating || isRepositioning}
+          isAnimating={isAnimating || isRepositioning}
           onHammerClick={handleHammerClick}
         />
 
         <HammerVisual
-          isAnimating={isHammerAnimating}
+          isAnimating={isAnimating}
           targetObjectId={targetObjectId}
           shadowPosition={shadowPosition}
           isVisible={!isRepositioning}
-          onAnimationComplete={onAnimationComplete}
         />
       </div>
     </div>

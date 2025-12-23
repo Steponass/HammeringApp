@@ -1,11 +1,13 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import type { NotificationData, NotificationVariant } from 'types/notifications';
+import { getRandomHammerMessage } from 'data/notificationMessages';
 
 const useNotifications = () => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
+  const usedHammerMessagesRef = useRef<string[]>([]);
 
   const addNotification = useCallback((
-    message: string, 
+    message: string,
     variant: NotificationVariant = 'hammer'
   ): void => {
     const newNotification: NotificationData = {
@@ -17,6 +19,20 @@ const useNotifications = () => {
 
     setNotifications(prev => [...prev, newNotification]);
   }, []);
+
+  const addHammerNotification = useCallback((): void => {
+    const { message: randomMessage, shouldResetUsed } = getRandomHammerMessage(
+      usedHammerMessagesRef.current
+    );
+
+    if (shouldResetUsed) {
+      usedHammerMessagesRef.current = [randomMessage];
+    } else {
+      usedHammerMessagesRef.current = [...usedHammerMessagesRef.current, randomMessage];
+    }
+
+    addNotification(randomMessage, 'hammer');
+  }, [addNotification]);
 
   const addCompletionMessage = useCallback((message: string): void => {
     addNotification(message, 'completion');
@@ -43,6 +59,7 @@ const useNotifications = () => {
   return {
     notifications,
     addNotification,
+    addHammerNotification,
     addCompletionMessage,
     startRemovingNotification,
     finishRemovingNotification,

@@ -51,21 +51,21 @@ const HammerVisual: React.FC<HammerVisualProps> = ({
       scaleY: [1, 1.05, 0.93, 0.8, 1],
       y: [0, -10, 5, 0],
       transition: {
-        duration: 0.5,
-        times: [0, 0.3, 0.6, 0.85, 1],
+        duration: 0.4,
+        times: [0, 0.3, 0.6, 0.8, 1],
         ease: "easeInOut",
       scaleX: {
-        duration: 0.5,
-        times: [0, 0.3, 0.6, 0.85, 1],
+        duration: 0.4,
+        times: [0, 0.3, 0.6, 0.8, 1],
         ease: "easeInOut",
       },
       scaleY: {
-        duration: 0.5,
-        times: [0, 0.3, 0.6, 0.85, 1],
+        duration: 0.4,
+        times: [0, 0.3, 0.6, 0.8, 1],
         ease: "easeInOut",
       },
       y: {
-        duration: 0.5,
+        duration: 0.4,
         times: [0, 0.3, 0.6, 1], // Only 4 keyframes for Y
         ease: "easeOut",
       },

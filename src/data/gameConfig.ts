@@ -32,7 +32,7 @@ export const GAME_CONFIG: GameConfiguration = {
 
   shadowConfig: {
     radius: 45,
-    opacity: 0.7,
+    opacity: 0.6,
     blurAmount: 2,
   },
 

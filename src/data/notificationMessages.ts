@@ -1,6 +1,5 @@
 const HAMMER_NOTIFICATION_MESSAGES = [
   "Consider it “addressed”",
-  "Fix it your way",
   "Form follows force",
   "Hammer: 1, Logic: 0",
   "There goes nuance",
@@ -24,9 +23,6 @@ const HAMMER_NOTIFICATION_MESSAGES = [
   "The tool chose you",
   "A teachable moment. For the object.",
   "Use excessive confidence",
-  "Minimum viable damage",
-  "You brought alignment. With impact",
-  "No blockers left",
   "Pain points resolved",
   "Nothing subtle ever scaled",
   "Efficiency redefined",
