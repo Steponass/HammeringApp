@@ -1,6 +1,6 @@
 **Smash away!**
 
-[Demo](https://www.hammering.netlify.app)
+[Demo](https://hammering.netlify.app)
 
 Built with React.js + Motion animation library.
 
